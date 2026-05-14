@@ -2,30 +2,6 @@
 
 @section('title', 'Admin Dashboard | Hi Venus')
 
-@push('styles')
-<style>
-    /* Override global background only for dashboard */
-    main > div.absolute.inset-0 { 
-        display: none !important; 
-    }
-    main {
-        background-color: #d0f0ff !important; /* Soft sky blue */
-        background-image: 
-            radial-gradient(#ff97cf 18%, transparent 18%),
-            radial-gradient(#ffde59 18%, transparent 18%) !important;
-        background-size: 80px 80px !important;
-        background-position: 0 0, 40px 40px !important;
-        background-attachment: fixed;
-    }
-    
-    /* Ensure content visibility */
-    .bubble-title {
-        background-color: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(4px);
-    }
-</style>
-@endpush
-
 @section('content')
 <!-- Page Header -->
 <header class="flex justify-between items-end mb-10">

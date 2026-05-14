@@ -7,11 +7,12 @@
 @push('styles')
 <style>
     .grid-kawaii-pattern {
-        background-color: #ffffff !important;
+        background-color: #d0f0ff !important; /* Soft sky blue */
         background-image: 
-            linear-gradient(#ff85d0 2px, transparent 2px),
-            linear-gradient(90deg, #a7f3d0 2px, transparent 2px) !important;
-        background-size: 60px 60px !important;
+            radial-gradient(#ff97cf 18%, transparent 18%),
+            radial-gradient(#ffde59 18%, transparent 18%) !important;
+        background-size: 80px 80px !important;
+        background-position: 0 0, 40px 40px !important;
         background-attachment: fixed !important;
     }
     body {
