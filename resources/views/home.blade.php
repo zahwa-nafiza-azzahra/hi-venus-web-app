@@ -59,26 +59,18 @@
             <span class="material-symbols-outlined text-primary text-4xl rotate-12 bg-surface-bright border-4 border-on-background rounded-full p-2 shadow-[4px_4px_0px_0px_#1b1c1c] animate-spin [animation-duration:10s]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
         </div>
         <div class="flex flex-wrap gap-8 justify-center md:justify-start stagger-container">
-            <!-- Category 1 -->
-            <a class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-background bg-tertiary-fixed flex flex-col items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#1b1c1c] hover:-translate-y-2 hover:-translate-x-1 transition-transform hover:shadow-[6px_6px_0px_0px_#1b1c1c] active:translate-y-1 active:translate-x-1 active:shadow-none group" href="#">
-                <span class="material-symbols-outlined text-4xl text-on-tertiary-fixed group-hover:scale-110 transition-transform">checkroom</span>
-                <span class="font-label-bold text-label-bold text-on-tertiary-fixed uppercase">Dresses</span>
+            @php
+                $colors = ['bg-tertiary-fixed', 'bg-primary-fixed', 'bg-secondary-fixed', 'bg-surface-bright'];
+                $icons = ['checkroom', 'apparel', 'styler', 'diamond', 'shopping_bag', 'wallet'];
+            @endphp
+            @foreach($categories as $index => $category)
+            <a class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-background {{ $colors[$index % count($colors)] }} flex flex-col items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#1b1c1c] hover:-translate-y-2 hover:-translate-x-1 transition-transform hover:shadow-[6px_6px_0px_0px_#1b1c1c] active:translate-y-1 active:translate-x-1 active:shadow-none group" href="{{ route('products.index', ['category' => $category->slug]) }}">
+                <span class="material-symbols-outlined text-4xl text-on-surface group-hover:scale-110 transition-transform">
+                    {{ $icons[$index % count($icons)] }}
+                </span>
+                <span class="font-label-bold text-label-bold text-on-surface uppercase text-center px-2 text-[10px] md:text-xs">{{ $category->name }}</span>
             </a>
-            <!-- Category 2 -->
-            <a class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-background bg-primary-fixed flex flex-col items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#1b1c1c] hover:-translate-y-2 hover:-translate-x-1 transition-transform hover:shadow-[6px_6px_0px_0px_#1b1c1c] active:translate-y-1 active:translate-x-1 active:shadow-none group" href="#">
-                <span class="material-symbols-outlined text-4xl text-on-primary-fixed group-hover:scale-110 transition-transform">apparel</span>
-                <span class="font-label-bold text-label-bold text-on-primary-fixed uppercase">Tops</span>
-            </a>
-            <!-- Category 3 -->
-            <a class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-background bg-secondary-fixed flex flex-col items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#1b1c1c] hover:-translate-y-2 hover:-translate-x-1 transition-transform hover:shadow-[6px_6px_0px_0px_#1b1c1c] active:translate-y-1 active:translate-x-1 active:shadow-none group" href="#">
-                <span class="material-symbols-outlined text-4xl text-on-secondary-fixed group-hover:scale-110 transition-transform">styler</span>
-                <span class="font-label-bold text-label-bold text-on-secondary-fixed uppercase">Bottoms</span>
-            </a>
-            <!-- Category 4 -->
-            <a class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-background bg-surface-bright flex flex-col items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#1b1c1c] hover:-translate-y-2 hover:-translate-x-1 transition-transform hover:shadow-[6px_6px_0px_0px_#1b1c1c] active:translate-y-1 active:translate-x-1 active:shadow-none group" href="#">
-                <span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:scale-110 transition-transform">diamond</span>
-                <span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Accessories</span>
-            </a>
+            @endforeach
         </div>
     </section>
 

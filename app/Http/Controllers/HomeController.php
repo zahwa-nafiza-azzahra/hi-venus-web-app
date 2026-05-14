@@ -11,6 +11,7 @@ class HomeController extends Controller {
         }
 
         $products = \App\Models\Product::latest()->take(4)->get();
-        return view('home', compact('products'));
+        $categories = \App\Models\Category::all();
+        return view('home', compact('products', 'categories'));
     }
 }
