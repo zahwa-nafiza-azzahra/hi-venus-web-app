@@ -40,31 +40,6 @@
             </label>
             @endforeach
         </div>
-        <!-- Price Filter Card -->
-        <div class="bg-tertiary-fixed border-4 border-on-background rounded-xl p-6 shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col gap-6 relative">
-            <span class="material-symbols-outlined absolute top-4 right-4 text-on-background opacity-50 rotate-45 text-4xl animate-spin [animation-duration:8s]">star</span>
-            <h2 class="font-headline-lg text-headline-lg text-on-background border-b-4 border-on-background pb-2 mb-2 italic">Price Range</h2>
-            <div class="font-label-bold text-label-bold text-center text-body-lg bg-surface-bright border-4 border-on-background py-2 rounded-lg shadow-[inset_0px_4px_0px_0px_rgba(27,28,28,0.1)]">
-                $10 - $150
-            </div>
-            <!-- Chunky Slider Mockup -->
-            <div class="relative py-4 mt-2">
-                <div class="h-6 bg-surface-bright border-4 border-on-background rounded-full w-full">
-                    <div class="h-full bg-primary rounded-l-full w-2/3 border-r-4 border-on-background"></div>
-                </div>
-                <!-- Thumb 1 -->
-                <div class="absolute top-2 left-0 w-10 h-10 bg-secondary-container border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:scale-110 transition-transform flex items-center justify-center">
-                    <div class="w-2 h-2 bg-on-background rounded-full"></div>
-                </div>
-                <!-- Thumb 2 -->
-                <div class="absolute top-2 left-2/3 -ml-5 w-10 h-10 bg-secondary-container border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:scale-110 transition-transform flex items-center justify-center">
-                    <div class="w-2 h-2 bg-on-background rounded-full"></div>
-                </div>
-            </div>
-            <button class="w-full bg-on-background text-surface-bright border-4 border-on-background rounded-lg py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all mt-2">
-                Apply Filter
-            </button>
-        </div>
     </aside>
 
     <!-- Product Grid Area -->
