@@ -61,11 +61,6 @@
         </div>
         <!-- CTA -->
         <div class="p-6 border-t-4 border-on-background bg-surface-container-low space-y-3">
-            <a href="{{ route('home') }}" class="w-full bg-primary text-on-primary border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rounded-full py-3 font-label-bold text-label-bold hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] active:shadow-none transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">rocket_launch</span>
-                Launch Shop
-            </a>
-            
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="w-full bg-surface-bright text-error border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rounded-full py-3 font-label-bold text-label-bold hover:bg-error hover:text-on-error hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] active:shadow-none transition-all flex items-center justify-center gap-2">
