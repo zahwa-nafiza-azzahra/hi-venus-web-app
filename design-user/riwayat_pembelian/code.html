@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Rubik:wght@400;500;700&amp;family=Be+Vietnam+Pro:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .kawaii-bg {
+            background-color: #e0f2f1; /* Mint tint */
+            background-image: radial-gradient(#9e357b 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .cloud-pattern {
+            background-color: #f0fdf4; /* Light Mint */
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='40' viewBox='0 0 80 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 40a10 10 0 0 1 10-10h40a10 10 0 0 1 10 10H10zM0 20a10 10 0 0 1 10-10h20a10 10 0 0 1 10 10H0zm60 0a10 10 0 0 1 10-10h10a10 10 0 0 1 10 10H60z' fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .sticker-rotate-left { transform: rotate(-2deg); }
+        .sticker-rotate-right { transform: rotate(3deg); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#9e357b",
+                      "on-tertiary-fixed": "#001e2b",
+                      "background": "#fcf9f8",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#f0eded",
+                      "secondary": "#705d00",
+                      "on-surface-variant": "#53424b",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-bright": "#fcf9f8",
+                      "outline": "#86727b",
+                      "tertiary-fixed-dim": "#73d2ff",
+                      "secondary-fixed": "#ffe173",
+                      "on-surface": "#1b1c1c",
+                      "secondary-container": "#fdd73b",
+                      "on-primary-fixed-variant": "#811962",
+                      "on-primary-container": "#7a135d",
+                      "tertiary-fixed": "#c1e8ff",
+                      "on-secondary-fixed-variant": "#554500",
+                      "on-secondary-container": "#715d00",
+                      "inverse-primary": "#ffaedb",
+                      "surface-variant": "#e5e2e1",
+                      "on-tertiary-fixed-variant": "#004d66",
+                      "on-primary": "#ffffff",
+                      "on-background": "#1b1c1c",
+                      "surface-container-high": "#eae7e7",
+                      "primary-container": "#ff85d0",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f6f3f2",
+                      "secondary-fixed-dim": "#e8c426",
+                      "primary-fixed": "#ffd8eb",
+                      "on-tertiary-container": "#004860",
+                      "surface-dim": "#dcd9d9",
+                      "primary-fixed-dim": "#ffaedb",
+                      "inverse-surface": "#303030",
+                      "primary": "#9e357b",
+                      "tertiary-container": "#38bbef",
+                      "tertiary": "#006687",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e5e2e1",
+                      "outline-variant": "#d8c0cb",
+                      "on-secondary-fixed": "#221b00",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#3c002b",
+                      "surface": "#fcf9f8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "section-gap": "80px",
+                      "margin-desktop": "64px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "price-display": ["Plus Jakarta Sans"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "label-bold": ["Rubik"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "body-lg": ["Be Vietnam Pro"],
+                      "body-md": ["Be Vietnam Pro"],
+                      "headline-lg": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "price-display": ["24px", {"lineHeight": "32px", "fontWeight": "800"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-1px", "fontWeight": "800"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background cloud-pattern min-h-screen">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-desktop py-4 w-full sticky top-0 z-50 bg-primary dark:bg-primary border-b-4 border-on-background shadow-[0px_6px_0px_0px_rgba(27,28,28,1)]">
+<div class="text-headline-lg font-headline-lg font-black text-on-primary tracking-tighter italic">Hi Venus</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Home</a>
+<a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Shop</a>
+<a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">New Arrivals</a>
+<a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Best Sellers</a>
+<a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Collections</a>
+<a class="font-label-bold text-label-bold text-on-primary border-b-4 border-on-primary pb-1" href="#">About Us</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="material-symbols-outlined text-on-primary text-3xl hover:scale-110 transition-transform" data-icon="shopping_cart">shopping_cart</button>
+<button class="material-symbols-outlined text-on-primary text-3xl hover:scale-110 transition-transform" data-icon="person">person</button>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- Header Section -->
+<header class="mb-12 relative">
+<div class="absolute -top-10 -left-6 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary drop-shadow-[4px_4px_0px_rgba(27,28,28,1)] mb-4">Riwayat Pembelian</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Lihat semua keajaiban yang pernah kamu beli di sini! ✨</p>
+</header>
+<!-- Filter Tabs -->
+<div class="flex overflow-x-auto pb-6 gap-4 no-scrollbar mb-8">
+<button class="whitespace-nowrap px-6 py-3 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold active:translate-y-1 active:shadow-none transition-all">Semua</button>
+<button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Menunggu Pembayaran</button>
+<button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Diproses</button>
+<button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Dikirim</button>
+<button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Selesai</button>
+<button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Dibatalkan</button>
+</div>
+<!-- Orders Grid (Asymmetric Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Order Card 1: Completed -->
+<div class="md:col-span-8 bg-surface-container-lowest border-4 border-on-background p-8 rounded-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col md:flex-row gap-6 relative overflow-hidden sticker-rotate-left">
+<div class="absolute top-4 right-4 bg-primary text-on-primary px-4 py-2 border-2 border-on-background font-label-bold rounded-full rotate-12 shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">Selesai</div>
+<div class="w-full md:w-32 h-32 bg-tertiary-fixed border-4 border-on-background rounded-lg flex items-center justify-center shrink-0">
+<img alt="Plushie" class="w-24 h-24 object-contain" data-alt="A super cute and soft pastel pink rabbit plushie with sparkly eyes sitting on a mint green cloud background. The plushie has a vibrant maximalist aesthetic with small heart and star embroidery. High resolution toy photography with bright studio lighting and high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVOqrQTfzkDKhoCSvuaeRsV5PJlLSMa3Ddc2ZERotrAqyEoKaWwzZ3pQW4UcTg1tJULk1P8Z73vdghCX5q12676rosbBdbbEv5HCwoiiotF-1EYCvYn2HSOvpHMcKTONXmX0JrOSjQ5znsRObN6fnIqK8su7Oly0zhRhR-yEm6GECvTzUtNwZJ2AtRAKqX_NITt_CxW2yM1w6o7NzTEfdi4NVNOIX8FTNS-ikZ4lqAtNst7WeObBpFJ85NeJ4dbbPYEIPV-99_1D44"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-bold text-label-bold text-primary">#VENUS-2024-001</p>
+<h3 class="font-headline-lg text-headline-lg text-on-background">Strawberry Bunny Set</h3>
+</div>
+<span class="font-price-display text-price-display text-tertiary">Rp 450.000</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">12 Oktober 2024 • 2 Barang</p>
+<div class="flex flex-wrap gap-4">
+<button class="px-6 py-3 bg-primary text-on-primary border-4 border-on-background rounded-lg font-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">Beri Ulasan</button>
+<button class="px-6 py-3 bg-surface-bright text-on-surface border-4 border-on-background rounded-lg font-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">Detail Pesanan</button>
+</div>
+</div>
+</div>
+<!-- Order Card 2: Processing (Side Panel Style) -->
+<div class="md:col-span-4 bg-surface-container-lowest border-4 border-on-background p-6 rounded-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col sticker-rotate-right bg-[radial-gradient(#fdd73b_4px,transparent_4px)] [background-size:20px_20px]">
+<div class="flex justify-between items-center mb-6">
+<span class="bg-secondary-container text-on-secondary-container px-4 py-1 border-2 border-on-background font-label-bold rounded-lg">Diproses</span>
+<span class="material-symbols-outlined text-on-surface" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<p class="font-label-bold text-label-bold text-primary mb-1">#VENUS-2024-002</p>
+<h3 class="font-headline-lg text-headline-lg text-on-background mb-4">Pastel Stationery Kit</h3>
+<div class="mb-6">
+<p class="font-body-md text-body-md font-bold">Total Transaksi:</p>
+<p class="font-price-display text-price-display text-primary">Rp 125.000</p>
+</div>
+<div class="mt-auto">
+<button class="w-full py-4 bg-surface-bright text-on-surface border-4 border-on-background rounded-lg font-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">Detail Pesanan</button>
+</div>
+</div>
+<!-- Order Card 3: Pending -->
+<div class="md:col-span-6 bg-surface-container-lowest border-4 border-on-background p-8 rounded-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex gap-6 sticker-rotate-left">
+<div class="w-24 h-24 bg-primary-fixed border-4 border-on-background rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="payments">payments</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-error-container text-on-error-container px-3 py-1 border-2 border-on-background font-label-bold rounded-lg text-xs">Menunggu Pembayaran</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-background">Dreamy Cloud Lamp</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">15 Oktober 2024 • Rp 89.000</p>
+<button class="px-6 py-3 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg font-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">Bayar Sekarang</button>
+</div>
+</div>
+<!-- Order Card 4: Shipped -->
+<div class="md:col-span-6 bg-surface-container-lowest border-4 border-on-background p-8 rounded-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex gap-6 sticker-rotate-right">
+<div class="w-24 h-24 bg-tertiary-fixed border-4 border-on-background rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+<img alt="Sunnies" class="w-full h-full object-cover" data-alt="Vibrant yellow oversized sunglasses with heart-shaped frames, styled in a maximalist pop-art fashion. The glasses are placed on a colorful confetti-filled background with bright, cheerful lighting and deep comic-book style shadows. 4k resolution, high energy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAdzMSTfkvnMtiO0TwKpL_Wm41r1_GHFKT6l1jiSNxtG9DcbZoun2apPaMhf5UlWB2vRYZchlRBzcbsMoukSOAG9Ci2qFNKV-7EYhNvXny65uQlgcPIn3oa2-101X72JYTQsfci_Ka0uGpmt98MvKUVJwp4rpXZyEXg9faPzzwBizAbPbCFAkzKa8jW-4cP98LV1hz3WCdtENxByw1jCy3mDWRKSlPlEo7e5lxClbNtguqLj3HsiaXd0sTBktQzkMrQNxQt9NV7-63"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 border-2 border-on-background font-label-bold rounded-lg text-xs">Dikirim</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-background">Kawaii Star Shades</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">14 Oktober 2024 • Rp 210.000</p>
+<button class="px-6 py-3 bg-surface-bright text-on-surface border-4 border-on-background rounded-lg font-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">Lacak Paket</button>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-16 flex justify-center">
+<button class="flex items-center gap-4 px-10 py-6 bg-surface-container-lowest border-4 border-on-background rounded-xl font-headline-lg text-headline-lg shadow-[10px_10px_0px_0px_rgba(27,28,28,1)] hover:rotate-2 hover:-translate-y-2 transition-all group">
+                Lihat Pesanan Lama 
+                <span class="material-symbols-outlined text-4xl group-hover:rotate-180 transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex flex-col md:flex-row justify-between items-start p-margin-desktop w-full border-t-4 border-on-background mt-section-gap bg-surface-container-highest dark:bg-surface-container-lowest bg-[radial-gradient(#9e357b_3px,transparent_3px)] [background-size:24px_24px]">
+<div class="mb-8 md:mb-0">
+<div class="text-headline-xl font-headline-xl font-black text-primary italic mb-4">Hi Venus</div>
+<p class="font-body-md text-body-md text-on-surface max-w-sm">Toko paling imut untuk segala kebutuhan aksesoris dan kebahagiaanmu!</p>
+</div>
+<div class="grid grid-cols-2 gap-12">
+<div class="flex flex-col gap-3">
+<h4 class="font-headline-lg text-headline-lg text-primary">Info</h4>
+<a class="font-body-md text-body-md text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform inline-block" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform inline-block" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-headline-lg text-headline-lg text-primary">Bantuan</h4>
+<a class="font-body-md text-body-md text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform inline-block" href="#">Shipping Info</a>
+<a class="font-body-md text-body-md text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform inline-block" href="#">Contact Us</a>
+</div>
+</div>
+<div class="w-full mt-12 pt-8 border-t-4 border-on-background text-center md:text-left">
+<p class="font-label-bold text-label-bold text-on-surface">© 2024 Hi Venus Kawaii Shop. Made with Sparkles!</p>
+</div>
+</footer>
+<!-- Decorative Floating Stickers -->
+<div class="fixed bottom-10 right-10 z-40 hidden md:block">
+<div class="bg-secondary-container p-6 rounded-full border-4 border-on-background shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] animate-bounce">
+<span class="material-symbols-outlined text-5xl" data-icon="sentiment_very_satisfied" data-weight="fill">sentiment_very_satisfied</span>
+</div>
+</div>
+</body></html>

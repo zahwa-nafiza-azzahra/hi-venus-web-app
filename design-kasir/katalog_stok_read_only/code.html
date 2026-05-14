@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e5e2e1",
+                    "surface-container": "#f0eded",
+                    "surface-container-low": "#f6f3f2",
+                    "secondary-container": "#fdd73b",
+                    "primary": "#9e357b",
+                    "on-secondary-fixed": "#221b00",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#ffd8eb",
+                    "on-secondary-fixed-variant": "#554500",
+                    "on-tertiary-container": "#004860",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#ffaedb",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#001e2b",
+                    "tertiary": "#006687",
+                    "on-surface-variant": "#53424b",
+                    "on-background": "#1b1c1c",
+                    "surface-tint": "#9e357b",
+                    "on-tertiary-fixed-variant": "#004d66",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#811962",
+                    "on-primary-container": "#7a135d",
+                    "inverse-primary": "#ffaedb",
+                    "surface-container-highest": "#e5e2e1",
+                    "outline-variant": "#d8c0cb",
+                    "tertiary-container": "#38bbef",
+                    "background": "#fcf9f8",
+                    "surface-bright": "#fcf9f8",
+                    "secondary": "#705d00",
+                    "on-primary-fixed": "#3c002b",
+                    "error-container": "#ffdad6",
+                    "outline": "#86727b",
+                    "tertiary-fixed": "#c1e8ff",
+                    "primary-container": "#ff85d0",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae7e7",
+                    "secondary-fixed": "#ffe173",
+                    "inverse-surface": "#303030",
+                    "on-surface": "#1b1c1c",
+                    "tertiary-fixed-dim": "#73d2ff",
+                    "surface-dim": "#dcd9d9",
+                    "secondary-fixed-dim": "#e8c426",
+                    "surface": "#fcf9f8",
+                    "on-secondary-container": "#715d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "80px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-bold": ["Rubik"],
+                    "price-display": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Be Vietnam Pro"],
+                    "body-lg": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-1px", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                    "price-display": ["24px", {"lineHeight": "32px", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .kawaii-shadow {
+        box-shadow: 8px 8px 0px 0px rgba(27, 28, 28, 1);
+      }
+      .kawaii-shadow-sm {
+        box-shadow: 4px 4px 0px 0px rgba(27, 28, 28, 1);
+      }
+      .kawaii-border {
+        border: 4px solid #1b1c1c;
+      }
+      .kawaii-border-thin {
+        border: 2px solid #1b1c1c;
+      }
+      .sticker-rotate-pos { transform: rotate(3deg); }
+      .sticker-rotate-neg { transform: rotate(-3deg); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24 md:pb-0">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-40 bg-surface border-b-4 border-on-background flex justify-between items-center px-gutter py-4 shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg font-black text-primary italic">Kawaii POS</span>
+</div>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant font-medium hover:translate-y-0.5 hover:translate-x-0.5 transition-transform" href="#">POS</a>
+<a class="text-primary font-bold border-b-4 border-primary pb-1 hover:translate-y-0.5 hover:translate-x-0.5 transition-transform" href="#">Catalog</a>
+<a class="text-on-surface-variant font-medium hover:translate-y-0.5 hover:translate-x-0.5 transition-transform" href="#">Orders</a>
+<a class="text-on-surface-variant font-medium hover:translate-y-0.5 hover:translate-x-0.5 transition-transform" href="#">Shift</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">print</button>
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">account_circle</button>
+</div>
+</header>
+<div class="flex">
+<!-- Side Navigation Bar (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-80px)] w-64 sticky top-20 bg-surface-container border-r-4 border-on-background shadow-[8px_0px_0px_0px_rgba(27,28,28,1)] py-4 overflow-y-auto">
+<div class="px-4 mb-6">
+<div class="kawaii-border-thin bg-surface-bright p-3 rounded-xl flex items-center gap-3 kawaii-shadow-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed border-2 border-on-background flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">storefront</span>
+</div>
+<div>
+<div class="font-label-bold text-on-surface">Kawaii Boutique</div>
+<div class="text-[10px] text-on-surface-variant">Station 01</div>
+</div>
+</div>
+</div>
+<nav class="flex-grow space-y-2">
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105" href="#">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="font-label-bold">Checkout</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-fixed font-bold border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] m-2 flex items-center gap-3 p-4 rounded-xl hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-bold">Catalog</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-bold">Pickups</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-bold">Reports</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop bg-background">
+<!-- Header & Search -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2">Katalog &amp; Stok ✨</h1>
+<p class="font-body-lg text-on-surface-variant">Intip koleksi lucu dan cek ketersediaan barang kamu!</p>
+</div>
+<div class="relative w-full md:w-96">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full pl-12 pr-4 py-4 kawaii-border rounded-xl bg-surface focus:outline-none focus:ring-4 focus:ring-tertiary-container kawaii-shadow-sm font-label-bold" placeholder="Cari SKU atau Nama Produk..." type="text"/>
+<div class="absolute -top-3 -right-3">
+<span class="bg-secondary-container text-on-secondary-fixed text-[10px] px-2 py-1 kawaii-border-thin rounded-full font-black uppercase sticker-rotate-pos">Cari!</span>
+</div>
+</div>
+</div>
+<!-- Category Filter Pills -->
+<div class="flex flex-wrap gap-4 mb-10">
+<button class="px-6 py-2 bg-primary text-on-primary kawaii-border-thin rounded-full font-label-bold kawaii-shadow-sm hover:translate-y-1 transition-transform">Semua</button>
+<button class="px-6 py-2 bg-surface text-on-surface-variant kawaii-border-thin rounded-full font-label-bold hover:bg-primary-fixed transition-colors">Aksesoris</button>
+<button class="px-6 py-2 bg-surface text-on-surface-variant kawaii-border-thin rounded-full font-label-bold hover:bg-primary-fixed transition-colors">Pakaian</button>
+<button class="px-6 py-2 bg-surface text-on-surface-variant kawaii-border-thin rounded-full font-label-bold hover:bg-primary-fixed transition-colors">Stationery</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Product Card 1 -->
+<div class="bg-surface kawaii-border rounded-xl p-6 kawaii-shadow hover:scale-[1.02] transition-all relative overflow-hidden group">
+<div class="absolute top-4 right-4 z-10">
+<div class="bg-secondary-container text-on-secondary-fixed px-4 py-2 kawaii-border-thin rounded-lg font-black sticker-rotate-pos shadow-sm">
+                            BARU!
+                        </div>
+</div>
+<div class="aspect-square w-full mb-6 bg-surface-container rounded-lg kawaii-border-thin overflow-hidden flex items-center justify-center relative">
+<img class="object-cover w-full h-full sticker-rotate-neg group-hover:rotate-0 transition-transform duration-500" data-alt="A high-quality, vibrant studio photo of a pastel pink fluffy handbag with a cute cartoon cat face embroidery. The handbag is centered against a soft yellow background with high-key lighting that emphasizes its soft texture and bright colors. The overall aesthetic is maximalist kawaii with bold outlines and a playful, toy-like feel consistent with a boutique catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNezMVaOsSL_9VTkjbKVWqCVM3XGdQUHdJTRQtHRcXKYkyeIraG3kbd2XKDlNvOAuJn9EsArYl82t12wfWZWpF6fzOzI27thWi_e6WB23VQ6me2G2IpuAtgTBJAJAlBTrslgKks2fehCsUXD5SYZGavOPYLc1H7GJWQC8QHs-chlR2WULjSvUYL_GOBll2mT3SwfPBA9QQJW-IjIDsdp5w2LOEcsC926pGJZhwbPVkNlYU2b7t-EXeFi4rL-PwH0VVXAb7TPguh2xU"/>
+</div>
+<div class="space-y-4">
+<div>
+<span class="text-[12px] font-black text-tertiary uppercase tracking-wider">SKU: HNV-001</span>
+<h3 class="font-headline-lg text-on-surface leading-tight">Tas Kucing Fluffy Pink</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-price-display text-primary">Rp 185.000</span>
+<span class="px-3 py-1 bg-green-200 text-green-800 border-2 border-green-800 rounded-lg font-black text-[12px]">STOK TERSEDIA</span>
+</div>
+<div class="pt-4 border-t-2 border-on-background/10 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Pink - S</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">12 Pcs</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Pink - M</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">8 Pcs</span>
+</div>
+</div>
+</div>
+<!-- Decorative Sparkle -->
+<span class="material-symbols-outlined absolute -bottom-2 -left-2 text-primary opacity-20 text-6xl rotate-12">auto_awesome</span>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface kawaii-border rounded-xl p-6 kawaii-shadow hover:scale-[1.02] transition-all relative overflow-hidden group">
+<div class="aspect-square w-full mb-6 bg-surface-container rounded-lg kawaii-border-thin overflow-hidden flex items-center justify-center relative">
+<img class="object-cover w-full h-full sticker-rotate-pos group-hover:rotate-0 transition-transform duration-500" data-alt="Close-up professional product shot of a collection of colorful washi tapes with various cute patterns like stars, hearts, and rainbows. The tapes are stacked playfully on a lavender background. Bright, saturated colors and crisp black outlines characterize the scene, fitting a high-energy comic-inspired UI. Soft shadows give depth to the stacked items." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWzEYaBBh1s6tCN-KXMR2TI_hSS59R_8MOlECS-fWzVV9fBoayK04ParvaGq6wIpUNhmIKMw4bZHfnNHOoaDQXLkinp5Ep2HjK75D8YM6kW3Te5iaNSgS4nfA_zdcEZDZpjb-0b9KKH2jW5-aYs3M2xRVbT_16Pf08O81ySke88VCNFZ1buYyKNxTKGwTuxQjhYLZxVl6guYxEXbzQ11Nl78ed8C0a8SetOJQ7_Ok1HUP1Tnaaq5Cplft2NAu8eQFjVkAnEyAv4QJc"/>
+</div>
+<div class="space-y-4">
+<div>
+<span class="text-[12px] font-black text-tertiary uppercase tracking-wider">SKU: HNV-002</span>
+<h3 class="font-headline-lg text-on-surface leading-tight">Washi Tape Pelangi</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-price-display text-primary">Rp 25.000</span>
+<span class="px-3 py-1 bg-yellow-200 text-yellow-800 border-2 border-yellow-800 rounded-lg font-black text-[12px]">STOK MENIPIS</span>
+</div>
+<div class="pt-4 border-t-2 border-on-background/10 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Pastel</span>
+<span class="bg-error text-on-error px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">2 Pcs</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Neon</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">15 Pcs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface kawaii-border rounded-xl p-6 kawaii-shadow hover:scale-[1.02] transition-all relative overflow-hidden group">
+<div class="aspect-square w-full mb-6 bg-surface-container rounded-lg kawaii-border-thin overflow-hidden flex items-center justify-center relative">
+<img class="object-cover w-full h-full sticker-rotate-neg group-hover:rotate-0 transition-transform duration-500" data-alt="A set of chunky, colorful ceramic mugs with exaggerated rounded handles and smiley face designs. The mugs are vibrant sky blue and cherry red, set against a bright mint green backdrop. The lighting is vivid and clear, creating sharp comic-style shadows. The product feels tactile and collectible, perfectly matching the energetic and youthful brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWhOG7_3pU2U2wk-Mi05oU4NV7H33idg0F-ICF4rrbi2HQg4Rw88UEwXNR_sCWjOMJg9A64vf3Ut4Y2Fjp2PpYgf3k9yu3wM6mWGlrdH-Gg5iYqQysGCq1MMwau5O66s8pW0Xq12tJx5OgSKQXO-ozlfNift4l3j3La1FXZ_BFnRCFNfzLDx4_hTFFr2PvtA6ERj-keVm_FjOiyqbX8yfOebHEo_CP908VRptg1v6cLvfQYYT48MTORRlQYZ8p0RzIzGEeX029a0HJ"/>
+</div>
+<div class="space-y-4">
+<div>
+<span class="text-[12px] font-black text-tertiary uppercase tracking-wider">SKU: HNV-003</span>
+<h3 class="font-headline-lg text-on-surface leading-tight">Mug Senyum Keramik</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-price-display text-primary">Rp 65.000</span>
+<span class="px-3 py-1 bg-green-200 text-green-800 border-2 border-green-800 rounded-lg font-black text-[12px]">STOK TERSEDIA</span>
+</div>
+<div class="pt-4 border-t-2 border-on-background/10 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Biru</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">20 Pcs</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Merah</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">18 Pcs</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Kuning</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">10 Pcs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface kawaii-border rounded-xl p-6 kawaii-shadow hover:scale-[1.02] transition-all relative overflow-hidden group">
+<div class="aspect-square w-full mb-6 bg-surface-container rounded-lg kawaii-border-thin overflow-hidden flex items-center justify-center relative">
+<img class="object-cover w-full h-full sticker-rotate-pos group-hover:rotate-0 transition-transform duration-500" data-alt="A brightly colored oversized hoodie featuring a large cartoon star graphic on the front. The fabric is a soft lavender shade. The hoodie is displayed on a simple mannequin against a bold pink background. High-contrast lighting and saturated colors define the image, emphasizing the chunky, playful aesthetic of the brand's apparel line." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZiEZcUlJsyPFYlScmpY4CXsonK3TPyTdSFu_Ma4IGwMH4k8O_qcVRTo7ykvH_UfbvlarjUtkbfiUEbaBxk934iZu8nTY9g23S3FVBZmr-aqOjREq3GtgtenwguqJ14hS5z6KbZnKZDhnZUIXkPldzc5wkwc5uF1CznvARFuYrTT5V3jb0iWMzHCRfjkpLe4r9IbIbOifo7-Az6GAH91Wh-3_X1xkZUQJaTdjG7TW-5nENayGVm_ROOUVuZsJcW-qYwJvK_d2HBIbL"/>
+</div>
+<div class="space-y-4">
+<div>
+<span class="text-[12px] font-black text-tertiary uppercase tracking-wider">SKU: HNV-004</span>
+<h3 class="font-headline-lg text-on-surface leading-tight">Hoodie Bintang Lucu</h3>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-price-display text-primary">Rp 225.000</span>
+<span class="px-3 py-1 bg-green-200 text-green-800 border-2 border-green-800 rounded-lg font-black text-[12px]">STOK TERSEDIA</span>
+</div>
+<div class="pt-4 border-t-2 border-on-background/10 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-on-surface-variant">Varian: Lavender - All Size</span>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-md font-bold text-sm kawaii-border-thin">5 Pcs</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Floating Stickers -->
+<div class="fixed bottom-32 right-12 hidden xl:block">
+<div class="w-24 h-24 bg-tertiary-container border-4 border-on-background rounded-full flex items-center justify-center sticker-rotate-neg kawaii-shadow-sm">
+<span class="material-symbols-outlined text-white text-5xl">star</span>
+</div>
+</div>
+<div class="fixed top-48 right-8 hidden xl:block">
+<div class="w-16 h-16 bg-primary-fixed border-4 border-on-background rounded-xl flex items-center justify-center sticker-rotate-pos kawaii-shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl">favorite</span>
+</div>
+</div>
+</main>
+</div>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-highest border-t-4 border-on-background shadow-[0px_-4px_0px_0px_rgba(27,28,28,1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-bold text-[10px]">POS</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container border-2 border-on-background rounded-xl px-4 py-1 shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:bg-primary-fixed-dim transition-colors active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">shelves</span>
+<span class="font-label-bold text-[10px]">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">package_2</span>
+<span class="font-label-bold text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-bold text-[10px]">End Shift</span>
+</a>
+</nav>
+</body></html>

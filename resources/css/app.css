@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Color Palette */
+    --color-surface-bright: #fcf9f8;
+    --color-on-background: #1b1c1c;
+    --color-surface-dim: #dcd9d9;
+    --color-on-error: #ffffff;
+    --color-on-surface: #1b1c1c;
+    --color-inverse-surface: #303030;
+    --color-primary: #9e357b;
+    --color-on-secondary-fixed: #221b00;
+    --color-on-tertiary: #ffffff;
+    --color-background: #fcf9f8;
+    --color-tertiary-fixed: #c1e8ff;
+    --color-on-secondary: #ffffff;
+    --color-surface-variant: #e5e2e1;
+    --color-on-secondary-fixed-variant: #554500;
+    --color-inverse-on-surface: #f3f0ef;
+    --color-on-tertiary-container: #004860;
+    --color-surface-container-highest: #e5e2e1;
+    --color-on-primary: #ffffff;
+    --color-secondary: #705d00;
+    --color-on-primary-fixed: #3c002b;
+    --color-on-secondary-container: #715d00;
+    --color-outline: #86727b;
+    --color-primary-fixed-dim: #ffaedb;
+    --color-surface-container-low: #f6f3f2;
+    --color-surface: #fcf9f8;
+    --color-on-error-container: #93000a;
+    --color-on-primary-container: #7a135d;
+    --color-error: #ba1a1a;
+    --color-tertiary-fixed-dim: #73d2ff;
+    --color-primary-container: #ff85d0;
+    --color-secondary-fixed: #ffe173;
+    --color-surface-tint: #9e357b;
+    --color-surface-container: #f0eded;
+    --color-on-primary-fixed-variant: #811962;
+    --color-on-surface-variant: #53424b;
+    --color-tertiary: #006687;
+    --color-secondary-fixed-dim: #e8c426;
+    --color-surface-container-high: #eae7e7;
+    --color-outline-variant: #d8c0cb;
+    --color-inverse-primary: #ffaedb;
+    --color-tertiary-container: #38bbef;
+    --color-on-tertiary-fixed-variant: #004d66;
+    --color-surface-container-lowest: #ffffff;
+    --color-primary-fixed: #ffd8eb;
+    --color-on-tertiary-fixed: #001e2b;
+    --color-error-container: #ffdad6;
+    --color-secondary-container: #fdd73b;
+
+    /* Spacing Constants */
+    --p-margin-desktop: 64px;
+    --p-margin-mobile: 16px;
+    --p-unit: 8px;
+    --p-gutter: 24px;
+    --p-section-gap: 80px;
+}
+
+@layer base {
+    body {
+        @apply antialiased text-[#1b1c1c];
+        font-family: 'Be Vietnam Pro', sans-serif;
+    }
+}
+
+@layer components {
+    /* Typography Utilities */
+    .text-headline-xl {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 48px;
+        line-height: 56px;
+        letter-spacing: -1px;
+        font-weight: 800;
+    }
+
+    .text-headline-lg {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 32px;
+        line-height: 40px;
+        font-weight: 800;
+    }
+
+    .text-headline-lg-mobile {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 28px;
+        line-height: 36px;
+        font-weight: 800;
+    }
+
+    .text-body-lg {
+        font-family: 'Be Vietnam Pro', sans-serif;
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 600;
+    }
+
+    .text-body-md {
+        font-family: 'Be Vietnam Pro', sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+    }
+
+    .text-label-bold {
+        font-family: 'Rubik', sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 700;
+    }
+
+    .text-price-display {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 24px;
+        line-height: 32px;
+        font-weight: 800;
+    }
+
+    /* Pattern Definitions */
+    .pattern-bg-main {
+        background-color: #c1e8ff;
+        background-image: radial-gradient(#ff85d0 10px, transparent 10px), radial-gradient(#ffe173 10px, transparent 10px);
+        background-size: 60px 60px;
+        background-position: 0 0, 30px 30px;
+        background-attachment: fixed;
+    }
+
+    .grid-kawaii-pattern {
+        background-color: #ffffff;
+        background-image: 
+            linear-gradient(#ff85d0 2px, transparent 2px),
+            linear-gradient(90deg, #a7f3d0 2px, transparent 2px);
+        background-size: 60px 60px;
+        background-attachment: fixed;
+    }
+
+    .pattern-bg-auth {
+        background-image: 
+            radial-gradient(rgba(27,28,28,0.2) 3px, transparent 3px),
+            linear-gradient(135deg, var(--color-primary-container), var(--color-secondary-container), var(--color-tertiary-container));
+        background-size: 24px 24px, auto;
+        background-attachment: fixed;
+    }
+
+    .pattern-bg-kawaii {
+        background-color: #fcf9f8;
+        background-image: 
+            linear-gradient(90deg, #98ffc0 6px, transparent 6px), 
+            linear-gradient(#ff85d0 6px, transparent 6px);
+        background-size: 64px 64px;
+        background-attachment: fixed;
+    }
+
+    .pattern-rays {
+        background-color: #fdd73b;
+        background-image: repeating-conic-gradient(
+            from 0deg at 50% 50%,
+            #ff85d0 0deg 20deg,
+            #38bbef 20deg 40deg,
+            #fdd73b 40deg 60deg
+        );
+        background-attachment: fixed;
+    }
+
+    .pattern-nav {
+        background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,133,208,0.4) 20px, rgba(255,133,208,0.4) 40px);
+    }
+
+    .pattern-footer-diagonal {
+        background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,133,208,0.4) 20px, rgba(255,133,208,0.4) 40px);
+    }
+
+    .pattern-dots-subtle {
+        background-image: radial-gradient(rgba(27, 28, 28, 0.2) 2px, transparent 2px);
+        background-size: 16px 16px;
+    }
+
+    /* Common Cartoon Elements */
+    .ct-border {
+        border: 4px solid var(--color-on-background);
+    }
+
+    .ct-shadow-sm {
+        box-shadow: 4px 4px 0px 0px var(--color-on-background);
+    }
+
+    .ct-shadow {
+        box-shadow: 8px 8px 0px 0px var(--color-on-background);
+    }
+
+    .ct-shadow-lg {
+        box-shadow: 12px 12px 0px 0px var(--color-on-background);
+    }
+
+    .ct-shadow-xl {
+        box-shadow: 16px 16px 0px 0px var(--color-on-background);
+    }
+
+    /* Buttons */
+    .ct-btn {
+        @apply px-6 py-3 rounded-xl border-4 border-on-background shadow-[4px_4px_0px_0px_#1b1c1c] font-black uppercase tracking-wider transition-all duration-200 active:translate-y-1 active:translate-x-1 active:shadow-none inline-flex items-center justify-center gap-2;
+    }
+    .ct-btn-primary { @apply bg-primary text-on-primary hover:bg-primary-container; }
+    .ct-btn-secondary { @apply bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed; }
+    .ct-btn-tertiary { @apply bg-tertiary-container text-on-tertiary-container hover:bg-tertiary-fixed; }
+    .ct-btn-outline { @apply bg-surface-bright text-on-background hover:bg-surface-variant; }
+
+    /* Large Buttons */
+    .ct-btn-lg {
+        @apply px-10 py-5 rounded-2xl border-4 border-on-background shadow-[8px_8px_0px_0px_#1b1c1c] font-black text-xl uppercase tracking-widest transition-all duration-200 hover:translate-y-[-2px] hover:translate-x-[-2px] hover:shadow-[10px_10px_0px_0px_#1b1c1c] active:translate-y-2 active:translate-x-2 active:shadow-none inline-flex items-center justify-center gap-3;
+    }
+
+    /* Cards */
+    .ct-card {
+        @apply bg-surface-bright border-4 border-on-background rounded-2xl shadow-[8px_8px_0px_0px_#1b1c1c] overflow-hidden;
+    }
+    .ct-card-interactive {
+        @apply hover:translate-y-[-4px] hover:rotate-1 transition-all duration-300;
+    }
+
+    /* Sticker Labels */
+    .ct-sticker {
+        @apply inline-block px-4 py-2 border-4 border-on-background rounded-full font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_#1b1c1c] z-10;
+    }
+    .ct-sticker-primary { @apply bg-primary text-on-primary rotate-[-6deg]; }
+    .ct-sticker-secondary { @apply bg-secondary-container text-on-secondary-container rotate-[6deg]; }
+    .ct-sticker-tertiary { @apply bg-tertiary-container text-on-tertiary-container rotate-[-3deg]; }
+
+    /* Inputs */
+    .ct-input {
+        @apply w-full bg-surface-bright px-6 py-4 border-4 border-on-background rounded-xl font-bold shadow-[inset_0px_4px_0px_0px_rgba(27,28,28,0.1)] focus:outline-none focus:border-primary transition-all placeholder:text-outline;
+    }
+
+    /* Badges */
+    .ct-badge {
+        @apply px-3 py-1 border-2 border-on-background rounded-full font-black text-[10px] uppercase shadow-[2px_2px_0px_0px_#1b1c1c];
+    }
+
+    /* Bubble Titles */
+    .bubble-title {
+        @apply relative inline-block text-headline-xl italic text-on-background;
+    }
+    .bubble-title::after {
+        content: '';
+        @apply absolute -bottom-2 left-0 w-full h-4 bg-primary-container -z-10 rounded-full opacity-60;
+    }
+
+    /* Auth Scalloped Accent */
+    .scalloped-accent::before {
+        content: '';
+        position: absolute;
+        inset: -12px;
+        background-color: var(--color-secondary-container);
+        border-radius: 3rem;
+        z-index: -1;
+        border: 4px solid var(--color-on-background);
+        box-shadow: 8px 8px 0px 0px var(--color-on-background);
+    }
+
+    /* Padding Helpers */
+    .p-margin-desktop { padding: var(--p-margin-desktop); }
+    .p-margin-mobile { padding: var(--p-margin-mobile); }
+    .px-margin-desktop { padding-left: var(--p-margin-desktop); padding-right: var(--p-margin-desktop); }
+    .px-margin-mobile { padding-left: var(--p-margin-mobile); padding-right: var(--p-margin-mobile); }
+    .mt-section-gap { margin-top: var(--p-section-gap); }
+    .gap-gutter { gap: var(--p-gutter); }
+}
+
+/* Material Symbols Rendering */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+}
+
+/* Dots Background Utility */
+.dots-bg {
+    background-image: radial-gradient(var(--color-on-background) 2px, transparent 2px);
+    background-size: 32px 32px;
+    background-color: var(--color-background);
+}

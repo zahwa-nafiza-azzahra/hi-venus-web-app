@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e5e2e1",
+                        "surface-container": "#f0eded",
+                        "surface-container-low": "#f6f3f2",
+                        "secondary-container": "#fdd73b",
+                        "primary": "#9e357b",
+                        "on-secondary-fixed": "#221b00",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#ffd8eb",
+                        "on-secondary-fixed-variant": "#554500",
+                        "on-tertiary-container": "#004860",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#ffaedb",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#001e2b",
+                        "tertiary": "#006687",
+                        "on-surface-variant": "#53424b",
+                        "on-background": "#1b1c1c",
+                        "surface-tint": "#9e357b",
+                        "on-tertiary-fixed-variant": "#004d66",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#811962",
+                        "on-primary-container": "#7a135d",
+                        "inverse-primary": "#ffaedb",
+                        "surface-container-highest": "#e5e2e1",
+                        "outline-variant": "#d8c0cb",
+                        "tertiary-container": "#38bbef",
+                        "background": "#fcf9f8",
+                        "surface-bright": "#fcf9f8",
+                        "secondary": "#705d00",
+                        "on-primary-fixed": "#3c002b",
+                        "error-container": "#ffdad6",
+                        "outline": "#86727b",
+                        "tertiary-fixed": "#c1e8ff",
+                        "primary-container": "#ff85d0",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#eae7e7",
+                        "secondary-fixed": "#ffe173",
+                        "inverse-surface": "#303030",
+                        "on-surface": "#1b1c1c",
+                        "tertiary-fixed-dim": "#73d2ff",
+                        "surface-dim": "#dcd9d9",
+                        "secondary-fixed-dim": "#e8c426",
+                        "surface": "#fcf9f8",
+                        "on-secondary-container": "#715d00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "80px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Rubik"],
+                        "price-display": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-1px", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                        "price-display": ["24px", {"lineHeight": "32px", "fontWeight": "800"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sticker-rotate-1 { transform: rotate(-2deg); }
+        .sticker-rotate-2 { transform: rotate(3deg); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md" style="background: repeating-linear-gradient(45deg, #fcf9f8, #fcf9f8 20px, #f0eded 20px, #f0eded 40px);">
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container border-r-4 border-on-background shadow-[8px_0px_0px_0px_rgba(27,28,28,1)] z-50 py-margin-mobile">
+<div class="px-6 mb-8">
+<h1 class="font-headline-lg text-headline-lg font-black text-primary italic">Kawaii POS</h1>
+<p class="text-on-surface-variant font-label-bold text-label-bold">Hi Venus • Station 01</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105 active:scale-95" href="#">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="font-label-bold text-label-bold">Checkout</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105 active:scale-95" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-bold text-label-bold">Catalog</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-fixed font-bold border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] m-2 flex items-center gap-3 p-4 rounded-xl scale-105" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-bold text-label-bold">Pickups</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105 active:scale-95" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-bold text-label-bold">Reports</span>
+</a>
+<a class="text-on-surface-variant flex items-center gap-3 p-4 m-2 hover:bg-surface-variant rounded-xl transition-all hover:scale-105 active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold text-label-bold">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<button class="w-full py-4 bg-primary text-on-primary font-bold border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rounded-xl hover:translate-y-0.5 hover:translate-x-0.5 transition-transform active:translate-y-1 active:translate-x-1">
+                New Sale
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-64 pb-24 md:pb-8 min-h-screen">
+<!-- Top Nav (Mobile & Desktop Titles) -->
+<header class="sticky top-0 z-40 bg-surface border-b-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] px-gutter py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined md:hidden">menu</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-black text-primary">Verifikasi Pickup (Vibrant)</h2>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">print</span>
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</div>
+</header>
+<div class="p-gutter max-w-5xl mx-auto">
+<!-- Search Section -->
+<section class="mb-10">
+<div class="bg-surface-container-low border-4 border-on-background p-6 rounded-xl shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] relative overflow-hidden">
+<!-- Decorative Sparkles -->
+<span class="material-symbols-outlined absolute top-2 right-2 text-primary opacity-20 text-4xl">auto_awesome</span>
+<span class="material-symbols-outlined absolute bottom-2 left-2 text-tertiary opacity-20 text-4xl">star</span>
+<label class="block font-label-bold text-label-bold mb-3 text-on-surface-variant">INPUT KODE PICKUP / NOMOR PESANAN</label>
+<div class="flex flex-col md:flex-row gap-4">
+<div class="relative flex-1">
+<input class="w-full bg-white border-4 border-on-background p-4 rounded-xl text-headline-lg-mobile font-headline-lg-mobile focus:ring-4 focus:ring-tertiary-container focus:outline-none placeholder:opacity-30" placeholder="Contoh: VENUS-XXXXX" type="text" value="VENUS-99283"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-3xl">qr_code_scanner</span>
+</div>
+<button class="bg-tertiary-container text-on-tertiary-fixed font-black px-8 py-4 border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rounded-xl hover:translate-y-0.5 hover:translate-x-0.5 transition-transform active:translate-y-1 active:translate-x-1 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">search</span>
+                            CARI PESANAN
+                        </button>
+</div>
+</div>
+</section>
+<!-- Result Grid (Bento Style) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Order Status & Customer -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Status Card -->
+<div class="bg-white border-4 border-on-background p-6 rounded-xl shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] flex items-center justify-between">
+<div>
+<p class="text-on-surface-variant font-label-bold text-label-bold">STATUS SAAT INI</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-4 h-4 bg-secondary-container rounded-full border-2 border-on-background"></span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">Menunggu Pickup</h3>
+</div>
+</div>
+<div class="sticker-rotate-2 bg-primary-fixed border-2 border-on-background px-3 py-1 rounded-full text-on-primary-fixed-variant font-black text-xs">
+                            KILAT EXPRESS
+                        </div>
+</div>
+<!-- Details Card -->
+<div class="bg-white border-4 border-on-background p-8 rounded-xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] relative">
+<h4 class="font-headline-lg text-headline-lg mb-6 border-b-4 border-surface-variant pb-4">Detail Pesanan</h4>
+<div class="space-y-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<span class="text-on-surface-variant font-label-bold text-label-bold">NAMA PEMBELI</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Anya Forger ★</span>
+</div>
+<div class="space-y-4">
+<span class="text-on-surface-variant font-label-bold text-label-bold block mb-2">DAFTAR BARANG</span>
+<div class="flex items-center gap-4 p-4 bg-surface-container-low border-2 border-on-background rounded-xl">
+<div class="w-16 h-16 bg-white border-2 border-on-background rounded-lg flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro close-up of a vibrant pink stylish sunglass with chunky frames sitting on a bright yellow background. The lighting is high-contrast with sharp black comic-style shadows. The aesthetic is playful and kawaii, featuring high-saturation colors and a clean, glossy finish that makes the product look like a high-end collectible accessory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADMRVWhVfsnUHIVaX7cgnFYgsVZsvUnU_k5QEdXb8M6khlq3JZvDkDOvTFzWy3RJs88ZCstMPyHKX34aZIqZfMaI6h5YHlCZDuCDGnr8aKm0HicQ9J4v-mpfA9lfcA_Swbd394npU5Gz3sG7IO9dfgh5UmSnoK332dKQM3GXTLrVkDnpM8XSsrdJNAM1H8CNqx8NSV84xERK-AXql2dujyb2sauj7Z8qGzmgYFsoGyTgjjVZCHWxJRnyq_ly8uySotJ8fhDaKRRNGZ"/>
+</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg">Retro Pink Sunglasses</p>
+<p class="text-on-surface-variant text-sm">Qty: 1 • Rp 150.000</p>
+</div>
+<span class="font-price-display text-price-display text-primary">Rp 150k</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-surface-container-low border-2 border-on-background rounded-xl">
+<div class="w-16 h-16 bg-white border-2 border-on-background rounded-lg flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A cute, chunky strawberry-shaped plush toy with a smiling face and embroidered details. The strawberry is bright red with green felt leaves on top. The background is a soft pastel lavender. The image style is vibrant and toy-like, with thick outlines and bold colors following a maximalist kawaii aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxrDBPKDavtcRRsLOH2PiR8Uz423UsGENkCbzoGNXRjh8gPMBUxtAyD9Afcame3YbzraAGO-dSalCyPdHewxcZ610NAbk8A64s2BnmCwjPriihJaEXHYLRZgnNbiBZokKxWFh_RKARLNowQowZ0DAG5X1YyByKj7cGmb09ldMV-MmQRPLQ4i9KlWrUY15j_aJW22nNiKNG4fNpDpPYm4qdSQxVdNSPsWD44caM051N-ICe-DqgyE1UXj3q2GUt_6Ggewk1yKDxFyyo"/>
+</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg">Strawberry Plushie XL</p>
+<p class="text-on-surface-variant text-sm">Qty: 2 • Rp 85.000</p>
+</div>
+<span class="font-price-display text-price-display text-primary">Rp 170k</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & CTA -->
+<div class="space-y-6">
+<!-- Total Card -->
+<div class="bg-secondary-container border-4 border-on-background p-6 rounded-xl shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] text-on-secondary-fixed">
+<p class="font-label-bold text-label-bold opacity-70">TOTAL TAGIHAN</p>
+<h2 class="font-headline-xl text-headline-xl">Rp 320.000</h2>
+<div class="mt-4 pt-4 border-t-2 border-on-secondary-fixed-variant border-dashed">
+<p class="flex justify-between text-sm"><span>Subtotal</span> <span>Rp 320.000</span></p>
+<p class="flex justify-between text-sm"><span>PPN (0%)</span> <span>Rp 0</span></p>
+</div>
+</div>
+<!-- Action Card -->
+<div class="bg-white border-4 border-on-background p-6 rounded-xl shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] text-center">
+<div class="mb-6 sticker-rotate-1 inline-block bg-surface-variant border-2 border-on-background p-4 rounded-xl">
+<span class="material-symbols-outlined text-5xl text-primary">verified_user</span>
+</div>
+<p class="text-on-surface-variant mb-6 text-sm">Pastikan semua barang sudah sesuai sebelum konfirmasi serah terima.</p>
+<button class="w-full py-6 bg-primary text-on-primary font-black text-xl border-4 border-on-background shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] rounded-xl hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all active:scale-95">
+                            KONFIRMASI SERAH TERIMA
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-highest border-t-4 border-on-background shadow-[0px_-4px_0px_0px_rgba(27,28,28,1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-bold text-label-bold">POS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined">shelves</span>
+<span class="font-label-bold text-label-bold">Inventory</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container border-2 border-on-background rounded-xl px-4 py-1 shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-bold text-label-bold">Pickups</span>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-bold text-label-bold">Shift</span>
+</a>
+</nav>
+<!-- Mock Modal / Popup (Hidden by default, shown for layout demo) -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-on-background/40 backdrop-blur-sm p-4">
+<div class="bg-white border-4 border-on-background p-8 rounded-xl shadow-[12px_12px_0px_0px_rgba(27,28,28,1)] max-w-md w-full relative">
+<button class="absolute top-4 right-4 material-symbols-outlined">close</button>
+<div class="text-center">
+<div class="w-20 h-20 bg-secondary-container border-4 border-on-background rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-4xl">warning</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-2">Konfirmasi Akhir</h2>
+<p class="text-on-surface-variant mb-8">Apakah Anda yakin pesanan <strong class="text-on-background">VENUS-99283</strong> telah diserahkan ke kurir?</p>
+<div class="flex flex-col gap-4">
+<button class="w-full py-4 bg-primary text-on-primary font-black border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rounded-xl hover:translate-y-0.5 transition-transform">
+                        YA, SUDAH SELESAI
+                    </button>
+<button class="w-full py-4 bg-surface-variant text-on-surface-variant font-bold border-4 border-on-background rounded-xl">
+                        BATAL
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Corner Sticker -->
+<div class="fixed bottom-24 right-6 md:bottom-10 md:right-10 pointer-events-none z-30 sticker-rotate-2">
+<div class="bg-tertiary-container border-4 border-on-background p-4 rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<div class="fixed top-20 left-10 opacity-10 pointer-events-none select-none z-0"><span class="material-symbols-outlined text-[120px] text-primary" style="font-variation-settings: 'FILL' 1;">search</span></div><div class="fixed bottom-40 left-1/4 opacity-10 pointer-events-none select-none z-0"><span class="material-symbols-outlined text-[100px] text-tertiary" style="font-variation-settings: 'FILL' 1;">package_2</span></div><div class="fixed top-1/2 right-10 opacity-10 pointer-events-none select-none z-0"><span class="material-symbols-outlined text-[80px] text-secondary" style="font-variation-settings: 'FILL' 1;">shopping_basket</span></div></body></html>

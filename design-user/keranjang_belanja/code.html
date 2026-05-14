@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Rubik:wght@700&amp;family=Be+Vietnam+Pro:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+        }
+        .kawaii-stripes {
+            background-color: #ffd8eb;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(158, 53, 123, 0.1) 20px, rgba(158, 53, 123, 0.1) 40px);
+        }
+        .sticker-rotate-left { transform: rotate(-3deg); }
+        .sticker-rotate-right { transform: rotate(3deg); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#9e357b",
+                        "on-tertiary-fixed": "#001e2b",
+                        "background": "#fcf9f8",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f0eded",
+                        "secondary": "#705d00",
+                        "on-surface-variant": "#53424b",
+                        "inverse-on-surface": "#f3f0ef",
+                        "surface-bright": "#fcf9f8",
+                        "outline": "#86727b",
+                        "tertiary-fixed-dim": "#73d2ff",
+                        "secondary-fixed": "#ffe173",
+                        "on-surface": "#1b1c1c",
+                        "secondary-container": "#fdd73b",
+                        "on-primary-fixed-variant": "#811962",
+                        "on-primary-container": "#7a135d",
+                        "tertiary-fixed": "#c1e8ff",
+                        "on-secondary-fixed-variant": "#554500",
+                        "on-secondary-container": "#715d00",
+                        "inverse-primary": "#ffaedb",
+                        "surface-variant": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#004d66",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1b1c1c",
+                        "surface-container-high": "#eae7e7",
+                        "primary-container": "#ff85d0",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f6f3f2",
+                        "secondary-fixed-dim": "#e8c426",
+                        "primary-fixed": "#ffd8eb",
+                        "on-tertiary-container": "#004860",
+                        "surface-dim": "#dcd9d9",
+                        "primary-fixed-dim": "#ffaedb",
+                        "inverse-surface": "#303030",
+                        "primary": "#9e357b",
+                        "tertiary-container": "#38bbef",
+                        "tertiary": "#006687",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "outline-variant": "#d8c0cb",
+                        "on-secondary-fixed": "#221b00",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#3c002b",
+                        "surface": "#fcf9f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "section-gap": "80px",
+                        "margin-desktop": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "price-display": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-bold": ["Rubik"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "price-display": ["24px", {"lineHeight": "32px", "fontWeight": "800"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-1px", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "800"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden kawaii-stripes">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 w-full sticky top-0 z-50 bg-primary dark:bg-primary border-b-4 border-on-background shadow-[0px_6px_0px_0px_rgba(27,28,28,1)]">
+<div class="text-headline-lg font-headline-lg font-black text-on-primary tracking-tighter italic">Hi Venus</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">Home</a>
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">Shop</a>
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">New Arrivals</a>
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">Best Sellers</a>
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">Collections</a>
+<a class="text-on-primary/90 hover:text-on-primary font-label-bold text-label-bold hover:scale-105 transition-transform" href="#">About Us</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-primary hover:scale-110 transition-transform active:translate-y-1">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="text-on-primary hover:scale-110 transition-transform active:translate-y-1">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</nav>
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- Title Section -->
+<div class="mb-12 relative">
+<h1 class="font-headline-xl text-headline-xl text-primary inline-block bg-white px-8 py-4 border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] sticker-rotate-left">
+                Keranjang Kamu 💖
+            </h1>
+<div class="absolute -top-6 -right-6 hidden md:block">
+<span class="material-symbols-outlined text-secondary text-6xl opacity-50" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Items List -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border-4 border-on-background shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] p-6 flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] transition-all">
+<div class="w-32 h-32 flex-shrink-0 bg-primary-fixed border-2 border-on-background sticker-rotate-right overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A bright and colorful close-up of a pink designer sunglasses case featuring a cute cartoon rabbit illustration. The lighting is vivid and high-contrast, emphasizing the glossy texture of the case and the bold outlines of the artwork. The aesthetic is purely maximalist kawaii, with a playful energy and saturated pink and yellow tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf"/>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h3 class="font-headline-lg text-headline-lg text-primary mb-1">Bunny Sunglasses Case</h3>
+<p class="font-label-bold text-label-bold text-on-surface-variant mb-4">Varian: Pink Blossom / Large</p>
+<div class="flex items-center justify-center md:justify-start gap-4">
+<span class="font-price-display text-price-display text-secondary">Rp 125.000</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-4">
+<div class="flex items-center border-4 border-on-background bg-white shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
+<button class="p-2 hover:bg-surface-variant active:bg-secondary-container transition-colors"><span class="material-symbols-outlined" data-icon="remove">remove</span></button>
+<span class="px-4 font-headline-lg text-headline-lg border-x-4 border-on-background">1</span>
+<button class="p-2 hover:bg-surface-variant active:bg-secondary-container transition-colors"><span class="material-symbols-outlined" data-icon="add">add</span></button>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-bold text-label-bold text-on-surface">Subtotal: Rp 125.000</span>
+<button class="p-2 bg-error text-on-error border-2 border-on-background hover:scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border-4 border-on-background shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] p-6 flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] transition-all">
+<div class="w-32 h-32 flex-shrink-0 bg-tertiary-fixed border-2 border-on-background sticker-rotate-left overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up shot of a vibrant blue and yellow plush toy shaped like a stylized cloud with a happy face. The plush is positioned against a background of soft pastel patterns, under bright studio lighting that highlights its soft, fluffy texture. The visual style is energetic and toy-like, consistent with a high-energy kawaii pop culture vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkhQ2kKrHAPNge7wvskFW9C__EVuNyD0yLFUIfbZCmmhB2Z6CcoH8kQYcj33VrdAvQb1UmEvXFZFOeAkTN_-b89Jb2e3lkkU6-bhmxpnJH6gwwQ273w-wLuioKlNIqBerWzfm-ifuljrlz4-qs65P8GP0okbVk9IjWx7bCQVjTW5q1k-9AZCHgWvhSl6L6jD0uuSKZs0VVv6GxxF1833cgw0Eqxvn3EAEWt-0GWcdX3yZpD1lQFyjkV3QKfqAcn5gW1LJp9XdUhyhj"/>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h3 class="font-headline-lg text-headline-lg text-primary mb-1">Happy Cloud Plushie</h3>
+<p class="font-label-bold text-label-bold text-on-surface-variant mb-4">Varian: Sky Blue / Small</p>
+<div class="flex items-center justify-center md:justify-start gap-4">
+<span class="font-price-display text-price-display text-secondary">Rp 89.000</span>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-4">
+<div class="flex items-center border-4 border-on-background bg-white shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
+<button class="p-2 hover:bg-surface-variant active:bg-secondary-container transition-colors"><span class="material-symbols-outlined" data-icon="remove">remove</span></button>
+<span class="px-4 font-headline-lg text-headline-lg border-x-4 border-on-background">2</span>
+<button class="p-2 hover:bg-surface-variant active:bg-secondary-container transition-colors"><span class="material-symbols-outlined" data-icon="add">add</span></button>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-bold text-label-bold text-on-surface">Subtotal: Rp 178.000</span>
+<button class="p-2 bg-error text-on-error border-2 border-on-background hover:scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Sidebar -->
+<div class="lg:col-span-4">
+<div class="bg-white border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] p-8 sticky top-28">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-6 border-b-4 border-on-background pb-2">Ringkasan</h2>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-bold">Subtotal (3 item)</span>
+<span class="font-body-lg text-on-surface">Rp 303.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-bold">Pengiriman</span>
+<span class="font-body-lg text-on-surface">Rp 20.000</span>
+</div>
+<div class="pt-4 border-t-4 border-dashed border-outline-variant flex justify-between items-center">
+<span class="font-headline-lg text-headline-lg text-on-background">Total</span>
+<span class="font-price-display text-headline-lg text-secondary">Rp 323.000</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container border-4 border-on-background py-6 px-4 font-headline-lg text-headline-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-2 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:translate-y-2 active:shadow-none transition-all group">
+                        Lanjut ke Checkout
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="mt-8 flex items-center gap-4 p-4 bg-secondary-fixed border-2 border-on-background sticker-rotate-right">
+<span class="material-symbols-outlined text-on-secondary-fixed" data-icon="local_offer">local_offer</span>
+<p class="text-label-bold text-on-secondary-fixed">Gunakan kode promo untuk diskon ekstra!</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="full-width border-t-4 border-on-background mt-section-gap bg-surface-container-highest dark:bg-surface-container-lowest bg-[radial-gradient(#9e357b_3px,transparent_3px)] [background-size:24px_24px]">
+<div class="flex flex-col md:flex-row justify-between items-start p-margin-desktop w-full max-w-[1200px] mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="text-headline-xl font-headline-xl font-black text-primary italic mb-4">Hi Venus</div>
+<p class="max-w-xs text-on-surface font-body-md">Destinasi belanja paling kawaii untuk semua koleksi impianmu! ✨</p>
+</div>
+<div class="grid grid-cols-2 gap-12">
+<div class="flex flex-col gap-4">
+<h4 class="font-label-bold text-primary">Navigasi</h4>
+<a class="text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform" href="#">Privacy Policy</a>
+<a class="text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-bold text-primary">Bantuan</h4>
+<a class="text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform" href="#">Shipping Info</a>
+<a class="text-on-surface dark:text-on-surface-variant font-bold hover:text-primary hover:rotate-2 transition-transform" href="#">Contact Us</a>
+</div>
+</div>
+</div>
+<div class="w-full text-center py-8 border-t-4 border-on-background bg-white">
+<p class="font-label-bold text-primary">© 2024 Hi Venus Kawaii Shop. Made with Sparkles!</p>
+</div>
+</footer>
+</body></html>

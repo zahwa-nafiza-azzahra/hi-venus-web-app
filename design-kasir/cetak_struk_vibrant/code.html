@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;700&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .kawaii-sparkle {
+            position: absolute;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e5e2e1",
+                      "surface-container": "#f0eded",
+                      "surface-container-low": "#f6f3f2",
+                      "secondary-container": "#fdd73b",
+                      "primary": "#9e357b",
+                      "on-secondary-fixed": "#221b00",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#ffd8eb",
+                      "on-secondary-fixed-variant": "#554500",
+                      "on-tertiary-container": "#004860",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#ffaedb",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed": "#001e2b",
+                      "tertiary": "#006687",
+                      "on-surface-variant": "#53424b",
+                      "on-background": "#1b1c1c",
+                      "surface-tint": "#9e357b",
+                      "on-tertiary-fixed-variant": "#004d66",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#811962",
+                      "on-primary-container": "#7a135d",
+                      "inverse-primary": "#ffaedb",
+                      "surface-container-highest": "#e5e2e1",
+                      "outline-variant": "#d8c0cb",
+                      "tertiary-container": "#38bbef",
+                      "background": "#fcf9f8",
+                      "surface-bright": "#fcf9f8",
+                      "secondary": "#705d00",
+                      "on-primary-fixed": "#3c002b",
+                      "error-container": "#ffdad6",
+                      "outline": "#86727b",
+                      "tertiary-fixed": "#c1e8ff",
+                      "primary-container": "#ff85d0",
+                      "inverse-on-surface": "#f3f0ef",
+                      "on-error": "#ffffff",
+                      "surface-container-high": "#eae7e7",
+                      "secondary-fixed": "#ffe173",
+                      "inverse-surface": "#303030",
+                      "on-surface": "#1b1c1c",
+                      "tertiary-fixed-dim": "#73d2ff",
+                      "surface-dim": "#dcd9d9",
+                      "secondary-fixed-dim": "#e8c426",
+                      "surface": "#fcf9f8",
+                      "on-secondary-container": "#715d00"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-gap": "80px",
+                      "unit": "8px",
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "label-bold": ["Rubik"],
+                      "price-display": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Be Vietnam Pro"],
+                      "body-lg": ["Be Vietnam Pro"]
+              },
+              "fontSize": {
+                      "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-1px", "fontWeight": "800"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                      "price-display": ["24px", {"lineHeight": "32px", "fontWeight": "800"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden" style="background-image: radial-gradient(circle at center, #ffe173 0%, #fcf9f8 70%); background-size: 100% 100%;">
+<!-- Success Celebration Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center p-gutter relative max-w-4xl mx-auto w-full">
+<!-- Background Stickers & Decorations -->
+<div class="absolute top-10 left-0 -rotate-12 opacity-80 hidden md:block">
+<span class="material-symbols-outlined text-[120px] text-primary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div class="absolute bottom-20 right-0 rotate-12 opacity-80 hidden md:block">
+<span class="material-symbols-outlined text-[100px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<!-- Success Header -->
+<div class="text-center mb-10 z-10">
+<div class="inline-flex items-center justify-center bg-secondary-container border-4 border-on-background rounded-full p-6 shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] mb-6 transform -rotate-3">
+<span class="material-symbols-outlined text-[64px] text-on-secondary-fixed" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2 drop-shadow-[2px_2px_0px_white]">Cetak Struk (Vibrant)</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Hore! Pesanan kamu sudah masuk ke sistem.</p>
+</div>
+<!-- Digital Receipt Bento/Card -->
+<div class="w-full bg-surface-container-lowest border-4 border-on-background rounded-lg shadow-[12px_12px_0px_0px_rgba(27,28,28,1)] overflow-hidden relative mb-12">
+<!-- Decorative Zig-Zag Edge -->
+<div class="absolute top-0 left-0 w-full h-4 bg-primary flex overflow-hidden">
+<div class="w-full h-full" style="background-image: radial-gradient(circle at 10px -5px, transparent 12px, #1b1c1c 13px);"></div>
+</div>
+<div class="p-gutter pt-12">
+<!-- Receipt Header -->
+<div class="flex flex-col items-center mb-8 border-b-4 border-dashed border-outline-variant pb-6">
+<div class="font-headline-lg text-headline-lg text-primary italic font-black mb-1">Hi Venus</div>
+<p class="font-label-bold text-label-bold text-on-surface-variant">Station 01 • Kawaii Boutique</p>
+<p class="text-[12px] font-medium opacity-60">24 Oktober 2023 | 14:30 WIB</p>
+</div>
+<!-- Receipt Items -->
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-16 h-16 bg-primary-fixed border-2 border-on-background rounded-xl flex items-center justify-center overflow-hidden rotate-2">
+<img class="w-full h-full object-cover" data-alt="A cute designer sunglasses product with vibrant pink frames on a soft pastel yellow background. The lighting is bright and cheerful, evoking a fun Japanese pop-culture aesthetic with high contrast and sharp focus on the glossy texture of the accessory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPZNstcZDDt_IeOBmJfa5pk6jn4hgG88XzfEb2IO8gArTjqqLxNMKU8_lAkRMvNA9qj9bwhDy2vzA087jHJklCBEQvqB2e2JsYiXbset5FU5sNQsB5b1IXsavDbRWk1oK4O48jueqcQ3hj5VZhbGSAjqQ5MeCULfulNTl1Ay73yhywtMtSTH4OxAOlOQOdAyuAvdrCBfzQw1TC7y0tn7I-RnxozV2ptD2G2zqs1VQcqXMfksMIi0xp0lqhfXzDvpNHbaw_FTO1DUD5"/>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Kacamata Bintang Pink</p>
+<p class="text-on-surface-variant font-medium">1 x Rp 150.000</p>
+</div>
+</div>
+<p class="font-price-display text-price-display">Rp 150k</p>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-16 h-16 bg-secondary-fixed border-2 border-on-background rounded-xl flex items-center justify-center overflow-hidden -rotate-2">
+<img class="w-full h-full object-cover" data-alt="A miniature luxury designer handbag in bright teal with chunky golden hardware. The bag is positioned in the center with a slight tilt, against a clean white backdrop with hard-edge comic-style shadows. The overall look is tactile and toy-like." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvbS3y05OnkTR8Yid-eSJ9UJRKU6srXn-cz5jMDDkh9nPGdPZ5BVGFLHeIeemoT8cOV1fLhksAMLmI6uRUS21_dJXWXI7xrXnSPPTVHwavT8kq-QelyA7GU76oaDDgqKZLNng6RzKMOzyIsc-ASgj0kmrt8b1FTwqP0TSZoq9Gyv7kMZssCSisdwBAs_2mFOA0P6DCLNHEfwjiwGAmv72-NuyhzbnFCgqfeAJqtCGwDqt5M0oqx5ciQP-kIHPQXAhw_fFaVkCJIpUc"/>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Tas Mini Turkuis</p>
+<p class="text-on-surface-variant font-medium">2 x Rp 225.000</p>
+</div>
+</div>
+<p class="font-price-display text-price-display">Rp 450k</p>
+</div>
+</div>
+<!-- Total Section -->
+<div class="bg-surface-container-low border-4 border-on-background p-6 rounded-xl relative">
+<!-- Sparkle Sticker -->
+<div class="absolute -top-4 -right-4 rotate-12">
+<div class="bg-tertiary-container text-on-tertiary border-2 border-on-background px-3 py-1 rounded-full font-label-bold text-sm shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
+                            BEST BUY!
+                        </div>
+</div>
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-bold text-label-bold">Subtotal</p>
+<p class="font-price-display text-price-display text-lg">Rp 600.000</p>
+</div>
+<div class="flex justify-between items-center mb-4 text-on-surface-variant border-b-2 border-dotted border-outline pb-4">
+<p class="font-label-bold text-label-bold">Pajak (11%)</p>
+<p class="font-price-display text-price-display text-lg">Rp 66.000</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="font-headline-lg text-headline-lg text-primary">TOTAL</p>
+<p class="font-headline-xl text-headline-xl text-primary">Rp 666k</p>
+</div>
+</div>
+<!-- Footer Receipt -->
+<div class="mt-8 text-center">
+<div class="inline-block border-2 border-on-background px-4 py-2 rounded-lg bg-surface-variant font-label-bold text-on-surface mb-4">
+                        Metode: QRIS Berhasil
+                    </div>
+<p class="text-on-surface-variant italic font-medium">Terima kasih sudah berbelanja, Kawaii-friends! ✨</p>
+</div>
+</div>
+<!-- Bottom Zig-Zag Edge -->
+<div class="h-4 bg-on-background w-full" style="clip-path: polygon(0 0, 5% 100%, 10% 0, 15% 100%, 20% 0, 25% 100%, 30% 0, 35% 100%, 40% 0, 45% 100%, 50% 0, 55% 100%, 60% 0, 65% 100%, 70% 0, 75% 100%, 80% 0, 85% 100%, 90% 0, 95% 100%, 100% 0);"></div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col md:flex-row gap-6 w-full md:w-auto">
+<button class="bg-primary text-on-primary font-headline-lg text-headline-lg px-12 py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:scale-95 transition-all flex items-center justify-center gap-4">
+<span class="material-symbols-outlined text-4xl" data-icon="print">print</span>
+                Cetak Struk
+            </button>
+<button class="bg-secondary-container text-on-secondary-fixed font-headline-lg text-headline-lg px-8 py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:scale-95 transition-all flex items-center justify-center gap-4">
+<span class="material-symbols-outlined text-4xl" data-icon="picture_as_pdf">picture_as_pdf</span>
+                Simpan sebagai PDF
+            </button>
+</div>
+<!-- Secondary Action Link -->
+<button class="mt-12 font-label-bold text-label-bold text-primary underline underline-offset-4 decoration-4 hover:text-on-primary-fixed-variant transition-colors">
+            Kembali ke Menu Utama
+        </button>
+<div class="absolute top-1/4 right-10 rotate-12 opacity-60 pointer-events-none"><span class="material-symbols-outlined text-4xl text-primary">auto_awesome</span></div><div class="absolute bottom-1/4 left-10 -rotate-12 opacity-60 pointer-events-none"><span class="material-symbols-outlined text-5xl text-secondary-container">star</span></div><div class="absolute top-1/2 left-0 opacity-40 pointer-events-none"><span class="material-symbols-outlined text-3xl text-tertiary-container">sparkles</span></div><div class="absolute top-20 right-1/4 opacity-50 pointer-events-none"><span class="material-symbols-outlined text-2xl text-primary-container">favorite</span></div></main>
+<!-- Success Message Snackbar (Floating) -->
+<div class="fixed bottom-gutter left-1/2 -translate-x-1/2 bg-on-background text-surface border-2 border-surface px-6 py-4 rounded-xl flex items-center gap-4 shadow-[12px_12px_0px_0px_rgba(158,53,123,0.3)] z-50 animate-bounce">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">sentiment_very_satisfied</span>
+<span class="font-label-bold">Berhasil! Printer siap mencetak.</span>
+</div>
+</body></html>
