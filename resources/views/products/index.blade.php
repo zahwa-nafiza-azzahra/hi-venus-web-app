@@ -31,30 +31,14 @@
         <!-- Categories Card -->
         <div class="bg-surface-bright border-4 border-on-background rounded-xl p-6 shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col gap-4">
             <h2 class="font-headline-lg text-headline-lg text-on-background border-b-4 border-on-background pb-2 mb-2 italic">Categories</h2>
+            @foreach($categories as $category)
             <label class="flex items-center gap-4 cursor-pointer group">
-                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background bg-surface-variant flex items-center justify-center group-hover:bg-primary-container transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
-                    <span class="material-symbols-outlined opacity-0 text-on-background" style="font-variation-settings: 'wght' 900;">close</span>
+                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background {{ request('category') == $category->slug ? 'bg-primary-container' : 'bg-surface-variant' }} flex items-center justify-center group-hover:bg-primary-container transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
+                    <span class="material-symbols-outlined {{ request('category') == $category->slug ? 'opacity-100' : 'opacity-0' }} text-on-background text-xl" style="font-variation-settings: 'wght' 900;">close</span>
                 </div>
-                <span class="font-label-bold text-label-bold text-body-lg group-hover:text-primary transition-colors">All Tops</span>
+                <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="font-label-bold text-label-bold text-body-lg {{ request('category') == $category->slug ? 'text-primary' : 'group-hover:text-primary' }} transition-colors">{{ $category->name }}</a>
             </label>
-            <label class="flex items-center gap-4 cursor-pointer group">
-                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background bg-primary-container flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
-                    <span class="material-symbols-outlined text-on-background text-xl" style="font-variation-settings: 'wght' 900;">close</span>
-                </div>
-                <span class="font-label-bold text-label-bold text-body-lg text-primary">Dresses &amp; Skirts</span>
-            </label>
-            <label class="flex items-center gap-4 cursor-pointer group">
-                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background bg-surface-variant flex items-center justify-center group-hover:bg-primary-container transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
-                    <span class="material-symbols-outlined opacity-0 text-on-background" style="font-variation-settings: 'wght' 900;">close</span>
-                </div>
-                <span class="font-label-bold text-label-bold text-body-lg group-hover:text-primary transition-colors">Outerwear</span>
-            </label>
-            <label class="flex items-center gap-4 cursor-pointer group">
-                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background bg-surface-variant flex items-center justify-center group-hover:bg-primary-container transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
-                    <span class="material-symbols-outlined opacity-0 text-on-background" style="font-variation-settings: 'wght' 900;">close</span>
-                </div>
-                <span class="font-label-bold text-label-bold text-body-lg group-hover:text-primary transition-colors">Kawaii Accessories</span>
-            </label>
+            @endforeach
         </div>
         <!-- Price Filter Card -->
         <div class="bg-tertiary-fixed border-4 border-on-background rounded-xl p-6 shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col gap-6 relative">

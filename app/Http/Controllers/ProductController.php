@@ -12,7 +12,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = \App\Models\Product::with('category')->get();
-        return view('products.index', compact('products'));
+        $categories = \App\Models\Category::all();
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**
