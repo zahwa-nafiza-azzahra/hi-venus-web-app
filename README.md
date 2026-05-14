@@ -10,37 +10,27 @@ Aplikasi ini telah dideploy dan dapat diakses secara publik melalui tautan berik
 
 ## 📋 Deskripsi
 
-**Hi Venus** adalah Sistem Manajemen Butik berbasis web yang dirancang dengan estetika visual **"Cartoon/Sticker-Art"** yang unik. Sistem ini tidak hanya berfungsi sebagai katalog produk online, tetapi juga mencakup fitur manajemen internal seperti **Point of Sale (POS)** untuk kasir, manajemen stok, dan dashboard analitik admin yang responsif dan interaktif.
+**Hi Venus** adalah Sistem Manajemen Butik berbasis web yang komprehensif, dirancang untuk mengintegrasikan pengalaman belanja online dengan operasional bisnis internal secara efisien. Sistem ini mencakup katalog produk untuk pelanggan, modul **Point of Sale (POS)** untuk transaksi langsung, manajemen inventaris, serta dashboard analitik untuk pemantauan performa bisnis secara real-time.
 
-Sistem ini dikembangkan untuk memberikan pengalaman manajemen ritel yang menyenangkan dengan antarmuka yang penuh warna namun tetap memiliki fungsionalitas tingkat perusahaan.
+Aplikasi ini bertujuan untuk memberikan solusi digital bagi pemilik butik dalam mengelola stok, transaksi, dan data pelanggan dalam satu platform yang terintegrasi dan mudah digunakan.
 
 ---
 
 ## ✨ Fitur Utama
 
 ### 🛍️ Customer Experience
-- **Katalog Produk Interaktif**: Tampilan produk dengan gaya kartu stiker yang menarik dan dinamis.
-- **Shopping Cart**: Sistem keranjang belanja yang intuitif dan real-time.
-- **Checkout & Shipping**: Alur pemesanan yang linear, mudah diikuti, dan aman.
-- **Order Tracking**: Pantau status pesanan dengan tampilan timeline yang estetik.
-- **Wishlist & Reviews**: Simpan produk favorit dan berikan ulasan setelah berbelanja.
+- **Katalog Produk Interaktif**: Pencarian dan filter produk yang mudah untuk memudahkan pelanggan menemukan pakaian favorit.
+- **Shopping Cart**: Sistem keranjang belanja yang responsif dengan perhitungan biaya otomatis.
+- **Checkout & Shipping**: Alur pembayaran yang aman dengan integrasi detail pengiriman.
+- **Order Tracking**: Pemantauan status pesanan dari tahap pemrosesan hingga pengiriman.
+- **Wishlist & Reviews**: Fitur penyimpanan produk favorit dan pemberian ulasan kualitas produk.
 
 ### 💼 Admin & Management
-- **Dashboard Admin**: Ringkasan statistik penjualan, pendapatan, dan stok secara real-time.
-- **POS (Point of Sale)**: Sistem kasir modern untuk transaksi langsung dengan fitur struk belanja digital.
-- **Manajemen Produk & Stok**: Pengelolaan data produk, kategori, dan varian (warna/ukuran) secara terpusat.
-- **Manajemen Staff & Pelanggan**: Kelola akun kasir dan data pelanggan dalam satu panel kontrol.
-- **Pengaturan Profil**: Kustomisasi identitas admin dan pengelolaan keamanan akun.
-
----
-
-## 🎨 Design Philosophy
-
-Aplikasi ini menggunakan sistem desain **Kawaii-Pop / Cartoon Style** dengan karakteristik:
-- **Chunky Borders**: Penggunaan border solid `4px` di hampir semua elemen UI untuk kesan komik.
-- **Hard-Offset Shadows**: Bayangan tegas (bukan blur) untuk memberikan efek kedalaman "stiker".
-- **Vibrant & Pastel Palette**: Penggunaan warna-warna yang cerah, harmonis, dan menyegarkan mata.
-- **Bento Grid Layout**: Organisasi informasi menggunakan grid modern yang rapi dan terstruktur.
+- **Dashboard Analitik**: Visualisasi statistik penjualan, pendapatan harian, dan ringkasan stok.
+- **POS (Point of Sale)**: Antarmuka kasir yang cepat untuk menangani transaksi di toko fisik dengan struk digital.
+- **Manajemen Inventaris**: Pengelolaan data produk lengkap dengan kategori, harga, dan varian (ukuran/warna).
+- **Manajemen User & Staff**: Pengaturan hak akses untuk admin, staf kasir, dan pengelolaan data pelanggan terdaftar.
+- **Keamanan Akun**: Fitur pembaruan profil dan manajemen kata sandi yang terenkripsi.
 
 ---
 
@@ -58,7 +48,7 @@ Aplikasi ini menggunakan sistem desain **Kawaii-Pop / Cartoon Style** dengan kar
 
 ## 🔐 Kredensial Akses Demo
 
-Anda dapat mencoba berbagai peran menggunakan akun berikut:
+Silakan gunakan akun berikut untuk mencoba fungsionalitas sistem:
 
 | Peran | Email | Password |
 |-------|-------|----------|
@@ -93,4 +83,4 @@ php artisan serve
 
 ---
 
-© 2024 **Hi Venus** - Developed with ✨ and Sparkles.
+© 2024 **Hi Venus** - Developed for Boutique Management Excellence.
