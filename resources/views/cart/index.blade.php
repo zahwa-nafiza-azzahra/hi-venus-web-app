@@ -94,10 +94,17 @@
                         <span class="font-price-display text-headline-lg text-secondary">Rp {{ number_format($total + 20000, 0, ',', '.') }}</span>
                     </div>
                 </div>
+                @auth
                 <a href="{{ route('checkout.shipping') }}" class="w-full bg-primary-container text-on-primary-container border-4 border-on-background py-6 px-4 font-headline-lg text-headline-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-2 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:translate-y-2 active:shadow-none transition-all group">
                     Lanjut ke Checkout
                     <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
                 </a>
+                @else
+                <a href="{{ route('checkout.shipping') }}" class="w-full bg-primary-container text-on-primary-container border-4 border-on-background py-6 px-4 font-headline-lg text-headline-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-2 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:translate-y-2 active:shadow-none transition-all group">
+                    Login untuk Checkout 🔐
+                    <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">login</span>
+                </a>
+                @endauth
                 <div class="mt-8 flex items-center gap-4 p-4 bg-secondary-fixed border-2 border-on-background sticker-rotate-right">
                     <span class="material-symbols-outlined text-on-secondary-fixed">local_offer</span>
                     <p class="text-label-bold text-on-secondary-fixed">Gunakan kode promo untuk diskon ekstra!</p>

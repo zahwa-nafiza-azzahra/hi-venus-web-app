@@ -27,8 +27,10 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Checkout
-Route::get('/checkout/shipping', [CheckoutController::class, 'shipping'])->name('checkout.shipping');
-Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place_order');
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout/shipping', [CheckoutController::class, 'shipping'])->name('checkout.shipping');
+    Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place_order');
+});
 
 // POS Kasir (Standalone route, accessible by admin and cashier)
 Route::get('/pos', [PosController::class, 'index'])
