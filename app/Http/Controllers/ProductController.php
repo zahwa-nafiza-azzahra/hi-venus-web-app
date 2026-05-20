@@ -11,8 +11,17 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = \App\Models\Product::with('category')->get();
+        $query = \App\Models\Product::with('category');
+
+        if ($request->has('category') && $request->category != '') {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
+
+        $products = $query->paginate(8)->withQueryString();
         $categories = \App\Models\Category::all();
+        
         return view('products.index', compact('products', 'categories'));
     }
 

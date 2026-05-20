@@ -21,40 +21,33 @@
 @endpush
 
 @section('content')
-<main class="flex-grow flex flex-col md:flex-row gap-gutter p-margin-mobile md:p-margin-desktop max-w-[1600px] mx-auto w-full">
-    <!-- Left Sidebar (Filters) -->
-    <aside class="w-full md:w-80 flex-shrink-0 flex flex-col gap-8 relative z-10 animate-fade-in-left">
-        <!-- Decorative Sticker -->
-        <div class="absolute -top-6 -left-6 bg-secondary-fixed text-on-secondary-fixed font-headline-lg text-headline-lg border-4 border-on-background p-2 rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] rotate-[-15deg] z-20 animate-float">
-            <span class="material-symbols-outlined text-4xl">favorite</span>
-        </div>
-        <!-- Categories Card -->
-        <div class="bg-surface-bright border-4 border-on-background rounded-xl p-6 shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col gap-4">
-            <h2 class="font-headline-lg text-headline-lg text-on-background border-b-4 border-on-background pb-2 mb-2 italic">Categories</h2>
-            @foreach($categories as $category)
-            <label class="flex items-center gap-4 cursor-pointer group">
-                <div class="w-8 h-8 flex-shrink-0 border-4 border-on-background {{ request('category') == $category->slug ? 'bg-primary-container' : 'bg-surface-variant' }} flex items-center justify-center group-hover:bg-primary-container transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">
-                    <span class="material-symbols-outlined {{ request('category') == $category->slug ? 'opacity-100' : 'opacity-0' }} text-on-background text-xl" style="font-variation-settings: 'wght' 900;">close</span>
-                </div>
-                <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="font-label-bold text-label-bold text-body-lg {{ request('category') == $category->slug ? 'text-primary' : 'group-hover:text-primary' }} transition-colors">{{ $category->name }}</a>
-            </label>
-            @endforeach
-        </div>
-    </aside>
-
+<main class="flex-grow flex flex-col gap-gutter p-margin-mobile md:p-margin-desktop max-w-[1600px] mx-auto w-full">
     <!-- Product Grid Area -->
-    <div class="flex-grow flex flex-col gap-8 animate-fade-in-right">
+    <div class="flex-grow flex flex-col gap-8 animate-fade-in">
         <!-- Grid Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-center bg-surface-bright border-4 border-on-background p-4 rounded-xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] relative z-10">
-            <p class="font-body-lg text-body-lg">Showing <span class="font-bold text-primary">1-8</span> of 42 super cute items!</p>
-            <div class="flex items-center gap-4 mt-4 sm:mt-0">
-                <span class="font-label-bold text-label-bold">Sort by:</span>
-                <select class="appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-10">
-                    <option>Most Popular</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Newest Arrivals</option>
-                </select>
+        <div class="flex flex-col md:flex-row justify-between items-center bg-surface-bright border-4 border-on-background p-4 rounded-xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] relative z-10 gap-4">
+            <p class="font-body-lg text-body-lg text-center md:text-left">Showing <span class="font-bold text-primary">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</span> of <span class="font-bold text-primary">{{ $products->total() }}</span> items!</p>
+            <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <span class="font-label-bold text-label-bold whitespace-nowrap">Category:</span>
+                    <select onchange="window.location.href=this.value" class="w-full sm:w-auto appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-0.5rem)_center] bg-[length:1.5rem_1.5rem]">
+                        <option value="{{ route('products.index') }}">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ route('products.index', ['category' => $category->slug]) }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <span class="font-label-bold text-label-bold whitespace-nowrap">Sort by:</span>
+                    <select class="w-full sm:w-auto appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-0.5rem)_center] bg-[length:1.5rem_1.5rem]">
+                        <option>Most Popular</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest Arrivals</option>
+                    </select>
+                </div>
             </div>
         </div>
         
@@ -88,8 +81,8 @@
                     </button>
                 </form>
                 @else
-                <a href="{{ route('login') }}" class="w-full bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
-                    <span class="material-symbols-outlined">login</span> Login to Shop
+                <a href="{{ route('products.show', $p->id) }}" class="w-full bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
+                    <span class="material-symbols-outlined">visibility</span> See Detail Product
                 </a>
                 @endauth
             </div>
@@ -101,27 +94,63 @@
         </div>
         
         <!-- Pagination -->
+        @if ($products->hasPages())
         <div class="flex justify-center items-center gap-4 mt-section-gap z-10 pb-8">
-            <button class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                <span class="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button class="w-12 h-12 flex items-center justify-center bg-primary text-on-primary border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                1
-            </button>
-            <button class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                2
-            </button>
-            <button class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                3
-            </button>
-            <span class="font-headline-lg text-headline-lg mx-2 tracking-widest text-primary">...</span>
-            <button class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                6
-            </button>
-            <button class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
-                <span class="material-symbols-outlined">chevron_right</span>
-            </button>
+            {{-- Previous Page Link --}}
+            @if ($products->onFirstPage())
+                <span class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface-variant border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] opacity-50 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </span>
+            @else
+                <a href="{{ $products->previousPageUrl() }}" class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </a>
+            @endif
+
+            {{-- Pagination Elements --}}
+            @php
+                $start = max($products->currentPage() - 1, 1);
+                $end = min($products->currentPage() + 1, $products->lastPage());
+            @endphp
+            
+            @if($start > 1)
+                <a href="{{ $products->url(1) }}" class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">1</a>
+                @if($start > 2)
+                    <span class="font-headline-lg text-headline-lg mx-2 tracking-widest text-primary">...</span>
+                @endif
+            @endif
+
+            @for ($i = $start; $i <= $end; $i++)
+                @if ($i == $products->currentPage())
+                    <span class="w-12 h-12 flex items-center justify-center bg-primary text-on-primary border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+                        {{ $i }}
+                    </span>
+                @else
+                    <a href="{{ $products->url($i) }}" class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+                        {{ $i }}
+                    </a>
+                @endif
+            @endfor
+
+            @if($end < $products->lastPage())
+                @if($end < $products->lastPage() - 1)
+                    <span class="font-headline-lg text-headline-lg mx-2 tracking-widest text-primary">...</span>
+                @endif
+                <a href="{{ $products->url($products->lastPage()) }}" class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">{{ $products->lastPage() }}</a>
+            @endif
+
+            {{-- Next Page Link --}}
+            @if ($products->hasMorePages())
+                <a href="{{ $products->nextPageUrl() }}" class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>
+            @else
+                <span class="w-12 h-12 flex items-center justify-center bg-surface-bright text-on-surface-variant border-4 border-on-background rounded-full shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] opacity-50 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </span>
+            @endif
         </div>
+        @endif
     </div>
 </main>
 @endsection
