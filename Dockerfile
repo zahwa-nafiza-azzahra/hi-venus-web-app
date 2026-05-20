@@ -39,6 +39,12 @@ COPY . .
 # Install dependensi Laravel (tanpa paket dev untuk produksi)
 RUN composer install --no-dev --optimize-autoloader
 
+# Install Node.js dan build Vite assets
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+RUN npm install
+RUN npm run build
+
 # Beri hak akses (permissions) yang benar untuk folder storage dan cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
