@@ -80,12 +80,18 @@
                     <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{{ $p->image ? asset('storage/' . $p->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf' }}" alt="{{ $p->name }}"/>
                 </div>
                 <h3 class="font-body-lg text-body-lg font-bold text-center leading-tight min-h-[3rem] flex items-center">{{ $p->name }}</h3>
+                @auth
                 <form action="{{ route('cart.add', $p->id) }}" method="POST" class="w-full">
                     @csrf
                     <button type="submit" class="w-full bg-primary text-on-primary border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
                         <span class="material-symbols-outlined">add_shopping_cart</span> Add to Cart
                     </button>
                 </form>
+                @else
+                <a href="{{ route('login') }}" class="w-full bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
+                    <span class="material-symbols-outlined">login</span> Login to Shop
+                </a>
+                @endauth
             </div>
             @empty
             <div class="col-span-full py-20 text-center bg-white border-4 border-dashed border-on-background rounded-2xl">

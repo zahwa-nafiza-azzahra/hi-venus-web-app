@@ -101,12 +101,18 @@
                         <h3 class="text-body-lg font-body-lg text-on-background font-bold line-clamp-2">{{ $product->name }}</h3>
                         <p class="text-body-md font-body-md text-on-surface-variant mt-1">{{ Str::limit($product->description, 50) }}</p>
                     </div>
+                    @auth
                     <form action="{{ route('cart.add', $product->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="ml-4 shrink-0 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-full p-2 shadow-[2px_2px_0px_0px_#1b1c1c] hover:bg-secondary-fixed active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
                             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
                         </button>
                     </form>
+                    @else
+                    <a href="{{ route('login') }}" class="ml-4 shrink-0 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-full p-2 shadow-[2px_2px_0px_0px_#1b1c1c] hover:bg-secondary-fixed active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center" title="Login to shop">
+                        <span class="material-symbols-outlined">login</span>
+                    </a>
+                    @endauth
                 </div>
             </div>
             @empty

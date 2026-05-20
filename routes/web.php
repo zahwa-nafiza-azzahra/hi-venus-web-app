@@ -20,14 +20,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
-// Cart
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-// Checkout
+// Cart & Checkout (authenticated users only)
 Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
     Route::get('/checkout/shipping', [CheckoutController::class, 'shipping'])->name('checkout.shipping');
     Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place_order');
 });

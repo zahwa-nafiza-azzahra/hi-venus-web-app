@@ -65,6 +65,7 @@
 
             {{-- CTA --}}
             <div class="flex flex-col gap-6">
+                @auth
                 <div class="flex items-center gap-4">
                     <div class="flex items-center border-4 border-on-background rounded-xl p-1 bg-white shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
                         <button class="w-12 h-12 flex items-center justify-center text-primary hover:bg-surface-container-high rounded-lg">
@@ -88,6 +89,13 @@
                         <span class="material-symbols-outlined">share</span> Bagikan
                     </button>
                 </div>
+                @else
+                <a href="{{ route('login') }}" class="w-full bg-primary text-on-primary border-4 border-on-background py-5 rounded-2xl font-headline-lg text-headline-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center gap-3 no-underline">
+                    <span class="material-symbols-outlined">login</span>
+                    Login untuk Belanja
+                </a>
+                <p class="text-center text-on-surface-variant text-body-sm">Silakan login atau daftar akun untuk mulai berbelanja ✨</p>
+                @endauth
             </div>
 
             <div class="grid grid-cols-2 gap-3 mt-2">

@@ -26,17 +26,21 @@
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('products.*') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('products.index') }}">Shop</a>
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">New Arrivals</a>
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Best Sellers</a>
+                @auth
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('wishlist') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('wishlist') }}">Wishlist</a>
+                @endauth
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">About Us</a>
             </div>
         </div>
         <div class="flex items-center gap-4 bg-primary border-4 border-on-background px-4 py-2 rounded-full shadow-[4px_4px_0px_0px_#1b1c1c] -rotate-1">
+            @auth
             <a href="{{ route('cart.index') }}" class="relative text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none border-2 border-transparent hover:border-on-background rounded-full p-2 flex items-center justify-center">
                 <span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
                 <span class="absolute -top-2 -right-2 bg-secondary-fixed text-on-background font-label-bold text-[10px] w-5 h-5 rounded-full border-2 border-on-background flex items-center justify-center">
                     {{ count((array) session('cart')) }}
                 </span>
             </a>
+            @endauth
             @auth
                 <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none border-2 border-transparent hover:border-on-background rounded-full p-2 flex items-center justify-center" title="Dashboard">
                     <span class="material-symbols-outlined" data-icon="person">person</span>
