@@ -1,10 +1,10 @@
 # 🎀 Hi Venus - Boutique Management System
 
-[![Akses Publik](https://img.shields.io/badge/Akses-Live_Demo-FF69B4?style=for-the-badge&logo=rocket)](https://hi-venus-web-app-production.up.railway.app/)
+[![Akses Publik](https://img.shields.io/badge/Akses-Live_Demo-FF69B4?style=for-the-badge&logo=rocket)](https://hi-venus-web-app.onrender.com/)
 
 ## 🚀 Akses Publik
 Aplikasi ini telah dideploy dan dapat diakses secara publik melalui tautan berikut:
-👉 **[https://hi-venus-web-app-production.up.railway.app/](https://hi-venus-web-app-production.up.railway.app/)**
+👉 **[https://hi-venus-web-app.onrender.com/](https://hi-venus-web-app.onrender.com/)**
 
 ---
 
@@ -39,7 +39,7 @@ Aplikasi ini bertujuan untuk memberikan solusi digital bagi pemilik butik dalam 
 | Layer | Teknologi |
 |-------|-----------|
 | **Backend** | PHP 8.4, Laravel 11+ |
-| **Database** | MySQL (Railway Managed) |
+| **Database** | MySQL (TiDB Serverless) |
 | **Frontend** | Tailwind CSS v4, Vite |
 | **Icons** | Material Symbols Outlined |
 | **Architecture** | MVC (Model View Controller) |
