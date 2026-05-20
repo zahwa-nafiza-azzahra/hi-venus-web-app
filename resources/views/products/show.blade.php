@@ -46,14 +46,15 @@
                 Populer!
             </div>
             <div class="bg-surface-bright border-4 border-on-background rounded-lg p-6 comic-shadow-lg aspect-square flex items-center justify-center overflow-hidden">
-                <img id="main-product-img" class="w-full h-full object-cover rounded-md rotate-2 scale-90" alt="{{ $product->name ?? 'Product image' }}" src="{{ $product->image ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuDleVSqY7eI8Pa9yORcJKgZSuUVD0uPoA-lbi9QGeZ5mC0YEBZ9UR2R2JsxYbZZlWQmUB62PsH5eFomuhF4gbqOp8MN2kO7fnQ5Dd-ZG3tabP9zZDX-YqRTcfCU7NR-oe6sEZUwSoB3EpLM08AkarFZDj5A-nEMY3mjR_Gmb1NOxaT7YtgDvWgdqNuKJIBuCX0flKNpWkOttsQW0AR8xfifNCWI93EHhCZO_EXtKxu27CuYta_65gxkT_FSsa8s9PmiEvFt8JOkEFM_' }}" />
+                <img id="main-product-img" class="w-full h-full object-cover rounded-md rotate-2 scale-90" alt="{{ $product->name ?? 'Product image' }}" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400' }}" />
             </div>
             
             <div class="flex gap-4">
                 @php
+                $imgUrl = $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400';
                 $thumbs = [
-                    $product->image ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSoRnA9U_MAQeRsnLbGsQLnIs9AyA9s40m-h1excGOTMuJJHVabF0eVstiKi60zGkKNWk0xi7ku1wZUbmlP7CeEL1rjj-gGTq_ggbsy-SYEwauHz7yA9zRVt2x2RCqcqFdUPxVnJMd78h7bikVs2Bc7rnCvyh1qLPnYjOc6TFptz40lXTnEj_M2z_r_Jwtv6ACn4Q3GzsB8j5uhsEa1ntxZt3XwwQsP_pwMqVzypT6SrOjErAPKb2oewEA_ibpjAC_5g8fiQpn7g',
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuByBAIoolmV71-VjZfggrF7e_liA3GcGYeIgqezNDAzMxW-cD7VAj6UST40mfuJqh67z306cbeajxGmdJXeAGxgFdbJoPYzBUYdlD7C--3BY9bPA_UKJCtETMhbLUiei91A61ILMIRscj9spy-e5N6Z-KrRQyX21TfIeNnRjdSVAfQ7gm7grmPMQarb39cdUWcaj-yKtE5TRgpdE3_r0asPUAmUNc5gfvnXzQsZ1PeiOYwkDIxWA_qoJYWyqxz32NiCO70gWid-e5TZ'
+                    $imgUrl,
+                    $imgUrl
                 ];
                 @endphp
                 @foreach($thumbs as $thumb)
@@ -169,22 +170,13 @@
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
-            @php 
-            $related = [
-                ['id'=>1,'name'=>'Retro Handheld Bear','price'=>'450.000','img'=>'https://lh3.googleusercontent.com/aida-public/AB6AXuDWeCOinEHUnBSFTCpnNtlDOeSxh4Q_Vv-big2xDeNSRlvRrkSxu79djVkf6JE82zdVWAMdqS7aztAbbVIQChTgVAUdbZewFLPHpIlu1PJUtxqyCbEYm8VbX0UCaOlocu-_n47RH3CAa5C82dsN-ctgufQYE37xw3Lm1FaVm4ROKiOfu6tzfNQetxFqLW6vggAw7Q-7E2tFjP_z7gQtieSXo5YneTAaBmFMn4zc4ipgXzKKBK71xATJgwvKSaU52zMvFD7SOhqirxUM'],
-                ['id'=>2,'name'=>'Heart Candy Glasses','price'=>'89.000','img'=>'https://lh3.googleusercontent.com/aida-public/AB6AXuBHqJYwaso9bZhvmRpI7tiCdiccH19vst350MASmIdelnIPybFEW-5gp8M-L23OtEP1bLO1QkdeFs30QYCCSNganloAlJ1ynfSZDzPS2p4tPaubdIb8z1xEEEuH8MloGSdSOG-yoSHbcP7vf46_s5dqM2H1Q9r3HWzmkP2_lBDJQvfDOBBh4gAzsJT7XEAkZJsR_YAGGIOiti0b7TebGNoiZc65qCCfVt1rgtjrxQPd0c0pE0EpBplzzHpdh6IhpPxudV-s7TKOfxhd'],
-                ['id'=>3,'name'=>'Radio Powerbank','price'=>'175.000','img'=>'https://lh3.googleusercontent.com/aida-public/AB6AXuDOPe2i9STBpTeB6jtpO-jMs87TqLIkucyGHKhnPiuzGEaEEICIy8Qh3UuqueGtwNE7p-LGVJxR_kZbMoCjC2S3yhHJT7k97jxGSH1_FXLyXmILGnjJDt9dMASNXLiFNo1EzsgPz1SG1rc2ZDsuYJA8frkksb06C-_sD9vywJZ8Hd7V9_kMHQieBqj4Hhi1ieIUEy7ZMcvzn6JpYKjZw_fNPcLyLsopXjZPs4mFJ205G4152h2Oph1RuWskAOGmSd39Rzb_3SmLR6N_'],
-                ['id'=>4,'name'=>'Meow Keycaps Set','price'=>'210.000','img'=>'https://lh3.googleusercontent.com/aida-public/AB6AXuC4GppoMNUeSDiQPVNYbGY5xlYu2NXuFm-DcdQ8k8ack6C2zAGJJfLgBq1KqqALTK2qRUY9BVefLujg2CcZJg_XQrHmHS6hYmu798aje-0S8bTjsZxDIMBVXq7ef0Yma_wETx5RL_rs04NXaEGKm1Y4t3e-WjzdUjf0P13_f1jRiQuoHiGXnJTKzlVbHO6WcupO1qHeM7N3R1gNjCmFXlef3P1oNFyy1H9pebIhFJS3OhGz5nOVYw4e2CjFg0_pFXVRBAiQye_AEkbx']
-            ]; 
-            @endphp
-            
-            @foreach($related as $idx => $r)
-            <a href="{{ route('products.show', $r['id']) }}" class="bg-surface-bright border-4 border-on-background rounded-lg p-4 comic-shadow transition-transform group {{ $idx % 2 == 0 ? 'hover:rotate-1' : 'hover:-rotate-1' }} block text-decoration-none">
+            @foreach($relatedProducts as $idx => $r)
+            <a href="{{ route('products.show', $r->id) }}" class="bg-surface-bright border-4 border-on-background rounded-lg p-4 comic-shadow transition-transform group {{ $idx % 2 == 0 ? 'hover:rotate-1' : 'hover:-rotate-1' }} block text-decoration-none">
                 <div class="aspect-square bg-surface-variant rounded-md mb-4 overflow-hidden border-2 border-on-background">
-                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{{ $r['img'] }}" alt="{{ $r['name'] }}" />
+                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{{ $r->image ? asset('storage/' . $r->image) : 'https://placehold.co/400' }}" alt="{{ $r->name }}" />
                 </div>
-                <div class="font-label-bold text-on-background mb-1 truncate">{{ $r['name'] }}</div>
-                <div class="font-price-display text-primary text-sm sm:text-base">Rp {{ $r['price'] }}</div>
+                <div class="font-label-bold text-on-background mb-1 truncate">{{ $r->name }}</div>
+                <div class="font-price-display text-primary text-sm sm:text-base">Rp {{ number_format($r->price, 0, ',', '.') }}</div>
             </a>
             @endforeach
         </div>

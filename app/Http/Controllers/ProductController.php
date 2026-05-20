@@ -30,6 +30,20 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return view('products.show', ['id' => $id]);
+        $product = \App\Models\Product::findOrFail($id);
+        $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+            
+        if ($relatedProducts->count() < 4) {
+            $relatedProducts = \App\Models\Product::where('id', '!=', $id)
+                ->inRandomOrder()
+                ->take(4)
+                ->get();
+        }
+
+        return view('products.show', compact('product', 'relatedProducts'));
     }
 }
