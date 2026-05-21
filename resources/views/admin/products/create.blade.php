@@ -144,6 +144,11 @@
         background-color: #ffd8eb !important;
         transform: scale(1.02);
     }
+    .upload-area.border-error {
+        border-color: #ba1a1a !important;
+        background-color: #ffebeb !important;
+        animation: shake 0.5s ease;
+    }
     .upload-area .upload-hint {
         transition: opacity 0.2s ease;
     }
@@ -153,6 +158,12 @@
     .upload-area.has-image:hover .upload-hint {
         opacity: 1;
         background: rgba(255,255,255,0.85) !important;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        75% { transform: translateX(8px); }
     }
 
     /* Shimmer loading for submit */
@@ -287,6 +298,17 @@
                             </div>
                         </div>
                         <p class="text-xs text-on-surface-variant italic mt-2">💡 Tip: Click to toggle sizes and colors. Variants will be created for each combination after saving.</p>
+                        
+                        <!-- Dynamic Variant Preview Section -->
+                        <div class="mt-6 border-t-2 border-dashed border-on-background pt-6 hidden" id="variantPreviewSection">
+                            <h4 class="font-label-bold text-md mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm text-primary font-bold">analytics</span>
+                                Stock & Variant Distribution Preview
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="variantPreviewList">
+                                <!-- Preview cards injected by JS -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -308,8 +330,14 @@
                             <span class="text-xs text-on-surface-variant mt-2 hidden" id="dragHint">or drag & drop here</span>
                         </div>
                         
-                        <input type="file" name="image" id="imageInput" class="hidden" accept="image/jpeg,image/png,image/webp" required>
+                        <input type="file" name="image" id="imageInput" class="hidden" accept="image/jpeg,image/png,image/webp">
                     </div>
+                    
+                    <!-- Beautiful Custom Error Message for Image -->
+                    <p class="text-error text-sm font-bold w-full text-left flex items-center gap-1 hidden shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] p-2 bg-error-container border-2 border-on-background rounded-lg animate-bounce" id="imageError">
+                        <span class="material-symbols-outlined text-sm">error</span> Please upload a product image!
+                    </p>
+
                     <!-- File info after selection -->
                     <div id="fileInfo" class="hidden w-full text-left">
                         <div class="flex items-center justify-between bg-surface-container rounded-lg p-2 border-2 border-on-background">
@@ -327,14 +355,28 @@
                     <p class="text-xs text-on-surface-variant italic" id="formatHint">Supported formats: JPG, PNG, WEBP (Max 5MB)</p>
                 </div>
                 
-                <!-- Visibility -->
-                <div class="kawaii-card p-6 rounded-lg">
-                    <h3 class="font-label-bold text-lg mb-4">Store Visibility</h3>
+                <!-- Visibility & Store Settings -->
+                <div class="kawaii-card p-6 rounded-lg space-y-4">
+                    <h3 class="font-label-bold text-lg mb-2">Store Settings</h3>
                     
                     <div class="flex items-center justify-between p-3 bg-surface-container rounded-lg border-2 border-on-background">
-                        <span class="font-label-bold">Online Store</span>
-                        <input type="hidden" name="is_visible" id="isVisibleInput" value="1">
+                        <div class="flex flex-col">
+                            <span class="font-label-bold">Online Store</span>
+                            <span class="text-xs text-on-surface-variant">Visible in catalog</span>
+                        </div>
+                        <input type="checkbox" name="is_visible" id="isVisibleCheckbox" class="sr-only" checked value="1">
                         <div class="toggle-track active" id="visibilityToggle">
+                            <div class="toggle-knob"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between p-3 bg-surface-container rounded-lg border-2 border-on-background">
+                        <div class="flex flex-col">
+                            <span class="font-label-bold">Featured Product</span>
+                            <span class="text-xs text-on-surface-variant">Show on homepage</span>
+                        </div>
+                        <input type="checkbox" name="is_featured" id="isFeaturedCheckbox" class="sr-only" value="1">
+                        <div class="toggle-track" id="featuredToggle">
                             <div class="toggle-knob"></div>
                         </div>
                     </div>
@@ -381,6 +423,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileSize = document.getElementById('fileSize');
     const removeImage = document.getElementById('removeImage');
     const formatHint = document.getElementById('formatHint');
+    const imageError = document.getElementById('imageError');
+    const productForm = document.getElementById('productForm');
 
     // Show drag hint on desktop
     dragHint.classList.remove('hidden');
@@ -437,6 +481,8 @@ document.addEventListener('DOMContentLoaded', function() {
             fileSize.textContent = formatFileSize(file.size);
             fileInfo.classList.remove('hidden');
             formatHint.classList.add('hidden');
+            imageError.classList.add('hidden');
+            uploadArea.classList.remove('border-error');
         }
         reader.readAsDataURL(file);
     }
@@ -459,18 +505,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // ========== TOGGLE SWITCH ==========
+    // ========== TOGGLE SWITCHES ==========
     const visibilityToggle = document.getElementById('visibilityToggle');
-    const isVisibleInput = document.getElementById('isVisibleInput');
+    const isVisibleCheckbox = document.getElementById('isVisibleCheckbox');
 
     visibilityToggle.addEventListener('click', function() {
         const isActive = this.classList.contains('active');
         if (isActive) {
             this.classList.remove('active');
-            isVisibleInput.value = '0';
+            isVisibleCheckbox.checked = false;
         } else {
             this.classList.add('active');
-            isVisibleInput.value = '1';
+            isVisibleCheckbox.checked = true;
+        }
+    });
+
+    const featuredToggle = document.getElementById('featuredToggle');
+    const isFeaturedCheckbox = document.getElementById('isFeaturedCheckbox');
+
+    featuredToggle.addEventListener('click', function() {
+        const isActive = this.classList.contains('active');
+        if (isActive) {
+            this.classList.remove('active');
+            isFeaturedCheckbox.checked = false;
+        } else {
+            this.classList.add('active');
+            isFeaturedCheckbox.checked = true;
         }
     });
 
@@ -483,6 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             this.classList.toggle('selected');
             updateSizeInputs();
+            updateVariantPreview();
         });
     });
 
@@ -508,6 +569,7 @@ document.addEventListener('DOMContentLoaded', function() {
         swatch.addEventListener('click', function() {
             this.classList.toggle('selected');
             updateColorInputs();
+            updateVariantPreview();
         });
     });
 
@@ -522,6 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (exists) {
             exists.classList.add('selected');
             updateColorInputs();
+            updateVariantPreview();
             return;
         }
         // Add new swatch before the + button
@@ -532,9 +595,11 @@ document.addEventListener('DOMContentLoaded', function() {
         newSwatch.addEventListener('click', function() {
             this.classList.toggle('selected');
             updateColorInputs();
+            updateVariantPreview();
         });
         colorSelector.insertBefore(newSwatch, addColorBtn);
         updateColorInputs();
+        updateVariantPreview();
     });
 
     function updateColorInputs() {
@@ -549,10 +614,93 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // ========== FORM SUBMISSION ==========
-    document.getElementById('productForm').addEventListener('submit', function(e) {
+    // ========== DYNAMIC VARIANT PREVIEW ==========
+    const stockInput = document.getElementById('productStock');
+    const variantPreviewSection = document.getElementById('variantPreviewSection');
+    const variantPreviewList = document.getElementById('variantPreviewList');
+
+    function updateVariantPreview() {
+        const selectedSizes = Array.from(sizeSelector.querySelectorAll('.size-btn.selected')).map(btn => btn.dataset.size);
+        const selectedColors = Array.from(colorSelector.querySelectorAll('.color-swatch.selected')).map(swatch => {
+            const color = swatch.dataset.color;
+            if (color.startsWith('#')) {
+                return matchColorName(color);
+            }
+            return color;
+        });
+
+        function matchColorName(hex) {
+            switch(hex.toLowerCase()) {
+                case '#ff85d0': return 'Pink';
+                case '#38bbef': return 'Blue';
+                case '#fdd73b': return 'Yellow';
+                default: return 'Custom';
+            }
+        }
+
+        const activeSizes = selectedSizes.length > 0 ? selectedSizes : ['Default'];
+        const activeColors = selectedColors.length > 0 ? selectedColors : ['Default'];
+
+        const totalStock = parseInt(stockInput.value) || 0;
+        const totalCount = activeSizes.length * activeColors.length;
+
+        // Hide preview if there are no real selections
+        if (totalCount <= 1 && activeSizes[0] === 'Default' && activeColors[0] === 'Default') {
+            variantPreviewSection.classList.add('hidden');
+            return;
+        }
+
+        variantPreviewSection.classList.remove('hidden');
+        variantPreviewList.innerHTML = '';
+
+        const baseStock = Math.floor(totalStock / totalCount);
+        const remainder = totalStock % totalCount;
+
+        let index = 0;
+        activeSizes.forEach(size => {
+            activeColors.forEach(color => {
+                const stock = index === 0 ? (baseStock + remainder) : baseStock;
+                index++;
+
+                const skuSuffix = (size !== 'Default' || color !== 'Default') 
+                    ? `-${size.substring(0, 2).toUpperCase()}-${color.substring(0, 3).toUpperCase()}` 
+                    : '';
+
+                const card = document.createElement('div');
+                card.className = 'flex items-center justify-between p-3 bg-surface-container-low border-2 border-on-background rounded-lg text-xs';
+                card.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-bold">Size: ${size} | Color: ${color}</span>
+                        <span class="text-[10px] text-on-surface-variant font-mono">SKU Preview: HV-XXXX${skuSuffix}</span>
+                    </div>
+                    <span class="bg-primary text-on-primary font-bold px-2 py-1 rounded border border-on-background">${stock} Stock</span>
+                `;
+                variantPreviewList.appendChild(card);
+            });
+        });
+    }
+
+    // Bind preview listeners
+    stockInput.addEventListener('input', updateVariantPreview);
+
+
+    // ========== FORM SUBMISSION & CLIENT-SIDE VALIDATION ==========
+    productForm.addEventListener('submit', function(e) {
+        // Validate that image file has been uploaded
+        if (!imageInput.files || imageInput.files.length === 0) {
+            e.preventDefault();
+            imageError.classList.remove('hidden');
+            uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            uploadArea.classList.add('border-error');
+            setTimeout(() => {
+                uploadArea.classList.remove('border-error');
+            }, 1000);
+            return false;
+        }
+
+        // Show cute shimmer loading state on the button
         const btn = document.getElementById('submitBtn');
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Saving...';
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span> Saving Product...';
         btn.classList.add('btn-loading');
     });
 
@@ -575,6 +723,9 @@ document.addEventListener('DOMContentLoaded', function() {
             input.style.borderColor = '';
         });
     });
+
+    // Initialize variant preview on load
+    updateVariantPreview();
 
 });
 </script>

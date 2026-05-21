@@ -233,6 +233,13 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         $product->is_featured = $request->has('is_featured');
         $product->is_visible = $request->has('is_visible');
         
+        // Generate robust unique slug
+        $slug = \Illuminate\Support\Str::slug($data['name']);
+        if (\App\Models\Product::where('slug', $slug)->exists()) {
+            $slug .= '-' . rand(100, 999);
+        }
+        $product->slug = $slug;
+        
         if ($request->hasFile('image')) {
             if (env('CLOUDINARY_URL')) {
                 $path = \App\Services\CloudinaryService::upload($request->file('image'), 'products');
@@ -246,14 +253,59 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         
         $product->save();
         
-        // create initial variant
-        if ($data['initial_stock'] > 0) {
-            $product->variants()->create([
-                'color' => 'Default',
-                'size' => 'Default',
-                'stock' => $data['initial_stock'],
-                'sku' => 'HV-' . str_pad($product->id, 3, '0', STR_PAD_LEFT)
-            ]);
+        // Update product with its SKU
+        $product->sku = 'HV-' . str_pad($product->id, 4, '0', STR_PAD_LEFT);
+        $product->save();
+        
+        // Create product variants based on selected sizes and colors
+        $sizes = $request->input('sizes', []);
+        $colors = $request->input('colors', []);
+        
+        if (empty($sizes)) {
+            $sizes = ['Default'];
+        }
+        if (empty($colors)) {
+            $colors = ['Default'];
+        }
+        
+        $totalVariantsCount = count($sizes) * count($colors);
+        $baseStock = floor($data['initial_stock'] / $totalVariantsCount);
+        $remainder = $data['initial_stock'] % $totalVariantsCount;
+        
+        $isFirst = true;
+        foreach ($sizes as $size) {
+            foreach ($colors as $color) {
+                $stock = $baseStock;
+                if ($isFirst) {
+                    $stock += $remainder;
+                    $isFirst = false;
+                }
+                
+                $colorHex = null;
+                $colorName = $color;
+                if (str_starts_with($color, '#')) {
+                    $colorHex = $color;
+                    $colorName = match (strtolower($color)) {
+                        '#ff85d0' => 'Pink',
+                        '#38bbef' => 'Blue',
+                        '#fdd73b' => 'Yellow',
+                        default => 'Custom',
+                    };
+                }
+                
+                $variantSku = $product->sku . '-' . strtoupper(substr($size, 0, 2)) . '-' . strtoupper(substr($colorName, 0, 3));
+                if ($size === 'Default' && $colorName === 'Default') {
+                    $variantSku = $product->sku;
+                }
+                
+                $product->variants()->create([
+                    'color' => $colorName,
+                    'color_hex' => $colorHex,
+                    'size' => $size,
+                    'stock' => $stock,
+                    'sku' => $variantSku
+                ]);
+            }
         }
         
         return redirect()->route('admin.products.index')->with('success', 'Product successfully created!');
@@ -271,6 +323,12 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         $data = $request->only('name', 'price', 'description', 'category_id');
         $data['is_featured'] = $request->has('is_featured');
         $data['is_visible'] = $request->has('is_visible');
+        
+        // Update slug
+        $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        if (\App\Models\Product::where('slug', $data['slug'])->where('id', '!=', $id)->exists()) {
+            $data['slug'] .= '-' . rand(100, 999);
+        }
 
         if ($request->hasFile('image')) {
             if (env('CLOUDINARY_URL')) {
