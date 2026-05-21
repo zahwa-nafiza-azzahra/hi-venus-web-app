@@ -147,6 +147,7 @@ Route::middleware('auth')->group(function () {
         $product = \App\Models\Product::findOrFail($product_id);
         return view('reviews.create', compact('product'));
     })->name('reviews.create');
+    Route::post('/reviews/{product_id}', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
 
     // Orders
     Route::get('/orders', function () {
@@ -169,6 +170,17 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::get('/', [DashboardController::class, 'adminIndex'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'adminIndex'])->name('dashboard.alias');
     
+    // Vouchers
+    Route::get('vouchers', [\App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('vouchers.index');
+    
+    // Reviews
+    Route::get('reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
+    Route::post('reviews/{id}/status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])->name('reviews.status');
+    Route::delete('reviews/{id}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
+    
+    // Reports
+    Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+
     // Admin Users (Customers & Staff)
     Route::get('users', function () {
         $users = \App\Models\User::whereNot('role', \App\Models\User::ROLE_ADMIN)

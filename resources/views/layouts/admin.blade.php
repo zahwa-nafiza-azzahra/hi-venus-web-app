@@ -47,6 +47,18 @@
                 <span class="material-symbols-outlined text-2xl">group</span>
                 <span class="font-label-bold text-label-bold">Customers & Staff</span>
             </a>
+            <a href="{{ route('vouchers.index') }}" class="{{ request()->routeIs('vouchers.*') ? 'bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] scale-105' : 'text-on-surface dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-lg' }} font-bold flex items-center gap-3 p-4 transition-all">
+                <span class="material-symbols-outlined text-2xl">confirmation_number</span>
+                <span class="font-label-bold text-label-bold">Vouchers</span>
+            </a>
+            <a href="{{ route('reviews.index') }}" class="{{ request()->routeIs('reviews.*') ? 'bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] scale-105' : 'text-on-surface dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-lg' }} font-bold flex items-center gap-3 p-4 transition-all">
+                <span class="material-symbols-outlined text-2xl">reviews</span>
+                <span class="font-label-bold text-label-bold">Reviews</span>
+            </a>
+            <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] scale-105' : 'text-on-surface dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-lg' }} font-bold flex items-center gap-3 p-4 transition-all">
+                <span class="material-symbols-outlined text-2xl">bar_chart</span>
+                <span class="font-label-bold text-label-bold">Reports</span>
+            </a>
             <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.index') ? 'bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] scale-105' : 'text-on-surface dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-lg' }} font-bold flex items-center gap-3 p-4 transition-all">
                 <span class="material-symbols-outlined text-2xl">point_of_sale</span>
                 <span class="font-label-bold text-label-bold">POS Kasir</span>
