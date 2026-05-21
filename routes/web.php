@@ -210,6 +210,55 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         return view('admin.products.index', compact('products', 'categories', 'totalProducts'));
     })->name('products.index');
 
+    Route::get('products/create', function () {
+        $categories = \App\Models\Category::all();
+        return view('admin.products.create', compact('categories'));
+    })->name('products.create');
+
+    Route::post('products', function (\Illuminate\Http\Request $request) {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string',
+            'initial_stock' => 'required|integer|min:0',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+        
+        $product = new \App\Models\Product();
+        $product->name = $data['name'];
+        $product->category_id = $data['category_id'];
+        $product->price = $data['price'];
+        $product->description = $data['description'];
+        $product->is_featured = $request->has('is_featured');
+        $product->is_visible = $request->has('is_visible');
+        
+        if ($request->hasFile('image')) {
+            if (env('CLOUDINARY_URL')) {
+                $path = \App\Services\CloudinaryService::upload($request->file('image'), 'products');
+            } else {
+                $path = $request->file('image')->store('products', 'public');
+            }
+            if ($path) {
+                $product->image = $path;
+            }
+        }
+        
+        $product->save();
+        
+        // create initial variant
+        if ($data['initial_stock'] > 0) {
+            $product->variants()->create([
+                'color' => 'Default',
+                'size' => 'Default',
+                'stock' => $data['initial_stock'],
+                'sku' => 'HV-' . str_pad($product->id, 3, '0', STR_PAD_LEFT)
+            ]);
+        }
+        
+        return redirect()->route('admin.products.index')->with('success', 'Product successfully created!');
+    })->name('products.store');
+
     Route::get('products/{id}/edit', function ($id) {
         $product = \App\Models\Product::with('variants', 'category')->findOrFail($id);
         $categories = \App\Models\Category::all();
