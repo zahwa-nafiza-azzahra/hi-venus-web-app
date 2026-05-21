@@ -22,11 +22,11 @@
         <div class="p-6 border-b-4 border-on-background bg-primary-fixed">
             <div class="flex items-center gap-4 mb-4">
                 <div class="w-16 h-16 rounded-full border-4 border-on-background bg-secondary-container overflow-hidden flex-shrink-0 shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
-                    <img alt="Admin Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCePED73LgEJ6Od9HSoQ26OxnEWDXG8PVDek50dd-WDQcYt-uRuSc4837SKq0boIoMc2Mczelj5pWBd8r25OWFFES1JjCO2lzvjx31sUTUVChTfRxXmA_2n6NOxzSjKXAYxSkNoxqmjzN95Ov_3UfqJB-xjfb9s7ratj3v_a5invqQrwtGGkE8ZB9sYYzAUAvPVq5gDEWCp2icaQgoscdlKmkdURdQnltXW1Z6z0ZtlKtRwCWw747NSLKv9GLj06mA1K7us8AB1UthN">
+                    <img alt="Admin Avatar" class="w-full h-full object-cover" src="{{ auth()->user()->avatar_url ?? 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . auth()->user()->name }}">
                 </div>
                 <div>
-                    <h1 class="text-headline-lg font-headline-lg font-black text-primary leading-tight">Venus Admin</h1>
-                    <p class="font-label-bold text-label-bold text-on-surface-variant">Store Manager</p>
+                    <h1 class="text-headline-lg font-headline-lg font-black text-primary leading-tight">{{ auth()->user()->name }}</h1>
+                    <p class="font-label-bold text-label-bold text-on-surface-variant">{{ auth()->user()->isAdmin() ? 'Store Manager' : 'Staff' }}</p>
                 </div>
             </div>
         </div>
