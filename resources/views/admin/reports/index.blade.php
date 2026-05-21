@@ -114,7 +114,7 @@
 <span class="bg-secondary-container px-3 py-1 rounded-full border-2 border-on-surface font-bold text-xs">+12.4%</span>
 </div>
 <p class="font-label-caps text-outline uppercase text-xs mb-1">Total Revenue</p>
-<h3 class="font-display text-headline-lg">${{ number_format($totalRevenue, 2) }}</h3>
+<h3 class="font-display text-headline-lg">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
 </div>
 <!-- Card 2 -->
 <div class="kawaii-card p-8 rounded-lg relative group flex-1">
@@ -189,7 +189,7 @@
 <p class="font-bold text-outline text-xs">{{ $product->order_items_count }} sold this period</p>
 </div>
 <div class="text-right flex-shrink-0">
-<p class="font-display text-2xl text-primary">${{ number_format($product->price, 2) }}</p>
+<p class="font-display text-2xl text-primary">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
 <span class="bg-{{ $loop->even ? 'surface' : 'secondary' }}-container px-3 py-1 rounded-full border-2 border-on-surface text-[10px] font-black shadow-[2px_2px_0px_0px_#1b1c1c]">TOP {{ $loop->iteration }}</span>
 </div>
 </div>
@@ -218,7 +218,7 @@
 <span class="font-black truncate max-w-[100px] inline-block">{{ $order->user->name ?? 'Guest' }}</span>
 </td>
 <td class="py-4 border-y-4 border-on-surface text-xs font-bold py-6">{{ $order->created_at->diffForHumans() }}</td>
-<td class="py-4 border-y-4 border-on-surface font-display text-lg py-6">${{ number_format($order->total_amount, 2) }}</td>
+<td class="py-4 border-y-4 border-on-surface font-display text-lg py-6">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
 <td class="py-4 px-4 rounded-r-3xl border-y-4 border-r-4 border-on-surface text-right py-6">
 <span class="bg-{{ $order->status == 'paid' ? 'tertiary' : 'secondary' }}-container px-3 py-1 rounded-xl border-2 border-on-surface text-[10px] font-black italic shadow-[2px_2px_0px_0px_#1b1c1c] uppercase">{{ $order->status }}</span>
 </td>

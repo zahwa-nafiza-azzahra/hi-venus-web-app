@@ -126,7 +126,7 @@
 </div>
 </div>
 <p class="font-body font-bold text-on-surface/50 uppercase text-xs tracking-widest">Total Discounted</p>
-<p class="font-display text-5xl font-black mt-2">${{ number_format($totalDiscounted, 2) }}</p>
+<p class="font-display text-5xl font-black mt-2">Rp {{ number_format($totalDiscounted, 0, ',', '.') }}</p>
 </div>
 <div class="kawaii-card p-6 sticker-rotate-right bg-white">
 <div class="flex justify-between items-start mb-6">
@@ -208,10 +208,10 @@
     @elseif($voucher->type == 'free_shipping')
         FREE
     @else
-        ${{ number_format($voucher->value, 2) }}
+        Rp {{ number_format($voucher->value, 0, ',', '.') }}
     @endif
 </td>
-<td class="p-6 font-bold text-on-surface/60">${{ number_format($voucher->min_spend, 2) }}</td>
+<td class="p-6 font-bold text-on-surface/60">Rp {{ number_format($voucher->min_spend, 0, ',', '.') }}</td>
 <td class="p-6 font-bold text-on-surface/60">{{ $voucher->quota ? $voucher->quota_used . ' / ' . $voucher->quota : 'Unlimited' }}</td>
 <td class="p-6">
 <div class="font-bold text-sm leading-tight">
