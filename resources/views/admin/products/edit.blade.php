@@ -1,0 +1,242 @@
+@extends('layouts.admin')
+
+@section('title', 'Edit Product | Hi Venus Admin')
+
+@push('styles')
+<style>
+    .kawaii-grid {
+        background-image: 
+            linear-gradient(to right, #e5e2e1 1px, transparent 1px),
+            linear-gradient(to bottom, #e5e2e1 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+    .kawaii-stripe {
+        background: repeating-linear-gradient(45deg, #f0eded, #f0eded 10px, #fcf9f8 10px, #fcf9f8 20px);
+    }
+    .comic-shadow {
+        box-shadow: 6px 6px 0px 0px rgba(27,28,28,1);
+    }
+    .comic-shadow-sm {
+        box-shadow: 4px 4px 0px 0px rgba(27,28,28,1);
+    }
+    input:focus, select:focus, textarea:focus {
+        outline: none !important;
+        border-color: #38bbef !important;
+        box-shadow: 0 0 0 4px rgba(56, 187, 239, 0.3) !important;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="kawaii-grid -m-margin-desktop p-margin-desktop min-h-screen">
+    <!-- Header Actions -->
+    <div class="max-w-5xl mx-auto mb-10 flex justify-between items-center animate-fade-in-down">
+        <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 font-label-bold text-on-background bg-white border-4 border-on-background px-6 py-2 rounded-full comic-shadow-sm hover:translate-y-[-2px] active:translate-y-1 active:shadow-none transition-all">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back to Inventory
+        </a>
+        <div class="flex gap-4">
+            <span class="bg-tertiary-container text-on-tertiary-container border-2 border-on-background px-4 py-1 font-label-bold text-[12px] rotate-[-2deg] comic-shadow-sm">ID: #HV-{{ str_pad($product->id, 4, '0', STR_PAD_LEFT) }}</span>
+        </div>
+    </div>
+
+    <!-- Central Edit Card -->
+    <div class="max-w-5xl mx-auto bg-white border-4 border-on-background comic-shadow relative animate-fade-in-up">
+        <!-- Decorative Stickers -->
+        <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-20 h-20 rotate-12 z-20 hidden lg:block animate-float">
+            <img alt="Sparkle Sticker" class="w-full h-full drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt91q5XOKFc_Ygv2E2IZspunaeVtiSHrgoNgkc110i-xn2Eh_3WpJ8EUv9DOAY0q3hkc4_1DiK_KSactMdfbOtoEA7rqt6ELyfVaFXIrNQZdydWpwMBoI8i5ShijNIxbijU7ra4k8kkorqnnHGSabIviirRUML9dCfNIfBIzEKUqvmZ1hQe0K_Al6z8GLmDuMTHbFKmkIPGs1COLcSBBT6Jvx_v3xg929NQ6uWiTRuE4e-gxXCfhjtvKJtcRqMNFFkac8p31WjKjXZ"/>
+        </div>
+        <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-16 h-16 -rotate-12 z-20 hidden lg:block animate-float" style="animation-delay: 1s;">
+            <img alt="Heart Sticker" class="w-full h-full drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFbVZSb01r8CrWFIfyd8YPyo8nbXu39zJ6JqxrDdg8aXAQ3gmVW62zZgbYnHDucklpVyZa9Oxrd3VU1WIa-NuOGjyVBVaQb5YmkCFX5FiVzRCfxI9uSGuVXRQaC9b1SeZmN8ijTzS5oynzbXryniQrahNzdJKf72-ySotsej2Z4ubPGxB4vQIMVwPd_sdomUXb7Jv8mkp30yYejuAySYpwG0oUXlPAuvhrRY0Tglfh0Lob-1jhmqmK2dLM3fs3hh1xYxF_OhOiqiFO"/>
+        </div>
+
+        <!-- Card Header -->
+        <div class="border-b-4 border-on-background p-8 bg-secondary-container/20 flex items-center gap-4">
+            <div class="bg-primary p-3 rounded-lg border-2 border-on-background rotate-[-3deg]">
+                <span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">edit</span>
+            </div>
+            <h1 class="font-headline-lg text-headline-lg text-on-background">Edit Product Details</h1>
+        </div>
+
+        <!-- Form Content -->
+        <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data" class="p-8 lg:p-12">
+            @csrf
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                <!-- Left Column: Image Upload -->
+                <div class="lg:col-span-5">
+                    <label class="block font-label-bold text-label-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">image</span>
+                        Product Image
+                    </label>
+                    <div class="bg-surface-container-low border-4 border-on-background rounded-lg p-6 flex flex-col items-center justify-center aspect-square relative overflow-hidden group shadow-inner">
+                        <img alt="{{ $product->name }}" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform group-hover:rotate-0 duration-300" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAaNN70R8KFMIGS_QFE5IvIDTb3vUYACrwOZwljUcrNbsyMy3MFWE6fO1deDMFWrgiQu8PlQu9zkZFyEXjxGgz97uhw1gwI8eTRCFdFrQMfb5Wb7JLPla6wWSVe5YnWHTNmQfs_iOuTN_ZgQlfWeCKqy7u4yNAq0_vY9Zk6xIo6FBH0z9n8Z93UTey-c4kAVx52qtOyJbmzWrygOepYX9gBpdTeKuNZIpFULRSgbpO0R_Axj3mGVv97jjNx7uJkJlefefW5unOKIoJJ' }}"/>
+                        
+                        <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[12px] comic-shadow-sm rotate-12">
+                            PREVIEW
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <label class="bg-white border-3 border-on-background p-3 font-label-bold flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer">
+                            <span class="material-symbols-outlined">upload</span>
+                            Change
+                            <input type="file" name="image" class="hidden">
+                        </label>
+                        <button type="button" class="bg-white border-3 border-on-background p-3 font-label-bold text-error flex items-center justify-center gap-2 hover:bg-error-container transition-colors active:translate-y-1">
+                            <span class="material-symbols-outlined">delete</span>
+                            Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form Fields -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Product Name -->
+                    <div>
+                        <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">label</span>
+                            Product Name
+                        </label>
+                        <input name="name" class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all" type="text" value="{{ old('name', $product->name) }}" required/>
+                        @error('name')<p class="mt-1 text-xs text-error font-bold italic">{{ $message }}</p>@enderror
+                    </div>
+
+                    <!-- Category & Price Row -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">category</span>
+                                Category
+                            </label>
+                            <select name="category_id" class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm appearance-none">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">payments</span>
+                                Price (Rp)
+                            </label>
+                            <input name="price" class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm" type="number" value="{{ old('price', $product->price) }}" required/>
+                            @error('price')<p class="mt-1 text-xs text-error font-bold italic">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
+
+                    <!-- Stock -->
+                    <div>
+                        <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">inventory_2</span>
+                            Stock Quantity
+                        </label>
+                        <div class="flex items-center gap-4">
+                            <input class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm" type="number" value="{{ $product->variants->sum('stock') }}" disabled/>
+                            <span class="bg-secondary-container border-2 border-on-background px-4 py-2 font-label-bold whitespace-nowrap">Manage Variants</span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">description</span>
+                            Long Description
+                        </label>
+                        <textarea name="description" class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm" rows="4">{{ old('description', $product->description) }}</textarea>
+                    </div>
+
+                    <!-- Toggles -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                        <div class="flex items-center justify-between bg-surface-container border-3 border-on-background p-4 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="font-label-bold">Featured Product</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_featured" class="sr-only peer" {{ $product->is_featured ? 'checked' : '' }}>
+                                <div class="w-14 h-8 bg-surface-container-highest border-2 border-on-background peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-on-background after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-container"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between bg-surface-container border-3 border-on-background p-4 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                                <span class="font-label-bold">Visible in Store</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_visible" class="sr-only peer" {{ $product->is_visible ? 'checked' : '' }}>
+                                <div class="w-14 h-8 bg-surface-container-highest border-2 border-on-background peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-on-background after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-secondary-container"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Action Buttons -->
+            <div class="mt-12 pt-10 border-t-4 border-on-background flex flex-col md:flex-row justify-end gap-6">
+                <a href="{{ route('admin.products.index') }}" class="bg-secondary-fixed text-on-secondary-fixed border-4 border-on-background px-10 py-4 font-headline-lg-mobile text-headline-lg-mobile comic-shadow hover:translate-y-[-4px] hover:translate-x-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] transition-all active:translate-y-1 active:shadow-none order-2 md:order-1 text-center">
+                    Discard Changes
+                </a>
+                <button type="submit" class="bg-primary-container text-on-primary-container border-4 border-on-background px-12 py-4 font-headline-lg-mobile text-headline-lg-mobile comic-shadow hover:translate-y-[-4px] hover:translate-x-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] transition-all active:translate-y-1 active:shadow-none order-1 md:order-2 flex items-center justify-center gap-3">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Decorative footer elements -->
+    <div class="max-w-5xl mx-auto mt-12 flex justify-center gap-8 opacity-40">
+        <span class="material-symbols-outlined text-4xl">auto_awesome</span>
+        <span class="material-symbols-outlined text-4xl">pets</span>
+        <span class="material-symbols-outlined text-4xl">celebration</span>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    // Image Preview Logic
+    const imageInput = document.querySelector('input[name="image"]');
+    const imagePreview = document.querySelector('.lg\\:col-span-5 img');
+    
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.add('scale-105');
+                    setTimeout(() => imagePreview.classList.remove('scale-105'), 300);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Form Loading State
+    const editForm = document.querySelector('form');
+    const submitBtn = editForm.querySelector('button[type="submit"]');
+    
+    if (editForm && submitBtn) {
+        editForm.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="material-symbols-outlined animate-spin">sync</span>
+                Saving...
+            `;
+            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+        });
+    }
+
+    // Success Haptic Feedback (Visual only)
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('scale-[1.01]');
+        });
+        input.addEventListener('blur', () => {
+            input.parentElement.classList.remove('scale-[1.01]');
+        });
+    });
+</script>
+@endpush
