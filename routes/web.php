@@ -188,12 +188,22 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
 
     // Products Management
-    Route::get('products', function () {
-        $products = \App\Models\Product::with('variants')->paginate(12);
+    Route::get('products', function (\Illuminate\Http\Request $request) {
+        $query = \App\Models\Product::with('variants');
+        
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $products = $query->paginate(12)->withQueryString();
         $products->each(function($product) {
             $product->total_stock = $product->variants->sum('stock');
         });
-        return view('admin.products.index', compact('products'));
+
+        $categories = \App\Models\Category::all();
+        $totalProducts = \App\Models\Product::count();
+
+        return view('admin.products.index', compact('products', 'categories', 'totalProducts'));
     })->name('products.index');
 
     Route::get('products/{id}/edit', function ($id) {

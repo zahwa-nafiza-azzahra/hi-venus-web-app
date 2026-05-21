@@ -61,15 +61,32 @@
     </div>
 
     <!-- Filters Bar -->
-    <div class="flex flex-wrap gap-3 mb-8">
-        <button class="bg-on-surface text-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border comic-shadow-sm">All ({{ $products->count() }})</button>
-        <button class="bg-surface-container-lowest text-on-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border hover:bg-surface-container-low transition-colors">Plushies</button>
-        <button class="bg-surface-container-lowest text-on-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border hover:bg-surface-container-low transition-colors">Stationery</button>
-        <button class="bg-surface-container-lowest text-on-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border hover:bg-surface-container-low transition-colors">Apparel</button>
-        <button class="bg-surface-container-lowest text-on-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border hover:bg-surface-container-low transition-colors flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm">filter_list</span>
-            More Filters
-        </button>
+    <div class="flex flex-wrap gap-3 mb-8 items-center">
+        <a href="{{ route('admin.products.index') }}" class="{{ !request('category_id') ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
+            All ({{ $totalProducts }})
+        </a>
+        
+        @foreach($categories->take(3) as $category)
+            <a href="{{ route('admin.products.index', ['category_id' => $category->id]) }}" class="{{ request('category_id') == $category->id ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
+                {{ $category->name }}
+            </a>
+        @endforeach
+        
+        @if($categories->count() > 3)
+        <div class="relative group">
+            <button class="bg-surface-container-lowest text-on-surface py-2 px-5 rounded-full font-label-bold text-label-bold comic-border hover:bg-surface-container-low transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">filter_list</span>
+                More Filters
+            </button>
+            <div class="absolute left-0 mt-2 w-48 bg-surface-container-lowest rounded-xl comic-border comic-shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 overflow-hidden">
+                @foreach($categories->skip(3) as $category)
+                <a href="{{ route('admin.products.index', ['category_id' => $category->id]) }}" class="block px-4 py-3 text-on-surface hover:bg-surface-container-low {{ request('category_id') == $category->id ? 'bg-surface-container-high font-bold' : '' }} border-b border-surface-container-high last:border-b-0">
+                    {{ $category->name }}
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
     </div>
 
     <!-- Products Grid -->
