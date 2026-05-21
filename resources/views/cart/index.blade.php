@@ -36,7 +36,7 @@
             @foreach(session('cart') as $id => $details)
             <div class="bg-surface-container-lowest border-4 border-on-background shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] p-6 flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] transition-all animate-fade-in-up">
                 <div class="w-32 h-32 flex-shrink-0 bg-primary-fixed border-2 border-on-background sticker-rotate-right overflow-hidden">
-                    <img class="w-full h-full object-cover" src="{{ asset('storage/' . ($details['image'] ?? '')) }}" onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf'"/>
+                    <img class="w-full h-full object-cover" src="{{ (str_starts_with($details['image'] ?? '', 'http') ? $details['image'] : asset('storage/' . ($details['image'] ?? ''))) }}" onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf'"/>
                 </div>
                 <div class="flex-grow text-center md:text-left">
                     <h3 class="font-headline-lg text-headline-lg text-primary mb-1">{{ $details['name'] }}</h3>

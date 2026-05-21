@@ -50,7 +50,7 @@
                     <div class="flex items-center gap-8 group">
                         <div class="relative">
                             <div class="w-32 h-32 rounded-full border-4 border-on-background overflow-hidden sticker-rotate-right bg-primary-fixed shrink-0 shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
-                                <img id="avatar-preview" src="{{ auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://api.dicebear.com/7.x/avataaars/svg?seed='.auth()->user()->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                                <img id="avatar-preview" src="{{ auth()->user()->avatar ? auth()->user()->avatar_url : 'https://api.dicebear.com/7.x/avataaars/svg?seed='.auth()->user()->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
                             </div>
                             <label for="user-avatar-upload" class="absolute -bottom-2 -right-2 bg-secondary-container border-2 border-on-background w-10 h-10 rounded-full flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-sm">camera_alt</span>

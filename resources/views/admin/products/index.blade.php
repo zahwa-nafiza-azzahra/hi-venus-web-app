@@ -102,7 +102,7 @@
                 </div>
                 @endif
 
-                <img src="{{ $product->image ? asset('storage/' . $product->image) : $placeholders[$index % count($placeholders)] }}" 
+                <img src="{{ $product->image ? $product->image_url : $placeholders[$index % count($placeholders)] }}" 
                      alt="{{ $product->name }}" 
                      class="w-full h-full object-cover {{ $index % 2 == 0 ? 'sticker-rotate' : 'sticker-rotate-reverse' }} transition-transform group-hover:scale-105 {{ $product->total_stock == 0 ? 'grayscale' : '' }}">
                 

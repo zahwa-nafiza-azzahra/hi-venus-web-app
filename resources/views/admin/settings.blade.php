@@ -60,7 +60,7 @@
                     <div class="flex flex-col sm:flex-row items-center gap-8 p-6 bg-surface-container-lowest border-4 border-on-background rounded-2xl border-dashed">
                         <div class="relative">
                             <div class="w-32 h-32 rounded-full border-4 border-on-background overflow-hidden bg-primary-fixed shrink-0 shadow-[6px_6px_0px_0px_rgba(27,28,28,1)]">
-                                <img src="{{ auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://api.dicebear.com/7.x/avataaars/svg?seed='.auth()->user()->name }}" class="w-full h-full object-cover">
+                                <img src="{{ auth()->user()->avatar ? auth()->user()->avatar_url : 'https://api.dicebear.com/7.x/avataaars/svg?seed='.auth()->user()->name }}" class="w-full h-full object-cover">
                             </div>
                             <label for="avatar-upload" class="absolute -bottom-2 -right-2 bg-secondary-container border-4 border-on-background w-10 h-10 rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:scale-110 transition-all">
                                 <span class="material-symbols-outlined text-lg">camera_alt</span>

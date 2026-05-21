@@ -70,7 +70,7 @@
                 @endif
                 
                 <div class="bg-surface-variant border-4 border-on-background rounded-lg overflow-hidden w-full aspect-square mb-4 group-hover:{{ $idx % 2 == 0 ? '-rotate-2' : 'rotate-2' }} transition-transform cursor-pointer">
-                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{{ $p->image ? asset('storage/' . $p->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf' }}" alt="{{ $p->name }}"/>
+                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{{ $p->image ? $p->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf' }}" alt="{{ $p->name }}"/>
                 </div>
                 <h3 class="font-body-lg text-body-lg font-bold text-center leading-tight min-h-[3rem] flex items-center">{{ $p->name }}</h3>
                 @auth

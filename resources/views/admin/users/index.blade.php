@@ -69,7 +69,7 @@
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-20 h-20 rounded-full border-4 border-black overflow-hidden bg-white shadow-md group-hover:rotate-6 transition-transform flex-shrink-0">
                     @if($user->avatar)
-                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full bg-[#38bbef] flex items-center justify-center font-black text-2xl italic text-white border-black">
                             {{ strtoupper(substr($user->name, 0, 2)) }}

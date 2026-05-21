@@ -108,7 +108,7 @@
                     @foreach($order->items as $item)
                     <div class="flex gap-4">
                         <div class="w-16 h-16 bg-surface-variant border-2 border-on-background rounded-lg flex-shrink-0 overflow-hidden {{ $loop->odd ? 'rotate-2' : '-rotate-2' }}">
-                            <img alt="{{ $item->product->name }}" class="w-full h-full object-cover" src="{{ $item->product->image ? asset('storage/'.$item->product->image) : 'https://api.dicebear.com/7.x/shapes/svg?seed='.$item->product->name }}">
+                            <img alt="{{ $item->product->name }}" class="w-full h-full object-cover" src="{{ $item->product->image ? $item->product->image_url : 'https://api.dicebear.com/7.x/shapes/svg?seed='.$item->product->name }}">
                         </div>
                         <div class="flex-grow">
                             <p class="font-label-bold text-label-bold text-on-background truncate">{{ $item->product->name }}</p>

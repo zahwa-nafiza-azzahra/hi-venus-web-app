@@ -43,7 +43,7 @@
                 @endif
             </div>
             <div class="aspect-square w-full mb-6 bg-surface-container rounded-lg border-2 border-on-background overflow-hidden flex items-center justify-center relative">
-                <img class="object-cover w-full h-full -rotate-2 group-hover:rotate-0 transition-transform duration-500" src="{{ $product->image ? asset('storage/'.$product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNezMVaOsSL_9VTkjbKVWqCVM3XGdQUHdJTRQtHRcXKYkyeIraG3kbd2XKDlNvOAuJn9EsArYl82t12wfWZWpF6fzOzI27thWi_e6WB23VQ6me2G2IpuAtgTBJAJAlBTrslgKks2fehCsUXD5SYZGavOPYLc1H7GJWQC8QHs-chlR2WULjSvUYL_GOBll2mT3SwfPBA9QQJW-IjIDsdp5w2LOEcsC926pGJZhwbPVkNlYU2b7t-EXeFi4rL-PwH0VVXAb7TPguh2xU' }}">
+                <img class="object-cover w-full h-full -rotate-2 group-hover:rotate-0 transition-transform duration-500" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNezMVaOsSL_9VTkjbKVWqCVM3XGdQUHdJTRQtHRcXKYkyeIraG3kbd2XKDlNvOAuJn9EsArYl82t12wfWZWpF6fzOzI27thWi_e6WB23VQ6me2G2IpuAtgTBJAJAlBTrslgKks2fehCsUXD5SYZGavOPYLc1H7GJWQC8QHs-chlR2WULjSvUYL_GOBll2mT3SwfPBA9QQJW-IjIDsdp5w2LOEcsC926pGJZhwbPVkNlYU2b7t-EXeFi4rL-PwH0VVXAb7TPguh2xU' }}">
             </div>
             <div class="space-y-4">
                 <div>

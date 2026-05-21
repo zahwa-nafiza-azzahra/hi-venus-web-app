@@ -66,7 +66,7 @@
 
                 $firstItem = $order->items->first();
                 $productName = $firstItem ? $firstItem->product->name : 'Kawaii Haul ✨';
-                $productImage = $firstItem && $firstItem->product->image ? asset('storage/' . $firstItem->product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVOqrQTfzkDKhoCSvuaeRsV5PJlLSMa3Ddc2ZERotrAqyEoKaWwzZ3pQW4UcTg1tJULk1P8Z73vdghCX5q12676rosbBdbbEv5HCwoiiotF-1EYCvYn2HSOvpHMcKTONXmX0JrOSjQ5znsRObN6fnIqK8su7Oly0zhRhR-yEm6GECvTzUtNwZJ2AtRAKqX_NITt_CxW2yM1w6o7NzTEfdi4NVNOIX8FTNS-ikZ4lqAtNst7WeObBpFJ85NeJ4dbbPYEIPV-99_1D44';
+                $productImage = $firstItem && $firstItem->product->image ? $firstItem->product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVOqrQTfzkDKhoCSvuaeRsV5PJlLSMa3Ddc2ZERotrAqyEoKaWwzZ3pQW4UcTg1tJULk1P8Z73vdghCX5q12676rosbBdbbEv5HCwoiiotF-1EYCvYn2HSOvpHMcKTONXmX0JrOSjQ5znsRObN6fnIqK8su7Oly0zhRhR-yEm6GECvTzUtNwZJ2AtRAKqX_NITt_CxW2yM1w6o7NzTEfdi4NVNOIX8FTNS-ikZ4lqAtNst7WeObBpFJ85NeJ4dbbPYEIPV-99_1D44';
             @endphp
 
             <!-- Order Card -->

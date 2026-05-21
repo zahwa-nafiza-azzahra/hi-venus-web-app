@@ -42,7 +42,7 @@
         <!-- Product Info Card -->
         <div class="flex flex-col md:flex-row items-center gap-6 bg-surface-container-low border-4 border-on-background p-6 mb-10 rounded-2xl transform -rotate-1">
             <div class="w-32 h-32 bg-white border-2 border-on-background rounded-xl rotate-3 overflow-hidden flex-shrink-0 shadow-sm">
-                <img alt="{{ $product->name }}" class="w-full h-full object-cover" src="{{ $product->image ? asset('storage/'.$product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCS_PwSgy5z6NDtGiLL-19792uaym8oWuxi66KYSfBXoCP50mh-9RnqYgPPWdkl0LPf9DpXA8cZZ9M-O-d0TkUxf40RGwwJiN3U72kiKki0QvvYBI9_PuIzRPcps1xqUmw-tHnaWNOarBfX_R4NKeNRDKMK-NXpXG9GwmXP9Ni63WiRpTsXP1KbY8AKWZOYqbIB1nXMWYZGkKNjfaccyIFATMrv6o0rNF8yXjHu6dbEft-qS2Yrx4LWjsaYtCTSfaeaWjW3ho3bmQYr' }}">
+                <img alt="{{ $product->name }}" class="w-full h-full object-cover" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCS_PwSgy5z6NDtGiLL-19792uaym8oWuxi66KYSfBXoCP50mh-9RnqYgPPWdkl0LPf9DpXA8cZZ9M-O-d0TkUxf40RGwwJiN3U72kiKki0QvvYBI9_PuIzRPcps1xqUmw-tHnaWNOarBfX_R4NKeNRDKMK-NXpXG9GwmXP9Ni63WiRpTsXP1KbY8AKWZOYqbIB1nXMWYZGkKNjfaccyIFATMrv6o0rNF8yXjHu6dbEft-qS2Yrx4LWjsaYtCTSfaeaWjW3ho3bmQYr' }}">
             </div>
             <div class="text-center md:text-left">
                 <h2 class="font-headline-lg text-headline-lg text-on-background">{{ $product->name }}</h2>

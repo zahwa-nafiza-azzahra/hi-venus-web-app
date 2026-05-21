@@ -69,7 +69,7 @@
                         Product Image
                     </label>
                     <div class="bg-surface-container-low border-4 border-on-background rounded-lg p-6 flex flex-col items-center justify-center aspect-square relative overflow-hidden group shadow-inner">
-                        <img alt="{{ $product->name }}" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform group-hover:rotate-0 duration-300" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAaNN70R8KFMIGS_QFE5IvIDTb3vUYACrwOZwljUcrNbsyMy3MFWE6fO1deDMFWrgiQu8PlQu9zkZFyEXjxGgz97uhw1gwI8eTRCFdFrQMfb5Wb7JLPla6wWSVe5YnWHTNmQfs_iOuTN_ZgQlfWeCKqy7u4yNAq0_vY9Zk6xIo6FBH0z9n8Z93UTey-c4kAVx52qtOyJbmzWrygOepYX9gBpdTeKuNZIpFULRSgbpO0R_Axj3mGVv97jjNx7uJkJlefefW5unOKIoJJ' }}"/>
+                        <img alt="{{ $product->name }}" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform group-hover:rotate-0 duration-300" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAaNN70R8KFMIGS_QFE5IvIDTb3vUYACrwOZwljUcrNbsyMy3MFWE6fO1deDMFWrgiQu8PlQu9zkZFyEXjxGgz97uhw1gwI8eTRCFdFrQMfb5Wb7JLPla6wWSVe5YnWHTNmQfs_iOuTN_ZgQlfWeCKqy7u4yNAq0_vY9Zk6xIo6FBH0z9n8Z93UTey-c4kAVx52qtOyJbmzWrygOepYX9gBpdTeKuNZIpFULRSgbpO0R_Axj3mGVv97jjNx7uJkJlefefW5unOKIoJJ' }}"/>
                         
                         <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[12px] comic-shadow-sm rotate-12">
                             PREVIEW

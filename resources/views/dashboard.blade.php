@@ -126,7 +126,7 @@
                         <div
                             class="bg-secondary-container comic-border rounded-lg mb-4 overflow-hidden aspect-square flex items-center justify-center relative">
                             <img class="w-full h-full object-cover sticker-rotate-left group-hover:scale-110 transition-transform duration-300"
-                                src="{{ $product->image ? asset('storage/' . $product->image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDl4yG_3txYZB6wYeWFyDQy0HmKAf6DAlvDFZuyi8JW7xB1CRZzlLc2ZhNHhZ8B0OFVeoi5dparUTMJE2FZppvRYJL9n-FlpygTsEn9GJhmdAqJMeqeFNIw-8cncrDCEv3czN8bhjUVxZIBt4OjI_c-KlPoVVrRM73PQ0st4rNZVG-THfWp_xaMKcwJQnQYam1_KI0irTUTuy1lyTjYSa5jWTiEa7DmB94HCCVotBJytO6PcSU04o0MEd7Oqunl_5D1Ohx0SmqB3rG' }}" />
+                                src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDl4yG_3txYZB6wYeWFyDQy0HmKAf6DAlvDFZuyi8JW7xB1CRZzlLc2ZhNHhZ8B0OFVeoi5dparUTMJE2FZppvRYJL9n-FlpygTsEn9GJhmdAqJMeqeFNIw-8cncrDCEv3czN8bhjUVxZIBt4OjI_c-KlPoVVrRM73PQ0st4rNZVG-THfWp_xaMKcwJQnQYam1_KI0irTUTuy1lyTjYSa5jWTiEa7DmB94HCCVotBJytO6PcSU04o0MEd7Oqunl_5D1Ohx0SmqB3rG' }}" />
                             @if($product->is_featured)
                                 <div
                                     class="absolute top-2 right-2 bg-primary comic-border px-3 py-1 text-on-primary font-label-bold sticker-rotate-right">

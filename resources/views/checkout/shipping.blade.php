@@ -59,7 +59,7 @@
                         @php $total += $details['price'] * $details['quantity']; @endphp
                         <div class="bg-white border-4 border-on-background p-4 flex items-center gap-4 shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] group">
                             <div class="w-24 h-24 bg-primary-fixed border-2 border-on-background rounded-xl flex-shrink-0 overflow-hidden sticker-rotate-left group-hover:rotate-0 transition-transform">
-                                <img src="{{ asset('storage/' . ($details['image'] ?? '')) }}" onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuC7hQjMKr-I4FiKO77l686kTHlpVcH8GQGJMApwkJc5f7bS8CVt3xu4ljvs55Aac3uJMbXQtM9PFEQdzsdzGahpu9LyYuowv745FNFLthLAMITi7VSPz7Dshmst7kJjpnUvPAktI9cCOKX6kb8cN6INxLBVbXKFQEP9zrpothTQaSA3D_aCQtixtdaozNG5GSUrQwkVsly4DGGPWTgJcYOX3cKBqt0HOTN19awWewwuoPwOPjcH0JKoqoyOSKym0u9OHnhleKG73wmx'"/>
+                                <img src="{{ (str_starts_with($details['image'] ?? '', 'http') ? $details['image'] : asset('storage/' . ($details['image'] ?? ''))) }}" onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuC7hQjMKr-I4FiKO77l686kTHlpVcH8GQGJMApwkJc5f7bS8CVt3xu4ljvs55Aac3uJMbXQtM9PFEQdzsdzGahpu9LyYuowv745FNFLthLAMITi7VSPz7Dshmst7kJjpnUvPAktI9cCOKX6kb8cN6INxLBVbXKFQEP9zrpothTQaSA3D_aCQtixtdaozNG5GSUrQwkVsly4DGGPWTgJcYOX3cKBqt0HOTN19awWewwuoPwOPjcH0JKoqoyOSKym0u9OHnhleKG73wmx'"/>
                             </div>
                             <div class="flex-grow">
                                 <h4 class="font-headline-lg text-xl font-extrabold text-on-background">{{ $details['name'] }}</h4>

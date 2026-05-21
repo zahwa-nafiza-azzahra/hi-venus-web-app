@@ -46,12 +46,12 @@
                 Populer!
             </div>
             <div class="bg-surface-bright border-4 border-on-background rounded-lg p-6 comic-shadow-lg aspect-square flex items-center justify-center overflow-hidden">
-                <img id="main-product-img" class="w-full h-full object-cover rounded-md rotate-2 scale-90" alt="{{ $product->name ?? 'Product image' }}" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400' }}" />
+                <img id="main-product-img" class="w-full h-full object-cover rounded-md rotate-2 scale-90" alt="{{ $product->name ?? 'Product image' }}" src="{{ $product->image ? $product->image_url : 'https://placehold.co/400' }}" />
             </div>
             
             <div class="flex gap-4">
                 @php
-                $imgUrl = $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400';
+                $imgUrl = $product->image ? $product->image_url : 'https://placehold.co/400';
                 $thumbs = [
                     $imgUrl,
                     $imgUrl
@@ -173,7 +173,7 @@
             @foreach($relatedProducts as $idx => $r)
             <a href="{{ route('products.show', $r->id) }}" class="bg-surface-bright border-4 border-on-background rounded-lg p-4 comic-shadow transition-transform group {{ $idx % 2 == 0 ? 'hover:rotate-1' : 'hover:-rotate-1' }} block text-decoration-none">
                 <div class="aspect-square bg-surface-variant rounded-md mb-4 overflow-hidden border-2 border-on-background">
-                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{{ $r->image ? asset('storage/' . $r->image) : 'https://placehold.co/400' }}" alt="{{ $r->name }}" />
+                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{{ $r->image ? $r->image_url : 'https://placehold.co/400' }}" alt="{{ $r->name }}" />
                 </div>
                 <div class="font-label-bold text-on-background mb-1 truncate">{{ $r->name }}</div>
                 <div class="font-price-display text-primary text-sm sm:text-base">Rp {{ number_format($r->price, 0, ',', '.') }}</div>
