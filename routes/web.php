@@ -194,6 +194,10 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
+        
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
 
         $products = $query->paginate(12)->withQueryString();
         $products->each(function($product) {

@@ -48,26 +48,29 @@
             </h2>
             <p class="font-body-lg text-body-lg text-on-surface-variant">Manage your kawaii collection here!</p>
         </div>
-        <div class="flex items-center gap-4 w-full md:w-auto">
-            <div class="relative w-full md:w-64">
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <form action="{{ route('admin.products.index') }}" method="GET" class="relative w-full md:w-64">
+                @if(request('category_id'))
+                    <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                @endif
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                <input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest rounded-xl comic-border comic-shadow font-body-md focus:outline-none focus:border-tertiary-container focus:ring-0" placeholder="Search products..." type="text"/>
-            </div>
-            <button class="bg-primary text-on-primary font-label-bold text-label-bold py-3 px-6 rounded-xl comic-border-thick comic-shadow-lg comic-button-hover transition-all flex justify-center items-center gap-2 whitespace-nowrap">
+                <input name="search" value="{{ request('search') }}" class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest rounded-xl comic-border comic-shadow font-body-md focus:outline-none focus:border-tertiary-container focus:ring-0" placeholder="Search products..." type="text"/>
+            </form>
+            <a href="{{ url('admin/products/create') }}" class="bg-primary text-on-primary font-label-bold text-label-bold py-3 px-6 rounded-xl comic-border-thick comic-shadow-lg comic-button-hover transition-all flex justify-center items-center gap-2 whitespace-nowrap">
                 <span class="material-symbols-outlined">add_circle</span>
                 Add Product
-            </button>
+            </a>
         </div>
     </div>
 
     <!-- Filters Bar -->
     <div class="flex flex-wrap gap-3 mb-8 items-center">
-        <a href="{{ route('admin.products.index') }}" class="{{ !request('category_id') ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
+        <a href="{{ route('admin.products.index', array_filter(['search' => request('search')])) }}" class="{{ !request('category_id') ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
             All ({{ $totalProducts }})
         </a>
         
         @foreach($categories->take(3) as $category)
-            <a href="{{ route('admin.products.index', ['category_id' => $category->id]) }}" class="{{ request('category_id') == $category->id ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
+            <a href="{{ route('admin.products.index', array_filter(['category_id' => $category->id, 'search' => request('search')])) }}" class="{{ request('category_id') == $category->id ? 'bg-on-surface text-surface comic-shadow-sm' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-low' }} py-2 px-5 rounded-full font-label-bold text-label-bold comic-border transition-colors">
                 {{ $category->name }}
             </a>
         @endforeach
@@ -80,7 +83,7 @@
             </button>
             <div class="absolute left-0 mt-2 w-48 bg-surface-container-lowest rounded-xl comic-border comic-shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 overflow-hidden">
                 @foreach($categories->skip(3) as $category)
-                <a href="{{ route('admin.products.index', ['category_id' => $category->id]) }}" class="block px-4 py-3 text-on-surface hover:bg-surface-container-low {{ request('category_id') == $category->id ? 'bg-surface-container-high font-bold' : '' }} border-b border-surface-container-high last:border-b-0">
+                <a href="{{ route('admin.products.index', array_filter(['category_id' => $category->id, 'search' => request('search')])) }}" class="block px-4 py-3 text-on-surface hover:bg-surface-container-low {{ request('category_id') == $category->id ? 'bg-surface-container-high font-bold' : '' }} border-b border-surface-container-high last:border-b-0">
                     {{ $category->name }}
                 </a>
                 @endforeach
