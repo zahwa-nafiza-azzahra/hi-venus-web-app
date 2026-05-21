@@ -172,12 +172,7 @@
                     </a>
                 </div>
                 
-                <!-- Fun Decorative Badge -->
-                <div class="kawaii-card bg-secondary-container p-6 rounded-lg rotate-3 border-dashed border-4 border-on-background relative">
-                    <div class="absolute -top-3 -left-3 bg-white border-2 border-on-background rounded-full px-3 py-1 text-[10px] font-bold">PRO TIP</div>
-                    <p class="font-label-bold italic text-on-secondary-container">"Adding 3+ photos increases sales by 40%! Sparkle it up! ✨"</p>
-                    <span class="material-symbols-outlined absolute bottom-2 right-2 text-primary opacity-30">mood</span>
-                </div>
+
             </div>
         </form>
     </div>
