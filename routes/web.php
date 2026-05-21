@@ -91,6 +91,10 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'destr
     ->middleware('auth')
     ->name('logout');
 
+Route::get('/logout', function () {
+    return redirect('/');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
