@@ -439,6 +439,14 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         $updateData['images'] = $additionalImages;
 
         $product->update($updateData);
+
+        // Update variant stocks if provided
+        if ($request->has('variant_stock')) {
+            foreach ($request->input('variant_stock') as $variantId => $stockValue) {
+                $product->variants()->where('id', $variantId)->update(['stock' => (int)$stockValue]);
+            }
+        }
+
         return redirect()->route('admin.products.index')->with('success', '✨ Product "' . $product->name . '" has been updated!');
     })->name('products.update');
 

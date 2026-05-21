@@ -230,15 +230,35 @@
                         </div>
                     </div>
 
-                    <!-- Stock -->
-                    <div>
-                        <label class="block font-label-bold text-label-bold mb-2 flex items-center gap-2">
+                    <!-- Stock & Variants -->
+                    <div class="space-y-3">
+                        <label class="block font-label-bold text-label-bold mb-1 flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary">inventory_2</span>
-                            Stock Quantity
+                            Stock & Variant Management
                         </label>
-                        <div class="flex items-center gap-4">
-                            <input class="w-full bg-white border-3 border-on-background p-4 font-body-md rounded-lg comic-shadow-sm" type="number" value="{{ $product->variants->sum('stock') }}" disabled/>
-                            <span class="bg-secondary-container border-2 border-on-background px-4 py-2 font-label-bold whitespace-nowrap">Manage Variants</span>
+                        <p class="text-xs text-on-surface-variant">Update the stock of each variant below. The total stock is automatically calculated.</p>
+                        
+                        <div class="space-y-3 bg-surface-container/60 border-3 border-on-background p-4 rounded-lg">
+                            @foreach($product->variants as $variant)
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white border-2 border-on-background rounded-lg text-sm comic-shadow-sm transition-transform hover:scale-[1.01]">
+                                <div class="flex flex-col">
+                                    <span class="font-label-bold text-on-background">
+                                        @if($variant->size === 'Default' && $variant->color === 'Default')
+                                            Standard Item (No Variants)
+                                        @else
+                                            Size: <span class="text-primary">{{ $variant->size }}</span> | Color: <span class="text-secondary">{{ $variant->color }}</span>
+                                        @endif
+                                    </span>
+                                    <span class="text-[10px] font-mono text-on-surface-variant mt-0.5">SKU: {{ $variant->sku }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" name="variant_stock[{{ $variant->id }}]" 
+                                        class="w-28 bg-white border-2 border-on-background px-3 py-2 font-body-md rounded text-center focus:outline-none focus:border-primary transition-colors" 
+                                        value="{{ $variant->stock }}" min="0" required/>
+                                    <span class="text-xs font-bold text-on-surface-variant">units</span>
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
 
