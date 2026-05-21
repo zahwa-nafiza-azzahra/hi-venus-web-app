@@ -4,29 +4,9 @@
 
 @push('styles')
 <style>
-    body {
-        background-color: #fcf9f8;
-        /* Enhanced Playful Pattern */
-        background-image: 
-            radial-gradient(#ff85d0 2px, transparent 2px),
-            radial-gradient(#38bbef 2px, transparent 2px);
-        background-size: 32px 32px;
-        background-position: 0 0, 16px 16px;
-        position: relative;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(#e5e2e1 1px, transparent 1px), linear-gradient(90deg, #e5e2e1 1px, transparent 1px);
-        background-size: 64px 64px;
-        opacity: 0.3;
-        z-index: -1;
-        pointer-events: none;
+    /* Hide default admin layout pattern to use custom one */
+    main > div.absolute.inset-0.z-0 {
+        display: none !important;
     }
 
     .kawaii-card {
@@ -66,6 +46,11 @@
 @endpush
 
 @section('content')
+<!-- Custom Background Pattern Layer just for this page -->
+<div class="fixed inset-0 z-0 ml-72 pointer-events-none" style="background-color: #fcf9f8; background-image: radial-gradient(#ff85d0 2px, transparent 2px), radial-gradient(#38bbef 2px, transparent 2px); background-size: 32px 32px; background-position: 0 0, 16px 16px;">
+    <div class="absolute inset-0" style="background-image: linear-gradient(#e5e2e1 1px, transparent 1px), linear-gradient(90deg, #e5e2e1 1px, transparent 1px); background-size: 64px 64px; opacity: 0.3;"></div>
+</div>
+
 <div class="animate-fade-in relative z-10">
     <header class="flex justify-between items-center mb-10">
         <div>
