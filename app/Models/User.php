@@ -19,11 +19,20 @@ class User extends Authenticatable {
         return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
     }
 
-    public function getAvatarUrlAttribute(): string {
-        if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+    /**
+     * Get the user's avatar URL.
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if (!$this->avatar) {
+            return asset('images/default-avatar.png');
         }
-        return asset('images/default-avatar.png');
+        
+        if (str_starts_with($this->avatar, 'http')) {
+            return $this->avatar;
+        }
+        
+        return asset('storage/' . $this->avatar);
     }
 
     public function bookings() { return $this->hasMany(Booking::class); }

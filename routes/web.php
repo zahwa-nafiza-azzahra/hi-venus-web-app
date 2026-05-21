@@ -127,14 +127,18 @@ Route::middleware('auth')->group(function () {
     })->name('settings.password');
     Route::post('/settings/avatar', function (\Illuminate\Http\Request $request) {
         $request->validate(['avatar' => 'required|image|mimes:png,jpg,jpeg|max:5120']);
-        $path = $request->file('avatar')->store('avatars', 'public');
+        if (env('CLOUDINARY_URL')) {
+            $path = \App\Services\CloudinaryService::upload($request->file('avatar'), 'avatars');
+        } else {
+            $path = $request->file('avatar')->store('avatars', 'public');
+        }
         
-        // Delete old avatar if exists
-        if (auth()->user()->avatar) {
+        // Delete old avatar if exists (only if it's a local file, not an http url)
+        if (auth()->user()->avatar && !str_starts_with(auth()->user()->avatar, 'http')) {
             \Illuminate\Support\Facades\Storage::disk('public')->delete(auth()->user()->avatar);
         }
         
-        auth()->user()->update(['avatar' => $path]);
+        if ($path) auth()->user()->update(['avatar' => $path]);
         return back()->with('success', 'Profile photo updated successfully.');
     })->name('settings.avatar');
 
@@ -206,8 +210,14 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         $data['is_visible'] = $request->has('is_visible');
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = $path;
+            if (env('CLOUDINARY_URL')) {
+                $path = \App\Services\CloudinaryService::upload($request->file('image'), 'products');
+            } else {
+                $path = $request->file('image')->store('products', 'public');
+            }
+            if ($path) {
+                $data['image'] = $path;
+            }
         }
 
         $product->update($data);
@@ -239,14 +249,18 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     })->name('settings.password');
     Route::post('settings/avatar', function (\Illuminate\Http\Request $request) {
         $request->validate(['avatar' => 'required|image|mimes:png,jpg,jpeg|max:5120']);
-        $path = $request->file('avatar')->store('avatars', 'public');
+        if (env('CLOUDINARY_URL')) {
+            $path = \App\Services\CloudinaryService::upload($request->file('avatar'), 'avatars');
+        } else {
+            $path = $request->file('avatar')->store('avatars', 'public');
+        }
 
-        // Delete old avatar if exists
-        if (auth()->user()->avatar) {
+        // Delete old avatar if exists (only if it's a local file)
+        if (auth()->user()->avatar && !str_starts_with(auth()->user()->avatar, 'http')) {
             \Illuminate\Support\Facades\Storage::disk('public')->delete(auth()->user()->avatar);
         }
 
-        auth()->user()->update(['avatar' => $path]);
+        if ($path) auth()->user()->update(['avatar' => $path]);
         return back()->with('success', 'Profile photo updated successfully.');
     })->name('settings.avatar');
 });
