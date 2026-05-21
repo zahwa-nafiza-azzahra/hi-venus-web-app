@@ -222,7 +222,14 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'initial_stock' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+        
+        $request->validate([
+            'slide_images.0' => 'required_without:image|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'slide_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ], [
+            'slide_images.0.required_without' => 'Please upload a primary product image!',
         ]);
         
         $product = new \App\Models\Product();
@@ -240,16 +247,43 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         }
         $product->slug = $slug;
         
-        if ($request->hasFile('image')) {
+        // Slide 0: Primary Image
+        $primaryPath = null;
+        if ($request->hasFile('slide_images.0')) {
+            $file = $request->file('slide_images.0');
             if (env('CLOUDINARY_URL')) {
-                $path = \App\Services\CloudinaryService::upload($request->file('image'), 'products');
+                $primaryPath = \App\Services\CloudinaryService::upload($file, 'products');
             } else {
-                $path = $request->file('image')->store('products', 'public');
+                $primaryPath = $file->store('products', 'public');
             }
-            if ($path) {
-                $product->image = $path;
+        } elseif ($request->hasFile('image')) {
+            $file = $request->file('image');
+            if (env('CLOUDINARY_URL')) {
+                $primaryPath = \App\Services\CloudinaryService::upload($file, 'products');
+            } else {
+                $primaryPath = $file->store('products', 'public');
             }
         }
+        if ($primaryPath) {
+            $product->image = $primaryPath;
+        }
+        
+        // Slide 1, 2, 3: Additional Images
+        $additionalImages = [];
+        for ($i = 1; $i <= 3; $i++) {
+            if ($request->hasFile("slide_images.{$i}")) {
+                $file = $request->file("slide_images.{$i}");
+                if (env('CLOUDINARY_URL')) {
+                    $path = \App\Services\CloudinaryService::upload($file, 'products');
+                } else {
+                    $path = $file->store('products', 'public');
+                }
+                if ($path) {
+                    $additionalImages[] = $path;
+                }
+            }
+        }
+        $product->images = $additionalImages;
         
         $product->save();
         
@@ -320,28 +354,91 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::post('products/{id}/update', function (\Illuminate\Http\Request $request, $id) {
         $product = \App\Models\Product::findOrFail($id);
         
-        $data = $request->only('name', 'price', 'description', 'category_id');
-        $data['is_featured'] = $request->has('is_featured');
-        $data['is_visible'] = $request->has('is_visible');
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string',
+        ]);
+        
+        $request->validate([
+            'slide_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        $updateData = [
+            'name' => $data['name'],
+            'category_id' => $data['category_id'],
+            'price' => $data['price'],
+            'description' => $data['description'],
+            'is_featured' => $request->has('is_featured'),
+            'is_visible' => $request->has('is_visible'),
+        ];
         
         // Update slug
-        $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
-        if (\App\Models\Product::where('slug', $data['slug'])->where('id', '!=', $id)->exists()) {
-            $data['slug'] .= '-' . rand(100, 999);
+        $updateData['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        if (\App\Models\Product::where('slug', $updateData['slug'])->where('id', '!=', $id)->exists()) {
+            $updateData['slug'] .= '-' . rand(100, 999);
         }
 
-        if ($request->hasFile('image')) {
+        // Slide 0: Primary Image
+        $mainImage = $product->image;
+        if ($request->input('remove_slides.0') == '1') {
+            $mainImage = null;
+        }
+        if ($request->hasFile('slide_images.0')) {
+            $file = $request->file('slide_images.0');
             if (env('CLOUDINARY_URL')) {
-                $path = \App\Services\CloudinaryService::upload($request->file('image'), 'products');
+                $path = \App\Services\CloudinaryService::upload($file, 'products');
             } else {
-                $path = $request->file('image')->store('products', 'public');
+                $path = $file->store('products', 'public');
             }
             if ($path) {
-                $data['image'] = $path;
+                $mainImage = $path;
+            }
+        } elseif ($request->hasFile('image')) {
+            $file = $request->file('image');
+            if (env('CLOUDINARY_URL')) {
+                $path = \App\Services\CloudinaryService::upload($file, 'products');
+            } else {
+                $path = $file->store('products', 'public');
+            }
+            if ($path) {
+                $mainImage = $path;
             }
         }
+        $updateData['image'] = $mainImage;
 
-        $product->update($data);
+        // Slide 1, 2, 3: Additional Images
+        $additionalImages = [];
+        $currentImages = is_array($product->images) ? $product->images : [];
+        
+        for ($i = 1; $i <= 3; $i++) {
+            $slotVal = isset($currentImages[$i - 1]) ? $currentImages[$i - 1] : null;
+            
+            if ($request->input("remove_slides.{$i}") == '1') {
+                $slotVal = null;
+            }
+            
+            if ($request->hasFile("slide_images.{$i}")) {
+                $file = $request->file("slide_images.{$i}");
+                if (env('CLOUDINARY_URL')) {
+                    $path = \App\Services\CloudinaryService::upload($file, 'products');
+                } else {
+                    $path = $file->store('products', 'public');
+                }
+                if ($path) {
+                    $slotVal = $path;
+                }
+            }
+            
+            if ($slotVal) {
+                $additionalImages[] = $slotVal;
+            }
+        }
+        $updateData['images'] = $additionalImages;
+
+        $product->update($updateData);
         return redirect()->route('admin.products.index')->with('success', '✨ Product "' . $product->name . '" has been updated!');
     })->name('products.update');
 

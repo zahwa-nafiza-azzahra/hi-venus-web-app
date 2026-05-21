@@ -74,9 +74,30 @@
             <h1 class="font-headline-lg text-headline-lg text-on-background">Edit Product Details</h1>
         </div>
 
+        @php
+            $slideUrls = [];
+            // Slide 0: Primary Image
+            $slideUrls[0] = $product->image ? $product->image_url : null;
+            // Slide 1-3: Additional Images
+            $additional = is_array($product->images) ? $product->images : [];
+            for ($i = 1; $i <= 3; $i++) {
+                $slideUrls[$i] = isset($additional[$i-1]) ? (str_starts_with($additional[$i-1], 'http') ? $additional[$i-1] : asset('storage/' . $additional[$i-1])) : null;
+            }
+        @endphp
+
         <!-- Form Content -->
         <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data" class="p-8 lg:p-12">
             @csrf
+            
+            <!-- Hidden inputs for multi-slide images -->
+            <div id="slide-inputs-container">
+                @for($i = 0; $i < 4; $i++)
+                    <input type="file" name="slide_images[{{ $i }}]" id="slide-input-{{ $i }}" class="hidden" accept="image/*" onchange="handleSlideFileChange({{ $i }}, this)">
+                    <input type="hidden" name="remove_slides[{{ $i }}]" id="remove-slide-{{ $i }}" value="0">
+                    <input type="hidden" name="existing_images[{{ $i }}]" id="existing-slide-{{ $i }}" value="{{ $slideUrls[$i] ? '1' : '0' }}">
+                @endfor
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
                 <!-- Left Column: Image Carousel -->
                 <div class="lg:col-span-5">
@@ -92,28 +113,28 @@
                         {{-- Slide 1 (primary image) --}}
                         <div class="img-slide active absolute inset-0 items-center justify-center" data-slide="0">
                             <img id="preview-0" alt="Slide 1" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform hover:rotate-0 duration-300"
-                                src="{{ $product->image ? $product->image_url : 'https://placehold.co/400x400/f5d4e8/9e357b?text=No+Image' }}"/>
+                                src="{{ $slideUrls[0] ?? 'https://placehold.co/400x400/f5d4e8/9e357b?text=No+Image' }}"/>
                             <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-12">MAIN</div>
                         </div>
 
                         {{-- Slide 2 --}}
                         <div class="img-slide absolute inset-0 items-center justify-center" data-slide="1">
                             <img id="preview-1" alt="Slide 2" class="w-4/5 h-4/5 object-contain rotate-[2deg] transition-transform hover:rotate-0 duration-300"
-                                src="https://placehold.co/400x400/d4e8f5/357b9e?text=+"/>
+                                src="{{ $slideUrls[1] ?? 'https://placehold.co/400x400/d4e8f5/357b9e?text=Empty+Slide' }}"/>
                             <div class="absolute top-4 right-4 bg-primary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-12">SLIDE 2</div>
                         </div>
 
                         {{-- Slide 3 --}}
                         <div class="img-slide absolute inset-0 items-center justify-center" data-slide="2">
                             <img id="preview-2" alt="Slide 3" class="w-4/5 h-4/5 object-contain rotate-[-2deg] transition-transform hover:rotate-0 duration-300"
-                                src="https://placehold.co/400x400/e8f5d4/7b9e35?text=+"/>
+                                src="{{ $slideUrls[2] ?? 'https://placehold.co/400x400/e8f5d4/7b9e35?text=Empty+Slide' }}"/>
                             <div class="absolute top-4 right-4 bg-secondary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-6">SLIDE 3</div>
                         </div>
 
                         {{-- Slide 4 --}}
                         <div class="img-slide absolute inset-0 items-center justify-center" data-slide="3">
                             <img id="preview-3" alt="Slide 4" class="w-4/5 h-4/5 object-contain rotate-[3deg] transition-transform hover:rotate-0 duration-300"
-                                src="https://placehold.co/400x400/f5e8d4/9e7b35?text=+"/>
+                                src="{{ $slideUrls[3] ?? 'https://placehold.co/400x400/f5e8d4/9e7b35?text=Empty+Slide' }}"/>
                             <div class="absolute top-4 right-4 bg-tertiary-fixed border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-6">SLIDE 4</div>
                         </div>
 
@@ -147,7 +168,7 @@
                         <div onclick="goToSlide({{ $i }})" id="thumb-{{ $i }}"
                             class="cursor-pointer border-4 border-on-background rounded-lg overflow-hidden aspect-square bg-surface-container-low hover:scale-105 transition-transform {{ $i == 0 ? 'ring-4 ring-primary ring-offset-1' : '' }}">
                             <img id="thumb-img-{{ $i }}" class="w-full h-full object-cover" 
-                                src="{{ $i == 0 && $product->image ? $product->image_url : 'https://placehold.co/100x100/eeeeee/aaaaaa?text=' . ($i+1) }}"
+                                src="{{ $slideUrls[$i] ?? 'https://placehold.co/100x100/eeeeee/aaaaaa?text=' . ($i+1) }}"
                                 alt="Thumbnail {{ $i+1 }}"/>
                         </div>
                         @endfor
@@ -160,11 +181,11 @@
                             Click a thumbnail then upload to replace that slide
                         </p>
                         <div class="grid grid-cols-2 gap-3">
-                            <label class="bg-white border-3 border-on-background p-3 font-label-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer rounded-lg comic-shadow-sm">
+                            <button type="button" onclick="triggerActiveUpload()"
+                                class="bg-white border-3 border-on-background p-3 font-label-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer rounded-lg comic-shadow-sm">
                                 <span class="material-symbols-outlined text-primary">upload</span>
                                 Upload to Slide <span id="upload-slot-label">1</span>
-                                <input type="file" name="image" id="slide-upload-input" class="hidden" accept="image/*">
-                            </label>
+                            </button>
                             <button type="button" onclick="removeCurrentSlide()"
                                 class="bg-white border-3 border-on-background p-3 font-label-bold text-sm text-error flex items-center justify-center gap-2 hover:bg-error-container transition-colors active:translate-y-1 rounded-lg comic-shadow-sm">
                                 <span class="material-symbols-outlined">delete</span>
@@ -280,23 +301,133 @@
 
 @push('scripts')
 <script>
-    // Image Preview Logic
-    const imageInput = document.querySelector('input[name="image"]');
-    const imagePreview = document.querySelector('.lg\\:col-span-5 img');
+    let currentSlideIndex = 0;
+    const totalSlides = 4;
     
-    if (imageInput && imagePreview) {
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.classList.add('scale-105');
-                    setTimeout(() => imagePreview.classList.remove('scale-105'), 300);
-                }
-                reader.readAsDataURL(file);
+    // Default placeholders for empty/removed states
+    const placeholders = {
+        0: 'https://placehold.co/400x400/f5d4e8/9e357b?text=No+Image',
+        1: 'https://placehold.co/400x400/d4e8f5/357b9e?text=Empty+Slide',
+        2: 'https://placehold.co/400x400/e8f5d4/7b9e35?text=Empty+Slide',
+        3: 'https://placehold.co/400x400/f5e8d4/9e7b35?text=Empty+Slide'
+    };
+    
+    const thumbPlaceholders = {
+        0: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=1',
+        1: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=2',
+        2: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=3',
+        3: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=4'
+    };
+
+    function goToSlide(index) {
+        if (index < 0 || index >= totalSlides) return;
+        currentSlideIndex = index;
+        
+        // Update slides visibility
+        document.querySelectorAll('.img-slide').forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.add('active');
+                slide.style.display = 'flex';
+            } else {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
             }
         });
+        
+        // Update Dots
+        document.querySelectorAll('.thumb-dot').forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.add('active');
+                dot.style.background = '#9e357b';
+            } else {
+                dot.classList.remove('active');
+                dot.style.background = '';
+            }
+        });
+        
+        // Update Thumbnail active highlight
+        document.querySelectorAll('[id^="thumb-"]').forEach((thumb, i) => {
+            if (i === index) {
+                thumb.classList.add('ring-4', 'ring-primary', 'ring-offset-1');
+            } else {
+                thumb.classList.remove('ring-4', 'ring-primary', 'ring-offset-1');
+            }
+        });
+        
+        // Update Slide Counter
+        document.getElementById('slide-counter').textContent = `${index + 1} / ${totalSlides}`;
+        
+        // Update Upload button label text
+        document.getElementById('upload-slot-label').textContent = index + 1;
+    }
+
+    function changeSlide(direction) {
+        let newIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+        goToSlide(newIndex);
+    }
+    
+    function triggerActiveUpload() {
+        document.getElementById(`slide-input-${currentSlideIndex}`).click();
+    }
+    
+    function handleSlideFileChange(index, input) {
+        const file = input.files[0];
+        if (file) {
+            // Validate size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ File size is too large! Maximum 5MB.');
+                input.value = '';
+                return;
+            }
+            
+            // Validate format
+            const validFormats = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+            if (!validFormats.includes(file.type)) {
+                alert('❌ Unsupported format! Use JPG, PNG, or WEBP.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update Slide Preview
+                const previewImg = document.getElementById(`preview-${index}`);
+                previewImg.src = e.target.result;
+                
+                // Update Thumbnail Strip Image
+                const thumbImg = document.getElementById(`thumb-img-${index}`);
+                thumbImg.src = e.target.result;
+                
+                // Reset remove flag
+                document.getElementById(`remove-slide-${index}`).value = '0';
+                
+                // Add scale haptic-like micro-animation to active slide preview
+                previewImg.classList.add('scale-105');
+                setTimeout(() => previewImg.classList.remove('scale-105'), 300);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function removeCurrentSlide() {
+        // Clear file input
+        const fileInput = document.getElementById(`slide-input-${currentSlideIndex}`);
+        fileInput.value = '';
+        
+        // Mark as removed
+        document.getElementById(`remove-slide-${currentSlideIndex}`).value = '1';
+        document.getElementById(`existing-slide-${currentSlideIndex}`).value = '0';
+        
+        // Reset previews to default placeholders
+        document.getElementById(`preview-${currentSlideIndex}`).src = placeholders[currentSlideIndex];
+        document.getElementById(`thumb-img-${currentSlideIndex}`).src = thumbPlaceholders[currentSlideIndex];
+        
+        // Haptic shake animation on slide removal
+        const slideEl = document.querySelector(`.img-slide[data-slide="${currentSlideIndex}"]`);
+        if (slideEl) {
+            slideEl.classList.add('animate-bounce');
+            setTimeout(() => slideEl.classList.remove('animate-bounce'), 500);
+        }
     }
 
     // Form Loading State
@@ -304,7 +435,27 @@
     const submitBtn = editForm.querySelector('button[type="submit"]');
     
     if (editForm && submitBtn) {
-        editForm.addEventListener('submit', function() {
+        editForm.addEventListener('submit', function(e) {
+            // Verify at least one image remains
+            let hasAtLeastOneImage = false;
+            for (let i = 0; i < totalSlides; i++) {
+                const fileInput = document.getElementById(`slide-input-${i}`);
+                const isRemoved = document.getElementById(`remove-slide-${i}`).value === '1';
+                const hasExisting = document.getElementById(`existing-slide-${i}`).value === '1';
+                
+                if ((fileInput.files && fileInput.files.length > 0) || (hasExisting && !isRemoved)) {
+                    hasAtLeastOneImage = true;
+                    break;
+                }
+            }
+            
+            if (!hasAtLeastOneImage) {
+                e.preventDefault();
+                alert('❌ Product must have at least one image!');
+                goToSlide(0);
+                return false;
+            }
+
             submitBtn.disabled = true;
             submitBtn.innerHTML = `
                 <span class="material-symbols-outlined animate-spin">sync</span>
@@ -324,5 +475,8 @@
             input.parentElement.classList.remove('scale-[1.01]');
         });
     });
+    
+    // Initialise slide display
+    goToSlide(0);
 </script>
 @endpush

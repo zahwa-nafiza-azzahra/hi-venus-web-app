@@ -177,6 +177,23 @@
         animation: shimmer 1.5s infinite;
         pointer-events: none;
     }
+    
+    .img-slide { display: none; }
+    .img-slide.active { display: flex; }
+    .thumb-dot.active {
+        background: #9e357b;
+        border-color: #1b1c1c;
+        transform: scale(1.2);
+    }
+    .carousel-arrow {
+        transition: all 0.15s;
+    }
+    .carousel-arrow:hover {
+        transform: scale(1.1);
+    }
+    .carousel-arrow:active {
+        transform: scale(0.95);
+    }
 </style>
 @endpush
 
@@ -314,45 +331,117 @@
             </div>
             
             <!-- Right Column: Image & Actions -->
-            <div class="space-y-8">
-                <!-- Image Upload -->
+            <div class="space-y-6">
+                <!-- Hidden inputs for multi-slide images -->
+                <div id="slide-inputs-container">
+                    @for($i = 0; $i < 4; $i++)
+                        <input type="file" name="slide_images[{{ $i }}]" id="slide-input-{{ $i }}" class="hidden" accept="image/*" onchange="handleSlideFileChange({{ $i }}, this)">
+                        <input type="hidden" name="remove_slides[{{ $i }}]" id="remove-slide-{{ $i }}" value="0">
+                        <input type="hidden" name="existing_images[{{ $i }}]" id="existing-slide-{{ $i }}" value="0">
+                    @endfor
+                </div>
+
+                <!-- Image Upload (Carousel Style) -->
                 <div class="kawaii-card p-4 rounded-lg flex flex-col items-center gap-4 text-center">
-                    <div class="upload-area w-full aspect-square border-4 border-dashed border-outline-variant rounded-lg bg-surface-container-low flex flex-col items-center justify-center gap-4 relative overflow-hidden group" id="uploadArea">
+                    <label class="block font-label-bold text-label-bold text-left w-full mb-1 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">collections</span>
+                        Product Images
+                        <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-0.5 rounded-full border-2 border-on-background">up to 4</span>
+                    </label>
+
+                    {{-- Main Carousel --}}
+                    <div class="relative bg-surface-container-low border-4 border-on-background rounded-lg overflow-hidden aspect-square w-full comic-shadow" id="img-carousel">
                         
-                        <!-- Image Preview -->
-                        <img id="imagePreview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpMYTN0QmYyn1l7DGzHpqh5pv4OouUTsl5rteXYn0_OI5IxNpOYnf9a6rAXdGJBAkSxyAbccOpS-nHXT-G9jBStadhN8k0iro1s1e_MMb2LTED2mKw0Uco2v-Xjsu7YiFbkFgjK_YcmKmapg6qMQgRCEepLyXTgNQkMp2Pl4iagR3GUBskKQ29wwZgjOFKuzkQy0dSdluzwgaIFsAqEDpvPe1MAx4fnm3mjJ0RDyxGuBH_Guso6t9XcR7IldtyN23ZVXpCcE28RR1L" class="w-full h-full object-cover rounded-lg rotate-2 opacity-80 absolute inset-0 z-0">
-                        
-                        <div class="upload-hint absolute inset-0 bg-white/40 flex flex-col items-center justify-center hover:bg-white/10 transition-all cursor-pointer z-10" id="uploadHint">
-                            <div class="w-16 h-16 bg-white border-4 border-on-background rounded-full flex items-center justify-center mb-2 shadow-[4px_4px_0px_0px_#1b1c1c] group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-3xl" id="uploadIcon">cloud_upload</span>
-                            </div>
-                            <span class="font-label-bold text-on-background px-4 py-1 bg-secondary-container border-2 border-on-background rounded-full" id="uploadLabel">Upload Image</span>
-                            <span class="text-xs text-on-surface-variant mt-2 hidden" id="dragHint">or drag & drop here</span>
+                        {{-- Slide 1 --}}
+                        <div class="img-slide active absolute inset-0 items-center justify-center animate-fade-in" data-slide="0">
+                            <img id="preview-0" alt="Slide 1" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/f5d4e8/9e357b?text=Upload+Slide+1"/>
+                            <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-12">MAIN</div>
                         </div>
-                        
-                        <input type="file" name="image" id="imageInput" class="hidden" accept="image/jpeg,image/png,image/webp">
+
+                        {{-- Slide 2 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center animate-fade-in" data-slide="1">
+                            <img id="preview-1" alt="Slide 2" class="w-4/5 h-4/5 object-contain rotate-[2deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/d4e8f5/357b9e?text=Empty+Slide"/>
+                            <div class="absolute top-4 right-4 bg-primary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-12">SLIDE 2</div>
+                        </div>
+
+                        {{-- Slide 3 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center animate-fade-in" data-slide="2">
+                            <img id="preview-2" alt="Slide 3" class="w-4/5 h-4/5 object-contain rotate-[-2deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/e8f5d4/7b9e35?text=Empty+Slide"/>
+                            <div class="absolute top-4 right-4 bg-secondary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-6">SLIDE 3</div>
+                        </div>
+
+                        {{-- Slide 4 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center animate-fade-in" data-slide="3">
+                            <img id="preview-3" alt="Slide 4" class="w-4/5 h-4/5 object-contain rotate-[3deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/f5e8d4/9e7b35?text=Empty+Slide"/>
+                            <div class="absolute top-4 right-4 bg-tertiary-fixed border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-6">SLIDE 4</div>
+                        </div>
+
+                        {{-- Prev Arrow --}}
+                        <button type="button" id="prev-btn" onclick="changeSlide(-1)"
+                            class="carousel-arrow absolute left-3 top-1/2 -translate-y-1/2 bg-white border-3 border-on-background w-10 h-10 flex items-center justify-center rounded-full comic-shadow-sm z-10">
+                            <span class="material-symbols-outlined text-lg">chevron_left</span>
+                        </button>
+
+                        {{-- Next Arrow --}}
+                        <button type="button" id="next-btn" onclick="changeSlide(1)"
+                            class="carousel-arrow absolute right-3 top-1/2 -translate-y-1/2 bg-white border-3 border-on-background w-10 h-10 flex items-center justify-center rounded-full comic-shadow-sm z-10">
+                            <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        </button>
+
+                        {{-- Slide counter --}}
+                        <div class="absolute bottom-3 left-3 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full" id="slide-counter">1 / 4</div>
                     </div>
-                    
-                    <!-- Beautiful Custom Error Message for Image -->
+
+                    {{-- Dot Indicators --}}
+                    <div class="flex justify-center gap-2 mt-1">
+                        <button type="button" onclick="goToSlide(0)" class="thumb-dot active w-3 h-3 rounded-full border-2 border-on-background bg-primary transition-all" id="dot-0"></button>
+                        <button type="button" onclick="goToSlide(1)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-1"></button>
+                        <button type="button" onclick="goToSlide(2)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-2"></button>
+                        <button type="button" onclick="goToSlide(3)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-3"></button>
+                    </div>
+
+                    {{-- Thumbnail Strip --}}
+                    <div class="grid grid-cols-4 gap-2 w-full mt-1">
+                        @for($i = 0; $i < 4; $i++)
+                        <div onclick="goToSlide({{ $i }})" id="thumb-{{ $i }}"
+                            class="cursor-pointer border-4 border-on-background rounded-lg overflow-hidden aspect-square bg-surface-container-low hover:scale-105 transition-transform {{ $i == 0 ? 'ring-4 ring-primary ring-offset-1' : '' }}">
+                            <img id="thumb-img-{{ $i }}" class="w-full h-full object-cover" 
+                                src="https://placehold.co/100x100/eeeeee/aaaaaa?text={{ $i + 1 }}"
+                                alt="Thumbnail {{ $i+1 }}"/>
+                        </div>
+                        @endfor
+                    </div>
+
+                    {{-- Beautiful Custom Error Message for Image --}}
                     <p class="text-error text-sm font-bold w-full text-left flex items-center gap-1 hidden shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] p-2 bg-error-container border-2 border-on-background rounded-lg animate-bounce" id="imageError">
-                        <span class="material-symbols-outlined text-sm">error</span> Please upload a product image!
+                        <span class="material-symbols-outlined text-sm">error</span> Please upload a primary product image!
                     </p>
 
-                    <!-- File info after selection -->
-                    <div id="fileInfo" class="hidden w-full text-left">
-                        <div class="flex items-center justify-between bg-surface-container rounded-lg p-2 border-2 border-on-background">
-                            <div class="flex items-center gap-2 overflow-hidden">
-                                <span class="material-symbols-outlined text-primary">image</span>
-                                <span class="font-label-bold text-sm truncate" id="fileName"></span>
-                            </div>
-                            <button type="button" id="removeImage" class="text-error hover:bg-error-container rounded-full p-1 transition-colors">
-                                <span class="material-symbols-outlined text-sm">close</span>
+                    @error('slide_images.0')<p class="text-error text-sm font-bold w-full text-left flex items-center gap-1"><span class="material-symbols-outlined text-sm">error</span> {{ $message }}</p>@enderror
+
+                    {{-- Upload Buttons Row --}}
+                    <div class="w-full mt-2">
+                        <p class="font-label-bold text-[11px] text-on-surface-variant text-left mb-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">info</span>
+                            Select a slide first, then click upload
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 w-full">
+                            <button type="button" onclick="triggerActiveUpload()"
+                                class="bg-white border-3 border-on-background p-3 font-label-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer rounded-lg comic-shadow-sm">
+                                <span class="material-symbols-outlined text-primary">upload</span>
+                                Upload Slide <span id="upload-slot-label">1</span>
+                            </button>
+                            <button type="button" onclick="removeCurrentSlide()"
+                                class="bg-white border-3 border-on-background p-3 font-label-bold text-sm text-error flex items-center justify-center gap-2 hover:bg-error-container transition-colors active:translate-y-1 rounded-lg comic-shadow-sm">
+                                <span class="material-symbols-outlined">delete</span>
+                                Remove Slide
                             </button>
                         </div>
-                        <span class="text-xs text-on-surface-variant" id="fileSize"></span>
                     </div>
-                    @error('image')<p class="text-error text-sm font-bold w-full text-left flex items-center gap-1"><span class="material-symbols-outlined text-sm">error</span> {{ $message }}</p>@enderror
-                    <p class="text-xs text-on-surface-variant italic" id="formatHint">Supported formats: JPG, PNG, WEBP (Max 5MB)</p>
                 </div>
                 
                 <!-- Visibility & Store Settings -->
@@ -410,99 +499,143 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ========== IMAGE UPLOAD with Drag & Drop ==========
-    const imageInput = document.getElementById('imageInput');
-    const imagePreview = document.getElementById('imagePreview');
-    const uploadArea = document.getElementById('uploadArea');
-    const uploadHint = document.getElementById('uploadHint');
-    const uploadIcon = document.getElementById('uploadIcon');
-    const uploadLabel = document.getElementById('uploadLabel');
-    const dragHint = document.getElementById('dragHint');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileName = document.getElementById('fileName');
-    const fileSize = document.getElementById('fileSize');
-    const removeImage = document.getElementById('removeImage');
-    const formatHint = document.getElementById('formatHint');
-    const imageError = document.getElementById('imageError');
-    const productForm = document.getElementById('productForm');
+    // ========== MULTI-SLIDE CAROUSEL CONTROLLER ==========
+    let currentSlideIndex = 0;
+    const totalSlides = 4;
+    
+    // Default placeholders for empty/removed states
+    const placeholders = {
+        0: 'https://placehold.co/400x400/f5d4e8/9e357b?text=Upload+Slide+1',
+        1: 'https://placehold.co/400x400/d4e8f5/357b9e?text=Empty+Slide',
+        2: 'https://placehold.co/400x400/e8f5d4/7b9e35?text=Empty+Slide',
+        3: 'https://placehold.co/400x400/f5e8d4/9e7b35?text=Empty+Slide'
+    };
+    
+    const thumbPlaceholders = {
+        0: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=1',
+        1: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=2',
+        2: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=3',
+        3: 'https://placehold.co/100x100/eeeeee/aaaaaa?text=4'
+    };
 
-    // Show drag hint on desktop
-    dragHint.classList.remove('hidden');
+    window.goToSlide = function(index) {
+        if (index < 0 || index >= totalSlides) return;
+        currentSlideIndex = index;
+        
+        // Update slides visibility
+        document.querySelectorAll('.img-slide').forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.add('active');
+                slide.style.display = 'flex';
+            } else {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
+            }
+        });
+        
+        // Update Dots
+        document.querySelectorAll('.thumb-dot').forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.add('active');
+                dot.style.background = '#9e357b';
+            } else {
+                dot.classList.remove('active');
+                dot.style.background = '';
+            }
+        });
+        
+        // Update Thumbnail active highlight
+        document.querySelectorAll('[id^="thumb-"]').forEach((thumb, i) => {
+            if (i === index) {
+                thumb.classList.add('ring-4', 'ring-primary', 'ring-offset-1');
+            } else {
+                thumb.classList.remove('ring-4', 'ring-primary', 'ring-offset-1');
+            }
+        });
+        
+        // Update Slide Counter
+        document.getElementById('slide-counter').textContent = `${index + 1} / ${totalSlides}`;
+        
+        // Update Upload button label text
+        document.getElementById('upload-slot-label').textContent = index + 1;
+    }
 
-    // Click to upload
-    uploadHint.addEventListener('click', () => imageInput.click());
-
-    // Drag & Drop
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('drag-over');
-    });
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('drag-over');
-    });
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('drag-over');
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            imageInput.files = e.dataTransfer.files;
-            handleImageSelect(e.dataTransfer.files[0]);
-        }
-    });
-
-    // File input change
-    imageInput.addEventListener('change', function(e) {
-        if (e.target.files && e.target.files[0]) {
-            handleImageSelect(e.target.files[0]);
-        }
-    });
-
-    function handleImageSelect(file) {
-        // Validate file type
-        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-            alert('❌ Format tidak didukung! Gunakan JPG, PNG, atau WEBP.');
-            return;
-        }
-        // Validate file size (5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            alert('❌ Ukuran file terlalu besar! Maksimal 5MB.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            imagePreview.src = e.target.result;
-            imagePreview.classList.remove('opacity-80', 'rotate-2');
-            imagePreview.classList.add('opacity-100');
-            uploadArea.classList.add('has-image');
+    window.changeSlide = function(direction) {
+        let newIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+        goToSlide(newIndex);
+    }
+    
+    window.triggerActiveUpload = function() {
+        document.getElementById(`slide-input-${currentSlideIndex}`).click();
+    }
+    
+    window.handleSlideFileChange = function(index, input) {
+        const file = input.files[0];
+        if (file) {
+            // Validate size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ File size is too large! Maximum 5MB.');
+                input.value = '';
+                return;
+            }
             
-            // Show file info
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.classList.remove('hidden');
-            formatHint.classList.add('hidden');
-            imageError.classList.add('hidden');
-            uploadArea.classList.remove('border-error');
+            // Validate format
+            const validFormats = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+            if (!validFormats.includes(file.type)) {
+                alert('❌ Unsupported format! Use JPG, PNG, or WEBP.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update Slide Preview
+                const previewImg = document.getElementById(`preview-${index}`);
+                previewImg.src = e.target.result;
+                
+                // Update Thumbnail Strip Image
+                const thumbImg = document.getElementById(`thumb-img-${index}`);
+                thumbImg.src = e.target.result;
+                
+                // Reset remove flag
+                document.getElementById(`remove-slide-${index}`).value = '0';
+                
+                // Hide custom error if main slide is uploaded
+                if (index === 0) {
+                    document.getElementById('imageError').classList.add('hidden');
+                }
+                
+                // Add scale haptic-like micro-animation to active slide preview
+                previewImg.classList.add('scale-105');
+                setTimeout(() => previewImg.classList.remove('scale-105'), 300);
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
+    }
+    
+    window.removeCurrentSlide = function() {
+        // Clear file input
+        const fileInput = document.getElementById(`slide-input-${currentSlideIndex}`);
+        fileInput.value = '';
+        
+        // Mark as removed
+        document.getElementById(`remove-slide-${currentSlideIndex}`).value = '1';
+        document.getElementById(`existing-slide-${currentSlideIndex}`).value = '0';
+        
+        // Reset previews to default placeholders
+        document.getElementById(`preview-${currentSlideIndex}`).src = placeholders[currentSlideIndex];
+        document.getElementById(`thumb-img-${currentSlideIndex}`).src = thumbPlaceholders[currentSlideIndex];
+        
+        // Haptic shake animation on slide removal
+        const slideEl = document.querySelector(`.img-slide[data-slide="${currentSlideIndex}"]`);
+        if (slideEl) {
+            slideEl.classList.add('animate-bounce');
+            setTimeout(() => slideEl.classList.remove('animate-bounce'), 500);
+        }
     }
 
-    function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-        return (bytes / 1048576).toFixed(1) + ' MB';
-    }
-
-    // Remove image
-    removeImage.addEventListener('click', function() {
-        imageInput.value = '';
-        imagePreview.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCpMYTN0QmYyn1l7DGzHpqh5pv4OouUTsl5rteXYn0_OI5IxNpOYnf9a6rAXdGJBAkSxyAbccOpS-nHXT-G9jBStadhN8k0iro1s1e_MMb2LTED2mKw0Uco2v-Xjsu7YiFbkFgjK_YcmKmapg6qMQgRCEepLyXTgNQkMp2Pl4iagR3GUBskKQ29wwZgjOFKuzkQy0dSdluzwgaIFsAqEDpvPe1MAx4fnm3mjJ0RDyxGuBH_Guso6t9XcR7IldtyN23ZVXpCcE28RR1L';
-        imagePreview.classList.add('opacity-80', 'rotate-2');
-        imagePreview.classList.remove('opacity-100');
-        uploadArea.classList.remove('has-image');
-        fileInfo.classList.add('hidden');
-        formatHint.classList.remove('hidden');
-    });
+    // Initialize slide display
+    goToSlide(0);
 
 
     // ========== TOGGLE SWITCHES ==========
@@ -686,15 +819,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ========== FORM SUBMISSION & CLIENT-SIDE VALIDATION ==========
     productForm.addEventListener('submit', function(e) {
-        // Validate that image file has been uploaded
-        if (!imageInput.files || imageInput.files.length === 0) {
+        // Validate that primary slide image (slide-input-0) is uploaded
+        const primaryInput = document.getElementById('slide-input-0');
+        if (!primaryInput || !primaryInput.files || primaryInput.files.length === 0) {
             e.preventDefault();
-            imageError.classList.remove('hidden');
-            uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            uploadArea.classList.add('border-error');
+            const errEl = document.getElementById('imageError');
+            errEl.classList.remove('hidden');
+            const carousel = document.getElementById('img-carousel');
+            carousel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            carousel.classList.add('border-error');
             setTimeout(() => {
-                uploadArea.classList.remove('border-error');
+                carousel.classList.remove('border-error');
             }, 1000);
+            goToSlide(0);
             return false;
         }
 

@@ -49,24 +49,20 @@
                 <img id="main-product-img" class="w-full h-full object-cover rounded-md rotate-2 scale-90" alt="{{ $product->name ?? 'Product image' }}" src="{{ $product->image ? $product->image_url : 'https://placehold.co/400' }}" />
             </div>
             
-            <div class="flex gap-4">
+            <div class="flex flex-wrap gap-4">
                 @php
                 $imgUrl = $product->image ? $product->image_url : 'https://placehold.co/400';
-                $thumbs = [
-                    $imgUrl,
-                    $imgUrl
-                ];
+                $thumbs = $product->slide_urls;
+                if (empty($thumbs)) {
+                    $thumbs = [$imgUrl];
+                }
                 @endphp
-                @foreach($thumbs as $thumb)
-                <div onclick="document.getElementById('main-product-img').src='{{ $thumb }}'" class="w-24 h-24 bg-surface-bright border-4 border-on-background rounded-lg p-2 comic-shadow-sm cursor-pointer hover:scale-105 transition-transform">
-                    <img class="w-full h-full object-cover rounded-sm" src="{{ $thumb }}" alt="Thumbnail"/>
+                @foreach($thumbs as $index => $thumb)
+                <div onclick="document.getElementById('main-product-img').src='{{ $thumb }}'; changeActiveThumb(this)" 
+                    class="w-24 h-24 bg-surface-bright border-4 border-on-background rounded-lg p-2 comic-shadow-sm cursor-pointer hover:scale-105 transition-all {{ $index === 0 ? 'ring-4 ring-primary ring-offset-1' : '' }} thumb-item">
+                    <img class="w-full h-full object-cover rounded-sm" src="{{ $thumb }}" alt="Thumbnail {{ $index + 1 }}"/>
                 </div>
                 @endforeach
-                <div class="w-24 h-24 bg-surface-bright border-4 border-on-background rounded-lg p-2 comic-shadow-sm cursor-pointer hover:scale-105 transition-transform opacity-60">
-                    <div class="w-full h-full bg-surface-variant flex items-center justify-center rounded-sm">
-                        <span class="material-symbols-outlined">videocam</span>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -183,3 +179,14 @@
     </section>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+    function changeActiveThumb(element) {
+        document.querySelectorAll('.thumb-item').forEach(item => {
+            item.classList.remove('ring-4', 'ring-primary', 'ring-offset-1');
+        });
+        element.classList.add('ring-4', 'ring-primary', 'ring-offset-1');
+    }
+</script>
+@endpush
