@@ -24,6 +24,22 @@
         border-color: #38bbef !important;
         box-shadow: 0 0 0 4px rgba(56, 187, 239, 0.3) !important;
     }
+    .img-slide { display: none; }
+    .img-slide.active { display: flex; }
+    .thumb-dot.active {
+        background: #9e357b;
+        border-color: #1b1c1c;
+        transform: scale(1.2);
+    }
+    .carousel-arrow {
+        transition: all 0.15s;
+    }
+    .carousel-arrow:hover {
+        transform: scale(1.1);
+    }
+    .carousel-arrow:active {
+        transform: scale(0.95);
+    }
 </style>
 @endpush
 
@@ -62,29 +78,99 @@
         <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data" class="p-8 lg:p-12">
             @csrf
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-                <!-- Left Column: Image Upload -->
+                <!-- Left Column: Image Carousel -->
                 <div class="lg:col-span-5">
                     <label class="block font-label-bold text-label-bold mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">image</span>
-                        Product Image
+                        <span class="material-symbols-outlined text-primary">collections</span>
+                        Product Images
+                        <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-0.5 rounded-full border-2 border-on-background">up to 4</span>
                     </label>
-                    <div class="bg-surface-container-low border-4 border-on-background rounded-lg p-6 flex flex-col items-center justify-center aspect-square relative overflow-hidden group shadow-inner">
-                        <img alt="{{ $product->name }}" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform group-hover:rotate-0 duration-300" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAaNN70R8KFMIGS_QFE5IvIDTb3vUYACrwOZwljUcrNbsyMy3MFWE6fO1deDMFWrgiQu8PlQu9zkZFyEXjxGgz97uhw1gwI8eTRCFdFrQMfb5Wb7JLPla6wWSVe5YnWHTNmQfs_iOuTN_ZgQlfWeCKqy7u4yNAq0_vY9Zk6xIo6FBH0z9n8Z93UTey-c4kAVx52qtOyJbmzWrygOepYX9gBpdTeKuNZIpFULRSgbpO0R_Axj3mGVv97jjNx7uJkJlefefW5unOKIoJJ' }}"/>
+
+                    {{-- Main Carousel --}}
+                    <div class="relative bg-surface-container-low border-4 border-on-background rounded-lg overflow-hidden aspect-square comic-shadow" id="img-carousel">
                         
-                        <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[12px] comic-shadow-sm rotate-12">
-                            PREVIEW
+                        {{-- Slide 1 (primary image) --}}
+                        <div class="img-slide active absolute inset-0 items-center justify-center" data-slide="0">
+                            <img id="preview-0" alt="Slide 1" class="w-4/5 h-4/5 object-contain rotate-[-3deg] transition-transform hover:rotate-0 duration-300"
+                                src="{{ $product->image ? $product->image_url : 'https://placehold.co/400x400/f5d4e8/9e357b?text=No+Image' }}"/>
+                            <div class="absolute top-4 right-4 bg-tertiary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-12">MAIN</div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <label class="bg-white border-3 border-on-background p-3 font-label-bold flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer">
-                            <span class="material-symbols-outlined">upload</span>
-                            Change
-                            <input type="file" name="image" class="hidden">
-                        </label>
-                        <button type="button" class="bg-white border-3 border-on-background p-3 font-label-bold text-error flex items-center justify-center gap-2 hover:bg-error-container transition-colors active:translate-y-1">
-                            <span class="material-symbols-outlined">delete</span>
-                            Remove
+
+                        {{-- Slide 2 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center" data-slide="1">
+                            <img id="preview-1" alt="Slide 2" class="w-4/5 h-4/5 object-contain rotate-[2deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/d4e8f5/357b9e?text=+"/>
+                            <div class="absolute top-4 right-4 bg-primary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-12">SLIDE 2</div>
+                        </div>
+
+                        {{-- Slide 3 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center" data-slide="2">
+                            <img id="preview-2" alt="Slide 3" class="w-4/5 h-4/5 object-contain rotate-[-2deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/e8f5d4/7b9e35?text=+"/>
+                            <div class="absolute top-4 right-4 bg-secondary-container border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm rotate-6">SLIDE 3</div>
+                        </div>
+
+                        {{-- Slide 4 --}}
+                        <div class="img-slide absolute inset-0 items-center justify-center" data-slide="3">
+                            <img id="preview-3" alt="Slide 4" class="w-4/5 h-4/5 object-contain rotate-[3deg] transition-transform hover:rotate-0 duration-300"
+                                src="https://placehold.co/400x400/f5e8d4/9e7b35?text=+"/>
+                            <div class="absolute top-4 right-4 bg-tertiary-fixed border-2 border-on-background px-3 py-1 font-label-bold text-[10px] comic-shadow-sm -rotate-6">SLIDE 4</div>
+                        </div>
+
+                        {{-- Prev Arrow --}}
+                        <button type="button" id="prev-btn" onclick="changeSlide(-1)"
+                            class="carousel-arrow absolute left-3 top-1/2 -translate-y-1/2 bg-white border-3 border-on-background w-10 h-10 flex items-center justify-center rounded-full comic-shadow-sm z-10">
+                            <span class="material-symbols-outlined text-lg">chevron_left</span>
                         </button>
+
+                        {{-- Next Arrow --}}
+                        <button type="button" id="next-btn" onclick="changeSlide(1)"
+                            class="carousel-arrow absolute right-3 top-1/2 -translate-y-1/2 bg-white border-3 border-on-background w-10 h-10 flex items-center justify-center rounded-full comic-shadow-sm z-10">
+                            <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        </button>
+
+                        {{-- Slide counter --}}
+                        <div class="absolute bottom-3 left-3 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full" id="slide-counter">1 / 4</div>
+                    </div>
+
+                    {{-- Dot Indicators --}}
+                    <div class="flex justify-center gap-2 mt-3">
+                        <button type="button" onclick="goToSlide(0)" class="thumb-dot active w-3 h-3 rounded-full border-2 border-on-background bg-primary transition-all" id="dot-0"></button>
+                        <button type="button" onclick="goToSlide(1)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-1"></button>
+                        <button type="button" onclick="goToSlide(2)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-2"></button>
+                        <button type="button" onclick="goToSlide(3)" class="thumb-dot w-3 h-3 rounded-full border-2 border-on-background bg-surface-container transition-all" id="dot-3"></button>
+                    </div>
+
+                    {{-- Thumbnail Strip --}}
+                    <div class="grid grid-cols-4 gap-2 mt-3">
+                        @for($i = 0; $i < 4; $i++)
+                        <div onclick="goToSlide({{ $i }})" id="thumb-{{ $i }}"
+                            class="cursor-pointer border-4 border-on-background rounded-lg overflow-hidden aspect-square bg-surface-container-low hover:scale-105 transition-transform {{ $i == 0 ? 'ring-4 ring-primary ring-offset-1' : '' }}">
+                            <img id="thumb-img-{{ $i }}" class="w-full h-full object-cover" 
+                                src="{{ $i == 0 && $product->image ? $product->image_url : 'https://placehold.co/100x100/eeeeee/aaaaaa?text=' . ($i+1) }}"
+                                alt="Thumbnail {{ $i+1 }}"/>
+                        </div>
+                        @endfor
+                    </div>
+
+                    {{-- Upload Buttons Row --}}
+                    <div class="mt-3">
+                        <p class="font-label-bold text-[11px] text-on-surface-variant mb-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">info</span>
+                            Click a thumbnail then upload to replace that slide
+                        </p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="bg-white border-3 border-on-background p-3 font-label-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:translate-y-1 cursor-pointer rounded-lg comic-shadow-sm">
+                                <span class="material-symbols-outlined text-primary">upload</span>
+                                Upload to Slide <span id="upload-slot-label">1</span>
+                                <input type="file" name="image" id="slide-upload-input" class="hidden" accept="image/*">
+                            </label>
+                            <button type="button" onclick="removeCurrentSlide()"
+                                class="bg-white border-3 border-on-background p-3 font-label-bold text-sm text-error flex items-center justify-center gap-2 hover:bg-error-container transition-colors active:translate-y-1 rounded-lg comic-shadow-sm">
+                                <span class="material-symbols-outlined">delete</span>
+                                Remove Slide
+                            </button>
+                        </div>
                     </div>
                 </div>
 

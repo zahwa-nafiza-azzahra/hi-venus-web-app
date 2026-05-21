@@ -156,17 +156,49 @@
     </div>
 
     <!-- Pagination -->
+    @if ($products->hasPages())
     <div class="mt-10 flex justify-center items-center gap-2 pb-10">
-        <button class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center hover:bg-surface-container-low transition-colors">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="w-10 h-10 rounded-full bg-primary text-on-primary comic-border comic-shadow-sm font-label-bold text-label-bold flex items-center justify-center sticker-rotate">1</button>
-        <button class="w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface comic-border font-label-bold text-label-bold flex items-center justify-center hover:bg-surface-container-low transition-colors">2</button>
-        <button class="w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface comic-border font-label-bold text-label-bold flex items-center justify-center hover:bg-surface-container-low transition-colors">3</button>
-        <span class="font-label-bold text-label-bold px-2">...</span>
-        <button class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center hover:bg-surface-container-low transition-colors">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+        {{-- Previous Page Link --}}
+        @if ($products->onFirstPage())
+            <button class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center opacity-50 cursor-not-allowed">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+        @else
+            <a href="{{ $products->previousPageUrl() }}" class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center hover:bg-surface-container-low transition-colors text-on-surface">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </a>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @foreach ($products->links()->elements as $element)
+            {{-- "Three Dots" Separator --}}
+            @if (is_string($element))
+                <span class="font-label-bold text-label-bold px-2">{{ $element }}</span>
+            @endif
+
+            {{-- Array Of Links --}}
+            @if (is_array($element))
+                @foreach ($element as $page => $url)
+                    @if ($page == $products->currentPage())
+                        <div class="w-10 h-10 rounded-full bg-primary text-on-primary comic-border comic-shadow-sm font-label-bold text-label-bold flex items-center justify-center sticker-rotate">{{ $page }}</div>
+                    @else
+                        <a href="{{ $url }}" class="w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface comic-border font-label-bold text-label-bold flex items-center justify-center hover:bg-surface-container-low transition-colors">{{ $page }}</a>
+                    @endif
+                @endforeach
+            @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($products->hasMorePages())
+            <a href="{{ $products->nextPageUrl() }}" class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center hover:bg-surface-container-low transition-colors text-on-surface">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </a>
+        @else
+            <button class="w-10 h-10 rounded-full bg-surface-container-lowest comic-border flex items-center justify-center opacity-50 cursor-not-allowed">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        @endif
     </div>
+    @endif
 </div>
 @endsection

@@ -189,9 +189,9 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
     // Products Management
     Route::get('products', function () {
-        $products = \App\Models\Product::with('variants')->get()->map(function($product) {
+        $products = \App\Models\Product::with('variants')->paginate(12);
+        $products->each(function($product) {
             $product->total_stock = $product->variants->sum('stock');
-            return $product;
         });
         return view('admin.products.index', compact('products'));
     })->name('products.index');
