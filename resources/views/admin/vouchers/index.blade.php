@@ -189,9 +189,9 @@
 @forelse($vouchers as $voucher)
 <tr class="hover:bg-primary-container/10 transition-colors">
 <td class="p-6">
-<div class="bg-white border-4 border-on-surface px-4 py-2 rounded-xl font-bold text-primary shadow-[4px_4px_0px_0px_#1b1c1c] inline-block wonky-border">
+<span class="font-bold text-primary font-display text-lg">
                                     {{ $voucher->code }}
-                                </div>
+                                </span>
 </td>
 <td class="p-6">
 @if($voucher->type == 'percentage')
