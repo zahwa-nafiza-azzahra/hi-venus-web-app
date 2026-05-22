@@ -73,3 +73,4 @@ class VoucherController extends Controller
         $status = $voucher->is_active ? 'diaktifkan' : 'dinonaktifkan';
         return back()->with('success', "Voucher {$voucher->code} berhasil {$status}! ⚡");
     }
+}
