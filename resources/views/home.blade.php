@@ -103,14 +103,19 @@
                         <a href="{{ route('products.show', $product->id) }}" class="text-body-lg font-body-lg text-on-background font-bold line-clamp-2 hover:text-primary transition-colors">{{ $product->name }}</a>
                         <p class="text-body-md font-body-md text-on-surface-variant mt-1">{{ Str::limit($product->description, 50) }}</p>
                     </div>
-                    @auth
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="ml-4 shrink-0 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-full p-2 shadow-[2px_2px_0px_0px_#1b1c1c] hover:bg-secondary-fixed active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
-                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
-                        </button>
-                    </form>
-                    @endauth
+                    <div class="flex gap-2">
+                        <a href="{{ route('products.show', $product->id) }}" class="shrink-0 bg-primary-container text-on-primary-container border-4 border-on-background rounded-full p-2 shadow-[2px_2px_0px_0px_#1b1c1c] hover:bg-primary-fixed active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                        </a>
+                        @auth
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="shrink-0 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-full p-2 shadow-[2px_2px_0px_0px_#1b1c1c] hover:bg-secondary-fixed active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
+                                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+                            </button>
+                        </form>
+                        @endauth
+                    </div>
                 </div>
             </div>
             @empty
