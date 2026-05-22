@@ -89,16 +89,18 @@
                     New!
                 </div>
                 @endif
-                <div class="aspect-square bg-tertiary-fixed-dim rounded-lg mb-4 overflow-hidden border-4 border-on-background flex items-center justify-center relative p-4 bg-[radial-gradient(#c1e8ff_2px,transparent_2px)] [background-size:16px_16px]">
-                    <img alt="{{ $product->name }}" class="w-full h-full object-contain transform rotate-3 group-hover:scale-105 transition-transform duration-300 drop-shadow-[4px_4px_0px_rgba(27,28,28,0.5)]" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf' }}"/>
-                    <!-- Price Badge -->
-                    <div class="absolute -top-3 -right-3 bg-primary text-on-primary font-price-display text-price-display px-4 py-2 rounded-full border-4 border-on-background shadow-[4px_4px_0px_0px_#1b1c1c] rotate-12 z-10 group-hover:scale-110 transition-transform">
-                        Rp {{ number_format($product->price / 1000, 0) }}k
+                <a href="{{ route('products.show', $product->id) }}" class="block mb-4 relative group/link">
+                    <div class="aspect-square bg-tertiary-fixed-dim rounded-lg overflow-hidden border-4 border-on-background flex items-center justify-center relative p-4 bg-[radial-gradient(#c1e8ff_2px,transparent_2px)] [background-size:16px_16px] group-hover/link:shadow-inner">
+                        <img alt="{{ $product->name }}" class="w-full h-full object-contain transform rotate-3 group-hover/link:scale-110 transition-transform duration-300 drop-shadow-[4px_4px_0px_rgba(27,28,28,0.5)]" src="{{ $product->image ? $product->image_url : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5RyDys8VL3YqIOOgeEDYk8hRy2QwYwoMZOCjbxjiBe-XbfoJApDPdRc8KnsjAe3M5zLSH1i9ZxKQLjUH-SjykjKvex6zuVYPbSdGtEXLPJDEFQixIGhRViepgCEXlcCX9WY0oGKhSAw7uUighIIPrD7dTQKHJjeu7x53gQ00abxTWUZQmKEs2F9gNY6OW-i8qCzwOQG4GX_4xsyCrEh3dOmohjniqxHNHMUmNQFchd_DkjCPsN921gcBpmcIZ21sAo6PgpfujKuIf' }}"/>
+                        <!-- Price Badge -->
+                        <div class="absolute -top-3 -right-3 bg-primary text-on-primary font-price-display text-price-display px-4 py-2 rounded-full border-4 border-on-background shadow-[4px_4px_0px_0px_#1b1c1c] rotate-12 z-10 group-hover/link:scale-110 transition-transform">
+                            Rp {{ number_format($product->price / 1000, 0) }}k
+                        </div>
                     </div>
-                </div>
+                </a>
                 <div class="flex justify-between items-start mt-auto">
                     <div>
-                        <h3 class="text-body-lg font-body-lg text-on-background font-bold line-clamp-2">{{ $product->name }}</h3>
+                        <a href="{{ route('products.show', $product->id) }}" class="text-body-lg font-body-lg text-on-background font-bold line-clamp-2 hover:text-primary transition-colors">{{ $product->name }}</a>
                         <p class="text-body-md font-body-md text-on-surface-variant mt-1">{{ Str::limit($product->description, 50) }}</p>
                     </div>
                     @auth
