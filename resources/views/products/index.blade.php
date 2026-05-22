@@ -76,16 +76,12 @@
                     <h3 class="font-body-lg text-body-lg font-bold text-center leading-tight min-h-[3rem] flex justify-center items-center text-on-background">{{ $p->name }}</h3>
                 </a>
                 @auth
-                <form action="{{ route('cart.add', $p->id) }}" method="POST" class="w-full">
+                <form action="{{ route('cart.add', $p->id) }}" method="POST" class="w-full mt-4">
                     @csrf
-                    <button type="submit" class="w-full bg-primary text-on-primary border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
+                    <button type="submit" class="w-full bg-primary text-on-primary border-4 border-on-background rounded-lg py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
                         <span class="material-symbols-outlined">add_shopping_cart</span> Add to Cart
                     </button>
                 </form>
-                @else
-                <a href="{{ route('products.show', $p->id) }}" class="w-full bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg py-3 mt-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_0px_rgba(27,28,28,1)] transition-all flex justify-center items-center gap-2">
-                    <span class="material-symbols-outlined">visibility</span> See Detail Product
-                </a>
                 @endauth
             </div>
             @empty

@@ -137,10 +137,6 @@
                 <button class="bg-surface-bright text-on-background font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex-shrink-0">
                     <span class="material-symbols-outlined">favorite</span>
                 </button>
-                @else
-                <a href="{{ route('login') }}" class="flex-1 bg-primary text-on-primary font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex items-center justify-center gap-3 no-underline">
-                    <span class="material-symbols-outlined text-3xl">login</span> Login untuk Belanja
-                </a>
                 @endauth
             </div>
 
