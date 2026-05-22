@@ -46,7 +46,7 @@
     <!-- Stat Card 3 -->
     <a href="{{ route('admin.users.index') }}" class="ct-card ct-card-interactive bg-primary-container p-6 relative overflow-hidden group">
         <div class="flex justify-between items-start mb-4">
-            <p class="ct-sticker ct-sticker-tertiary text-[10px] scale-75 origin-top-left">Customers & Staff</p>
+            <p class="ct-sticker ct-sticker-tertiary text-[10px] scale-75 origin-top-left">Customers</p>
             <div class="w-14 h-14 bg-surface-bright border-4 border-on-background rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#1b1c1c]">
                 <span class="material-symbols-outlined text-on-background text-3xl">face_4</span>
             </div>
