@@ -92,11 +92,29 @@
 </h2>
 <p class="font-body text-xl font-bold text-on-surface/60 mt-2">Manage your shop rewards and promotional campaigns</p>
 </div>
-<button class="btn-chunky px-8 py-5 bg-primary text-on-primary rounded-2xl font-display text-lg font-black flex items-center gap-3">
+<button onclick="document.getElementById('addVoucherModal').classList.remove('hidden')" class="btn-chunky px-8 py-5 bg-primary text-on-primary rounded-2xl font-display text-lg font-black flex items-center gap-3">
 <span class="material-symbols-outlined text-3xl">add_circle</span>
                 CREATE NEW VOUCHER
             </button>
 </section>
+
+<!-- Success & Error Alerts -->
+@if(session('success'))
+    <div class="mb-8 p-4 bg-tertiary-container border-4 border-on-surface rounded-xl shadow-[4px_4px_0px_0px_#1b1c1c] font-bold text-on-tertiary-container flex items-center gap-3">
+        <span class="material-symbols-outlined">check_circle</span>
+        {{ session('success') }}
+    </div>
+@endif
+@if($errors->any())
+    <div class="mb-8 p-4 bg-error-container border-4 border-on-surface rounded-xl shadow-[4px_4px_0px_0px_#1b1c1c] font-bold text-error flex flex-col gap-1">
+        @foreach($errors->all() as $error)
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined">error</span>
+                {{ $error }}
+            </div>
+        @endforeach
+    </div>
+@endif
 
 <!-- SUMMARY CARDS -->
 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
@@ -220,19 +238,26 @@
 </div>
 </td>
 <td class="p-6">
+<form action="{{ route('admin.vouchers.toggle_status', $voucher->id) }}" method="POST" class="inline-block m-0 p-0">
+@csrf
 <label class="relative inline-flex items-center cursor-pointer group">
-<input {{ $voucher->is_active ? 'checked' : '' }} class="sr-only peer" type="checkbox"/>
+<input name="toggle" onchange="this.form.submit()" {{ $voucher->is_active ? 'checked' : '' }} class="sr-only peer" type="checkbox"/>
 <div class="w-16 h-10 bg-surface border-4 border-on-surface rounded-full peer peer-checked:after:translate-x-full peer-checked:after:content-['✨'] after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-2 after:border-on-surface after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-container flex items-center justify-center"></div>
 </label>
+</form>
 </td>
 <td class="p-6">
 <div class="flex justify-end gap-3">
-<button class="w-12 h-12 border-4 border-on-surface bg-white rounded-xl shadow-[3px_3px_0px_0px_#1b1c1c] hover:translate-y-px hover:translate-x-px hover:shadow-none flex items-center justify-center text-primary transition-all">
+<button type="button" onclick="openEditModal({{ $voucher }})" class="w-12 h-12 border-4 border-on-surface bg-white rounded-xl shadow-[3px_3px_0px_0px_#1b1c1c] hover:translate-y-px hover:translate-x-px hover:shadow-none flex items-center justify-center text-primary transition-all">
 <span class="material-symbols-outlined">edit</span>
 </button>
-<button class="w-12 h-12 border-4 border-on-surface bg-white rounded-xl shadow-[3px_3px_0px_0px_#1b1c1c] hover:translate-y-px hover:translate-x-px hover:shadow-none flex items-center justify-center text-error transition-all">
+<form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus voucher ini?');" class="inline-block m-0 p-0">
+@csrf
+@method('DELETE')
+<button type="submit" class="w-12 h-12 border-4 border-on-surface bg-white rounded-xl shadow-[3px_3px_0px_0px_#1b1c1c] hover:translate-y-px hover:translate-x-px hover:shadow-none flex items-center justify-center text-error transition-all">
 <span class="material-symbols-outlined">delete</span>
 </button>
+</form>
 </div>
 </td>
 </tr>
@@ -253,16 +278,139 @@
 </div>
 </div>
 </div>
+</div>
 <!-- DECORATIVE ELEMENTS -->
 <div class="fixed bottom-10 right-10 pointer-events-none opacity-40">
 <span class="material-symbols-outlined text-[100px] text-primary-container absolute -top-12 -left-12 rotate-12">auto_awesome</span>
 <span class="material-symbols-outlined text-[60px] text-tertiary-container absolute top-10 right-4 -rotate-12">favorite</span>
 </div>
 </div>
+
+<!-- Modal Create Voucher -->
+<div id="addVoucherModal" class="fixed inset-0 bg-on-surface/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-surface border-4 border-on-surface rounded-2xl w-full max-w-lg shadow-[8px_8px_0px_0px_#1b1c1c] overflow-y-auto max-h-[90vh]">
+        <div class="bg-primary p-4 border-b-4 border-on-surface flex justify-between items-center sticky top-0 z-10">
+            <h3 class="font-display font-black text-on-primary text-xl">🎟️ Tambah Voucher Baru</h3>
+            <button onclick="document.getElementById('addVoucherModal').classList.add('hidden')" class="text-on-primary hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form action="{{ route('admin.vouchers.store') }}" method="POST" class="p-6 flex flex-col gap-4">
+            @csrf
+            <div>
+                <label class="block font-bold mb-2">Voucher Code <span class="text-error">*</span></label>
+                <input type="text" name="code" required class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20 uppercase" placeholder="Misal: HARBOLNAS50">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Type <span class="text-error">*</span></label>
+                <select name="type" required class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20">
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed">Fixed Amount (Rp)</option>
+                    <option value="free_shipping">Free Shipping</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Value</label>
+                <input type="number" step="0.01" name="value" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20" placeholder="0">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Min Spend</label>
+                <input type="number" step="0.01" name="min_spend" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20" placeholder="0">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Quota</label>
+                <input type="number" name="quota" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20" placeholder="Kosongkan jika unlimited">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-bold mb-2">Start Date</label>
+                    <input type="datetime-local" name="start_date" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20">
+                </div>
+                <div>
+                    <label class="block font-bold mb-2">End Date</label>
+                    <input type="datetime-local" name="end_date" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-secondary-container/20">
+                </div>
+            </div>
+            <button type="submit" class="w-full mt-4 bg-secondary text-on-secondary border-4 border-on-surface py-3 rounded-xl font-black text-lg shadow-[4px_4px_0px_0px_#1b1c1c] btn-chunky hover:-translate-y-1 transition-all">
+                SIMPAN VOUCHER
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit Voucher -->
+<div id="editVoucherModal" class="fixed inset-0 bg-on-surface/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-surface border-4 border-on-surface rounded-2xl w-full max-w-lg shadow-[8px_8px_0px_0px_#1b1c1c] overflow-y-auto max-h-[90vh]">
+        <div class="bg-secondary-container p-4 border-b-4 border-on-surface flex justify-between items-center sticky top-0 z-10">
+            <h3 class="font-display font-black text-on-surface text-xl">📝 Edit Voucher</h3>
+            <button onclick="document.getElementById('editVoucherModal').classList.add('hidden')" class="text-on-surface hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="editForm" method="POST" class="p-6 flex flex-col gap-4">
+            @csrf
+            @method('PUT')
+            <div>
+                <label class="block font-bold mb-2">Voucher Code <span class="text-error">*</span></label>
+                <input type="text" name="code" id="edit_code" required class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20 uppercase">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Type <span class="text-error">*</span></label>
+                <select name="type" id="edit_type" required class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed">Fixed Amount (Rp)</option>
+                    <option value="free_shipping">Free Shipping</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Value</label>
+                <input type="number" step="0.01" name="value" id="edit_value" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Min Spend</label>
+                <input type="number" step="0.01" name="min_spend" id="edit_min_spend" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+            </div>
+            <div>
+                <label class="block font-bold mb-2">Quota</label>
+                <input type="number" name="quota" id="edit_quota" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-bold mb-2">Start Date</label>
+                    <input type="datetime-local" name="start_date" id="edit_start_date" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+                </div>
+                <div>
+                    <label class="block font-bold mb-2">End Date</label>
+                    <input type="datetime-local" name="end_date" id="edit_end_date" class="w-full border-4 border-on-surface rounded-xl p-3 font-bold focus:outline-none focus:bg-primary-container/20">
+                </div>
+            </div>
+            <button type="submit" class="w-full mt-4 bg-primary text-on-primary border-4 border-on-surface py-3 rounded-xl font-black text-lg shadow-[4px_4px_0px_0px_#1b1c1c] btn-chunky hover:-translate-y-1 transition-all">
+                UPDATE DATA
+            </button>
+        </form>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
 <script>
+        function openEditModal(voucher) {
+            document.getElementById('edit_code').value = voucher.code;
+            document.getElementById('edit_type').value = voucher.type;
+            document.getElementById('edit_value').value = voucher.value;
+            document.getElementById('edit_min_spend').value = voucher.min_spend;
+            document.getElementById('edit_quota').value = voucher.quota;
+            // Format dates for datetime-local
+            if (voucher.start_date) {
+                document.getElementById('edit_start_date').value = new Date(voucher.start_date).toISOString().slice(0,16);
+            }
+            if (voucher.end_date) {
+                document.getElementById('edit_end_date').value = new Date(voucher.end_date).toISOString().slice(0,16);
+            }
+            document.getElementById('editForm').action = '/admin/vouchers/' + voucher.id;
+            document.getElementById('editVoucherModal').classList.remove('hidden');
+        }
+
         // Micro-interactions for table rows
         document.querySelectorAll('tr').forEach(row => {
             row.addEventListener('mouseenter', () => {
