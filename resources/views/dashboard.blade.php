@@ -85,7 +85,7 @@
                 <h3 class="font-headline-lg text-headline-lg text-on-surface">Keranjang</h3>
                 <p class="font-body-md text-on-surface-variant">Lihat item impianmu</p>
             </a>
-            <a href="#"
+            <a href="{{ route('wishlist') }}"
                 class="bg-surface-container-lowest comic-border p-8 comic-shadow press-effect flex flex-col items-center text-center gap-4 sticker-rotate-right transition-transform hover:scale-105">
                 <div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center comic-border">
                     <span class="material-symbols-outlined text-4xl text-on-secondary-container"
@@ -94,7 +94,7 @@
                 <h3 class="font-headline-lg text-headline-lg text-on-surface">Wishlist</h3>
                 <p class="font-body-md text-on-surface-variant">Barang favoritmu</p>
             </a>
-            <a href="#"
+            <a href="{{ route('orders.index') }}"
                 class="bg-surface-container-lowest comic-border p-8 comic-shadow press-effect flex flex-col items-center text-center gap-4 sticker-rotate-left transition-transform hover:scale-105">
                 <div class="w-16 h-16 bg-tertiary-container rounded-full flex items-center justify-center comic-border">
                     <span class="material-symbols-outlined text-4xl text-on-tertiary-container">history</span>
