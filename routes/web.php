@@ -188,22 +188,9 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::post('cashiers/{id}/toggle-status', [\App\Http\Controllers\Admin\CashierController::class, 'toggleStatus'])->name('cashiers.toggle_status');
     Route::post('cashiers/{id}/reset-password', [\App\Http\Controllers\Admin\CashierController::class, 'resetPassword'])->name('cashiers.reset_password');
 
-    // Admin Users (Customers & Staff)
-    Route::get('users', function () {
-        $users = \App\Models\User::whereNot('role', \App\Models\User::ROLE_ADMIN)
-            ->withCount('orders')
-            ->get()
-            ->map(function($user) {
-                $user->total_spent = \App\Models\Order::where('user_id', $user->id)
-                    ->whereIn('status', ['paid', 'completed'])
-                    ->sum('total_amount');
-                $user->last_order_date = \App\Models\Order::where('user_id', $user->id)
-                    ->latest()
-                    ->first()?->created_at?->format('M d, Y') ?? 'No orders';
-                return $user;
-            });
-        return view('admin.users.index', compact('users'));
-    })->name('users.index');
+    // Admin Users (Buyers)
+    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::post('users/{id}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle_status');
 
 
     // Products Management
