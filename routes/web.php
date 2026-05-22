@@ -181,6 +181,13 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     // Reports
     Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
 
+    // Cashiers (FR-A04)
+    Route::get('cashiers', [\App\Http\Controllers\Admin\CashierController::class, 'index'])->name('cashiers.index');
+    Route::post('cashiers', [\App\Http\Controllers\Admin\CashierController::class, 'store'])->name('cashiers.store');
+    Route::put('cashiers/{id}', [\App\Http\Controllers\Admin\CashierController::class, 'update'])->name('cashiers.update');
+    Route::post('cashiers/{id}/toggle-status', [\App\Http\Controllers\Admin\CashierController::class, 'toggleStatus'])->name('cashiers.toggle_status');
+    Route::post('cashiers/{id}/reset-password', [\App\Http\Controllers\Admin\CashierController::class, 'resetPassword'])->name('cashiers.reset_password');
+
     // Admin Users (Customers & Staff)
     Route::get('users', function () {
         $users = \App\Models\User::whereNot('role', \App\Models\User::ROLE_ADMIN)

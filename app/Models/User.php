@@ -12,7 +12,7 @@ class User extends Authenticatable {
     const ROLE_CASHIER = 'cashier';
     const ROLE_USER    = 'user';
 
-    protected $fillable = ['name', 'email', 'password', 'role', 'phone', 'avatar', 'venus_points'];
+    protected $fillable = ['name', 'email', 'username', 'password', 'role', 'phone', 'avatar', 'venus_points', 'is_active'];
     protected $hidden   = ['password', 'remember_token'];
 
     protected function casts(): array {

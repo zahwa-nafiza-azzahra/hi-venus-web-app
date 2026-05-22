@@ -81,14 +81,14 @@
             <!-- Form -->
             <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-6">
                 @csrf
-                <!-- Input: Email -->
+                <!-- Input: Login ID -->
                 <div class="flex flex-col gap-2">
                     <label class="font-label-bold text-label-bold text-on-background flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">mail</span>
-                        Email Address
+                        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+                        Email Address or Username
                     </label>
-                    <input name="email" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="hello@hivenus.com" type="email" value="{{ old('email') }}" required autofocus/>
-                    @error('email')
+                    <input name="login_id" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="hello@hivenus.com or username" type="text" value="{{ old('login_id') }}" required autofocus/>
+                    @error('login_id')
                         <p class="text-error text-xs font-bold mt-1">{{ $message }}</p>
                     @enderror
                 </div>
