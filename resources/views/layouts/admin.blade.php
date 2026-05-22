@@ -63,10 +63,7 @@
                 <span class="material-symbols-outlined text-2xl">bar_chart</span>
                 <span class="font-label-bold text-label-bold">Reports</span>
             </a>
-            <a href="{{ route('pos.index') }}" class="{{ request()->routeIs('pos.index') ? 'bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] scale-105' : 'text-on-surface dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-lg' }} font-bold flex items-center gap-3 p-4 transition-all">
-                <span class="material-symbols-outlined text-2xl">point_of_sale</span>
-                <span class="font-label-bold text-label-bold">POS Kasir</span>
-            </a>
+
             @endif
 
             <div class="pt-4 pb-2 px-4 font-black text-[10px] uppercase tracking-widest text-on-surface-variant opacity-50">My Account</div>
