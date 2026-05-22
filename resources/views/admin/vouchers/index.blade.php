@@ -141,36 +141,7 @@
 
 <!-- TABLE SECTION -->
 <div class="kawaii-card rounded-3xl overflow-hidden bg-white">
-<div class="p-8 border-b-4 border-on-surface flex flex-wrap gap-6 items-center justify-between bg-surface-container/30">
-<div class="flex gap-4">
-<div class="relative">
-<select class="appearance-none bg-white border-4 border-on-surface rounded-2xl px-8 py-3 font-bold pr-16 focus:ring-4 focus:ring-primary-container shadow-[4px_4px_0px_0px_#1b1c1c] transition-all">
-<option>All Types</option>
-<option>Percentage</option>
-<option>Fixed Amount</option>
-<option>Free Shipping</option>
-</select>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
-</div>
-<div class="relative">
-<select class="appearance-none bg-white border-4 border-on-surface rounded-2xl px-8 py-3 font-bold pr-16 focus:ring-4 focus:ring-primary-container shadow-[4px_4px_0px_0px_#1b1c1c] transition-all">
-<option>Status: All</option>
-<option>Active</option>
-<option>Paused</option>
-<option>Expired</option>
-</select>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
-</div>
-</div>
-<div class="flex gap-4">
-<button class="w-14 h-14 flex items-center justify-center bg-white border-4 border-on-surface rounded-2xl shadow-[4px_4px_0px_0px_#1b1c1c] hover:bg-secondary-container transition-all">
-<span class="material-symbols-outlined text-2xl">download</span>
-</button>
-<button class="w-14 h-14 flex items-center justify-center bg-white border-4 border-on-surface rounded-2xl shadow-[4px_4px_0px_0px_#1b1c1c] hover:bg-secondary-container transition-all">
-<span class="material-symbols-outlined text-2xl">refresh</span>
-</button>
-</div>
-</div>
+
 <div class="overflow-x-auto">
 <table class="w-full text-left">
 <thead>
