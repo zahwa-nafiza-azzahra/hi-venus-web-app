@@ -30,7 +30,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = \App\Models\Product::findOrFail($id);
+        $product = \App\Models\Product::with(['reviews' => function($q) {
+            $q->where('status', 'approved')->latest();
+        }, 'reviews.user', 'variants'])->findOrFail($id);
+        
         $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
             ->where('id', '!=', $id)
             ->inRandomOrder()

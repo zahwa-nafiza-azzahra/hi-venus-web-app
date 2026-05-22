@@ -71,14 +71,16 @@
             <div>
                 <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">{{ $product->name ?? 'Kawaii Cat Ear Headphones' }}</h1>
                 <div class="flex items-center gap-2">
+                    @php
+                        $avgRating = $product->reviews->avg('rating') ?? 5;
+                        $reviewCount = $product->reviews->count();
+                    @endphp
                     <div class="flex text-secondary-container">
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="material-symbols-outlined">star_half</span>
+                        @for($i=1; $i<=5; $i++)
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ $i <= round($avgRating) ? 1 : 0 }};">star</span>
+                        @endfor
                     </div>
-                    <span class="font-label-bold text-on-surface-variant">(124 Ulasan)</span>
+                    <span class="font-label-bold text-on-surface-variant">({{ $reviewCount }} Ulasan)</span>
                 </div>
             </div>
 
@@ -93,24 +95,21 @@
             </div>
 
             <div class="p-6 bg-surface-container-low border-4 border-on-background rounded-lg space-y-6">
-                <!-- Color Selection -->
+                @if($product->variants && $product->variants->count() > 0)
                 <div>
-                    <h3 class="font-label-bold mb-3 uppercase tracking-wider">Pilih Warna</h3>
-                    <div class="flex gap-4">
-                        <button class="w-10 h-10 rounded-full border-4 border-on-background bg-primary comic-shadow-sm ring-4 ring-primary ring-offset-2"></button>
-                        <button class="w-10 h-10 rounded-full border-4 border-on-background bg-tertiary-container comic-shadow-sm"></button>
-                        <button class="w-10 h-10 rounded-full border-4 border-on-background bg-primary-fixed-dim comic-shadow-sm"></button>
-                    </div>
-                </div>
-
-                <!-- Size Selection -->
-                <div>
-                    <h3 class="font-label-bold mb-3 uppercase tracking-wider">Tipe Koneksi</h3>
+                    <h3 class="font-label-bold mb-3 uppercase tracking-wider">Varian Tersedia</h3>
                     <div class="flex flex-wrap gap-3">
-                        <button class="px-6 py-2 border-4 border-on-background bg-secondary-container font-label-bold rounded-lg comic-shadow-sm press-effect">Bluetooth 5.0</button>
-                        <button class="px-6 py-2 border-4 border-on-background bg-surface-bright font-label-bold rounded-lg comic-shadow-sm press-effect">Wired Only</button>
+                        @foreach($product->variants as $variant)
+                        <button type="button" class="px-4 py-2 border-4 border-on-background bg-surface-bright font-label-bold rounded-lg comic-shadow-sm press-effect text-sm flex items-center gap-2">
+                            @if($variant->color_hex)
+                            <span class="w-4 h-4 rounded-full border-2 border-on-background" style="background-color: {{ $variant->color_hex }};"></span>
+                            @endif
+                            {{ $variant->color ?? '' }} {{ $variant->size ? ' - ' . $variant->size : '' }}
+                        </button>
+                        @endforeach
                     </div>
                 </div>
+                @endif
 
                 <!-- Description Tabs -->
                 <div>
@@ -150,6 +149,54 @@
             </div>
         </div>
     </div>
+
+    <!-- Customer Reviews Section -->
+    <section class="mt-section-gap">
+        <div class="flex justify-between items-end mb-8">
+            <h2 class="font-headline-lg text-headline-lg flex items-center gap-3">
+                Ulasan Pembeli 
+                <span class="material-symbols-outlined text-tertiary scale-125">rate_review</span>
+            </h2>
+        </div>
+        
+        @if($product->reviews->count() > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+            @foreach($product->reviews as $review)
+            <div class="bg-surface-bright border-4 border-on-background rounded-lg p-6 comic-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-secondary-container border-2 border-on-background rounded-full flex items-center justify-center font-headline-lg text-primary overflow-hidden">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ $review->user->name }}" alt="Avatar">
+                        </div>
+                        <div>
+                            <p class="font-label-bold text-on-background">{{ $review->user->name }}</p>
+                            <p class="text-xs text-on-surface-variant">{{ $review->created_at->format('d M Y') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex text-secondary-container">
+                        @for($i=1; $i<=5; $i++)
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' {{ $i <= $review->rating ? 1 : 0 }};">star</span>
+                        @endfor
+                    </div>
+                </div>
+                <p class="font-body-md text-on-surface-variant mb-4">
+                    {{ $review->comment }}
+                </p>
+                @if($review->image)
+                <div class="w-24 h-24 bg-surface-variant border-2 border-on-background rounded-md overflow-hidden cursor-pointer hover:scale-105 transition-transform" onclick="window.open('{{ asset('storage/' . $review->image) }}', '_blank')">
+                    <img src="{{ asset('storage/' . $review->image) }}" class="w-full h-full object-cover" alt="Review Photo">
+                </div>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="bg-surface-bright border-4 border-dashed border-on-background rounded-xl p-10 text-center">
+            <span class="material-symbols-outlined text-6xl text-on-surface-variant opacity-50 mb-4" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+            <p class="font-headline-lg text-on-surface-variant italic">Belum ada ulasan untuk produk ini. Jadilah yang pertama! ✨</p>
+        </div>
+        @endif
+    </section>
 
     <!-- Related Products -->
     <section class="mt-section-gap">
