@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
     Route::get('/checkout/shipping', [CheckoutController::class, 'shipping'])->name('checkout.shipping');
+    Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.apply_voucher');
+    Route::post('/checkout/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.remove_voucher');
     Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place_order');
 });
 

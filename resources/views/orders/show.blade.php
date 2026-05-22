@@ -122,13 +122,19 @@
                 <!-- Totals -->
                 <div class="border-t-2 border-dashed border-outline-variant pt-4 space-y-2">
                     <div class="flex justify-between font-body-md text-sm">
-                        <span>Subtotal</span>
-                        <span class="font-bold">Rp {{ number_format($order->total_amount * 0.9, 0, ',', '.') }}</span>
+                        <span>Subtotal Produk</span>
+                        <span class="font-bold">Rp {{ number_format($order->total_amount - $order->shipping_cost + $order->discount_amount, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between font-body-md text-sm">
-                        <span>Biaya Kirim</span>
-                        <span class="font-bold">Rp 15.000</span>
+                        <span>Ongkos Kirim ({{ $order->shipping_method ?? 'Ekspedisi' }})</span>
+                        <span class="font-bold">Rp {{ number_format($order->shipping_cost ?? 15000, 0, ',', '.') }}</span>
                     </div>
+                    @if($order->discount_amount > 0)
+                    <div class="flex justify-between font-body-md text-sm text-tertiary">
+                        <span>Diskon Voucher</span>
+                        <span class="font-bold">- Rp {{ number_format($order->discount_amount, 0, ',', '.') }}</span>
+                    </div>
+                    @endif
                     <div class="flex justify-between pt-4 border-t-2 border-on-background">
                         <span class="font-headline-lg text-headline-lg text-on-background">TOTAL</span>
                         <span class="font-headline-lg text-headline-lg text-primary">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>

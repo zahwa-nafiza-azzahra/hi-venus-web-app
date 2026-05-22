@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{{ route('reviews.store', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <!-- Rating Section -->
             <section class="mb-10 text-center">

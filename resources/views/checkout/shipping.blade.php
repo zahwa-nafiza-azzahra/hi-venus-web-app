@@ -84,8 +84,9 @@
                         <h2 class="font-headline-lg text-headline-lg text-primary italic">Ekspedisi</h2>
                     </div>
                     <div class="relative">
-                        <select class="w-full h-16 px-6 bg-white border-4 border-on-background rounded-none font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] appearance-none focus:ring-0 focus:border-tertiary-container transition-all">
-                            <option value="jnt">J&T Express - Rp 15.000 (1-3 Hari)</option>
+                        <select id="shipping-select" class="w-full h-16 px-6 bg-white border-4 border-on-background rounded-none font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] appearance-none focus:ring-0 focus:border-tertiary-container transition-all">
+                            <option value="pickup">Ambil di Toko (Pickup) - Rp 0</option>
+                            <option value="jnt" selected>J&T Express - Rp 15.000 (1-3 Hari)</option>
                             <option value="jne">JNE Reguler - Rp 18.000 (2-4 Hari)</option>
                             <option value="sicepat">SiCepat Halu - Rp 12.000 (3-5 Hari)</option>
                         </select>
@@ -100,11 +101,11 @@
                     </div>
                     <div class="space-y-3">
                         <label class="flex items-center p-4 bg-white border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:bg-surface-container transition-all">
-                            <input checked class="w-6 h-6 border-4 border-on-background text-primary focus:ring-0" name="payment" type="radio"/>
+                            <input checked class="w-6 h-6 border-4 border-on-background text-primary focus:ring-0" name="payment_option" value="Bank Transfer" type="radio"/>
                             <span class="ml-4 font-label-bold text-label-bold">Transfer Bank</span>
                         </label>
                         <label class="flex items-center p-4 bg-white border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] cursor-pointer hover:bg-surface-container transition-all">
-                            <input class="w-6 h-6 border-4 border-on-background text-primary focus:ring-0" name="payment" type="radio"/>
+                            <input class="w-6 h-6 border-4 border-on-background text-primary focus:ring-0" name="payment_option" value="E-Wallet" type="radio"/>
                             <span class="ml-4 font-label-bold text-label-bold">E-Wallet (OVO/Dana)</span>
                         </label>
                     </div>
@@ -121,12 +122,28 @@
                 <!-- Voucher Input -->
                 <div class="mb-8">
                     <label class="font-label-bold text-label-bold block mb-2">Punya Kode Voucher?</label>
-                    <div class="flex gap-2">
-                        <input class="flex-grow bg-white border-4 border-on-background px-4 py-2 font-body-md focus:ring-0 focus:border-tertiary-container shadow-inner" placeholder="Masukkan Kode" type="text"/>
-                        <button class="bg-secondary-container border-4 border-on-background px-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none transition-all">
-                            Pakai
-                        </button>
-                    </div>
+                    @if(session('voucher'))
+                        <div class="flex items-center justify-between bg-tertiary-container border-2 border-on-background p-3 rounded-lg shadow-sm">
+                            <div>
+                                <span class="font-bold text-tertiary">🎟️ {{ session('voucher')->code }}</span>
+                                <p class="text-xs text-on-tertiary-container mt-1">Voucher berhasil dipakai!</p>
+                            </div>
+                            <form action="{{ route('checkout.remove_voucher') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-error hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-sm">close</span>
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <form action="{{ route('checkout.apply_voucher') }}" method="POST" class="flex gap-2">
+                            @csrf
+                            <input name="code" class="flex-grow bg-white border-4 border-on-background px-4 py-2 font-body-md focus:ring-0 focus:border-tertiary-container shadow-inner" placeholder="Masukkan Kode" type="text" required/>
+                            <button type="submit" class="bg-secondary-container border-4 border-on-background px-4 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none transition-all">
+                                Pakai
+                            </button>
+                        </form>
+                    @endif
                 </div>
                 <!-- Price Details -->
                 <div class="space-y-4 mb-8">
@@ -136,13 +153,19 @@
                     </div>
                     <div class="flex justify-between font-body-lg text-body-lg">
                         <span class="text-on-surface-variant">Ongkos Kirim</span>
-                        <span class="font-bold">Rp 15.000</span>
+                        <span class="font-bold" id="shipping-cost-display">Rp 15.000</span>
                     </div>
+                    @if(session('voucher'))
+                        <div class="flex justify-between font-body-lg text-body-lg text-tertiary">
+                            <span>Diskon Voucher</span>
+                            <span class="font-bold" id="discount-display">- Rp 0</span>
+                        </div>
+                    @endif
                     <hr class="border-t-4 border-on-background border-dashed"/>
                     <div class="flex justify-between items-center">
                         <span class="font-headline-lg text-xl italic text-primary">Total Bayar</span>
                         <div class="relative">
-                            <span class="font-price-display text-3xl font-black text-on-background">Rp {{ number_format($total + 15000, 0, ',', '.') }}</span>
+                            <span class="font-price-display text-3xl font-black text-on-background" id="final-total-display">Rp {{ number_format($total + 15000, 0, ',', '.') }}</span>
                             <div class="absolute -top-6 -right-6 w-12 h-12 bg-secondary-container border-2 border-on-background rounded-full flex items-center justify-center animate-bounce">
                                 <span class="material-symbols-outlined text-on-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
                             </div>
@@ -153,6 +176,7 @@
                 <form action="{{ route('checkout.place_order') }}" method="POST">
                     @csrf
                     <input type="hidden" name="payment" id="selected_payment" value="Bank Transfer">
+                    <input type="hidden" name="shipping" id="selected_shipping" value="jnt">
                     <button type="submit" class="w-full py-5 bg-primary text-on-primary border-4 border-on-background font-headline-lg text-2xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:scale-[1.02] active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-3">
                         Konfirmasi & Bayar ✨
                     </button>
@@ -165,3 +189,66 @@
     </div>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const shippingSelect = document.getElementById('shipping-select');
+        const paymentRadios = document.querySelectorAll('input[name="payment_option"]');
+        const selectedPaymentInput = document.getElementById('selected_payment');
+        const selectedShippingInput = document.getElementById('selected_shipping');
+        const shippingCostDisplay = document.getElementById('shipping-cost-display');
+        const discountDisplay = document.getElementById('discount-display');
+        const finalTotalDisplay = document.getElementById('final-total-display');
+        
+        const cartTotal = {{ $total }};
+        const voucherType = "{{ session('voucher') ? session('voucher')->type : '' }}";
+        const voucherValue = {{ session('voucher') ? session('voucher')->value : 0 }};
+        
+        function updateTotals() {
+            let shippingCost = 15000;
+            if (shippingSelect.value === 'pickup') shippingCost = 0;
+            else if (shippingSelect.value === 'jne') shippingCost = 18000;
+            else if (shippingSelect.value === 'sicepat') shippingCost = 12000;
+            
+            shippingCostDisplay.textContent = 'Rp ' + shippingCost.toLocaleString('id-ID');
+            selectedShippingInput.value = shippingSelect.value;
+            
+            let discount = 0;
+            if (voucherType === 'percentage') {
+                discount = cartTotal * (voucherValue / 100);
+            } else if (voucherType === 'fixed') {
+                discount = voucherValue;
+            } else if (voucherType === 'free_shipping') {
+                discount = shippingCost;
+            }
+            
+            if (discount > cartTotal + shippingCost) {
+                discount = cartTotal + shippingCost;
+            }
+            
+            if (discountDisplay) {
+                discountDisplay.textContent = '- Rp ' + discount.toLocaleString('id-ID');
+            }
+            
+            const finalTotal = (cartTotal + shippingCost) - discount;
+            finalTotalDisplay.textContent = 'Rp ' + finalTotal.toLocaleString('id-ID');
+        }
+
+        if(shippingSelect) {
+            shippingSelect.addEventListener('change', updateTotals);
+        }
+        
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if(this.checked) {
+                    selectedPaymentInput.value = this.value;
+                }
+            });
+        });
+
+        // initial call
+        if(shippingSelect) updateTotals();
+    });
+</script>
+@endpush
