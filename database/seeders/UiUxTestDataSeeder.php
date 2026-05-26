@@ -32,6 +32,7 @@ class UiUxTestDataSeeder extends Seeder
             ['name' => 'Atasan Lucu', 'slug' => 'atasan-lucu'],
             ['name' => 'Bawahan Gemas', 'slug' => 'bawahan-gemas'],
             ['name' => 'Dress Cantik', 'slug' => 'dress-cantik'],
+            ['name' => 'Setelan', 'slug' => 'setelan'],
             ['name' => 'Aksesoris Sparkle', 'slug' => 'aksesoris-sparkle'],
             ['name' => 'Tas', 'slug' => 'tas'],
             ['name' => 'Dompet', 'slug' => 'dompet'],
