@@ -33,7 +33,7 @@ class UiUxTestDataSeeder extends Seeder
             ['name' => 'Bawahan Gemas', 'slug' => 'bawahan-gemas'],
             ['name' => 'Dress Cantik', 'slug' => 'dress-cantik'],
             ['name' => 'Aksesoris Sparkle', 'slug' => 'aksesoris-sparkle'],
-            ['name' => 'Tas & Sepatu', 'slug' => 'tas-sepatu'],
+            ['name' => 'Sepatu Cantik', 'slug' => 'sepatu-cantik'],
         ];
 
         foreach ($categories as $catData) {
@@ -62,7 +62,7 @@ class UiUxTestDataSeeder extends Seeder
             ['name' => 'Bunny Ears Beanie', 'price' => 85000, 'category_id' => $allCats[3]->id, 'description' => 'Topi rajut dengan telinga kelinci yang bisa berdiri.'],
             ['name' => 'Heart Buckle Belt', 'price' => 65000, 'category_id' => $allCats[3]->id, 'description' => 'Ikat pinggang pink dengan gesper berbentuk hati.'],
             
-            // Tas & Sepatu
+            // Sepatu Cantik
             ['name' => 'Berry Sweet Backpack', 'price' => 275000, 'category_id' => $allCats[4]->id, 'description' => 'Tas ransel kecil berbentuk buah stroberi.'],
             ['name' => 'Cloud Platform Shoes', 'price' => 650000, 'category_id' => $allCats[4]->id, 'description' => 'Sepatu platform putih yang membuatmu merasa berjalan di awan.'],
             ['name' => 'Sparkle Glitter Flats', 'price' => 315000, 'category_id' => $allCats[4]->id, 'description' => 'Sepatu flat penuh glitter untuk hari-harimu yang bersinar.'],
