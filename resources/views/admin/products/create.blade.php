@@ -9,6 +9,17 @@
         display: none !important;
     }
 
+    /* Remove native number input spinner so our custom +/- stepper looks clean */
+    .no-spinner::-webkit-outer-spin-button,
+    .no-spinner::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .no-spinner {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
     .kawaii-card {
         background: white;
         border: 4px solid #1b1c1c;
@@ -320,10 +331,15 @@
                         <div class="mt-6 border-t-2 border-dashed border-on-background pt-6 hidden" id="variantPreviewSection">
                             <h4 class="font-label-bold text-md mb-3 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm text-primary font-bold">analytics</span>
-                                Stock & Variant Distribution Preview
+                                Stock & Variant Distribution
                             </h4>
+                            <p class="text-xs text-on-surface-variant italic mb-3">✏️ Stock per varian dibagi otomatis, tapi kamu bisa edit manual angkanya kalau mau distribusi yang beda.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="variantPreviewList">
                                 <!-- Preview cards injected by JS -->
+                            </div>
+                            <div id="variantStockWarning" class="hidden mt-4 p-3 rounded-lg border-2 border-error bg-error-container text-on-error-container text-xs font-bold flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">error</span>
+                                <span id="variantStockWarningText"></span>
                             </div>
                         </div>
                     </div>
@@ -751,6 +767,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const stockInput = document.getElementById('productStock');
     const variantPreviewSection = document.getElementById('variantPreviewSection');
     const variantPreviewList = document.getElementById('variantPreviewList');
+    const variantManualEdits = new Map(); // key: "size|color" -> manually edited stock value
 
     function updateVariantPreview() {
         const selectedSizes = Array.from(sizeSelector.querySelectorAll('.size-btn.selected')).map(btn => btn.dataset.size);
@@ -780,37 +797,120 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide preview if there are no real selections
         if (totalCount <= 1 && activeSizes[0] === 'Default' && activeColors[0] === 'Default') {
             variantPreviewSection.classList.add('hidden');
+            variantManualEdits.clear();
             return;
         }
 
         variantPreviewSection.classList.remove('hidden');
-        variantPreviewList.innerHTML = '';
 
         const baseStock = Math.floor(totalStock / totalCount);
         const remainder = totalStock % totalCount;
 
+        // Build the current set of variant keys so we can prune stale manual edits
+        const currentKeys = new Set();
+
         let index = 0;
+        const fragment = document.createDocumentFragment();
         activeSizes.forEach(size => {
             activeColors.forEach(color => {
-                const stock = index === 0 ? (baseStock + remainder) : baseStock;
+                const autoStock = index === 0 ? (baseStock + remainder) : baseStock;
+                const key = size + '|' + color;
+                currentKeys.add(key);
                 index++;
 
                 const skuSuffix = (size !== 'Default' || color !== 'Default') 
                     ? `-${size.substring(0, 2).toUpperCase()}-${color.substring(0, 3).toUpperCase()}` 
                     : '';
 
+                // Use manually edited value if the user already touched this variant
+                const displayStock = variantManualEdits.has(key) ? variantManualEdits.get(key) : autoStock;
+
                 const card = document.createElement('div');
-                card.className = 'flex items-center justify-between p-3 bg-surface-container-low border-2 border-on-background rounded-lg text-xs';
+                card.className = 'flex items-center justify-between p-3 bg-surface-container-low border-2 border-on-background rounded-lg text-xs gap-3';
                 card.innerHTML = `
                     <div class="flex flex-col">
                         <span class="font-bold">Size: ${size} | Color: ${color}</span>
                         <span class="text-[10px] text-on-surface-variant font-mono">SKU Preview: HV-XXXX${skuSuffix}</span>
                     </div>
-                    <span class="bg-primary text-on-primary font-bold px-2 py-1 rounded border border-on-background">${stock} Stock</span>
+                    <div class="flex items-center border-2 border-on-background rounded-full overflow-hidden bg-primary shrink-0">
+                        <button type="button" class="variant-stock-decrement w-7 h-7 flex items-center justify-center text-on-primary font-bold hover:bg-primary-container transition-colors" data-variant-key="${key}">−</button>
+                        <input type="number" min="0" inputmode="numeric"
+                               class="variant-stock-input no-spinner w-12 text-center font-bold bg-primary text-on-primary border-x-2 border-on-background py-1"
+                               data-variant-key="${key}"
+                               name="variant_stock_map[${key}]"
+                               value="${displayStock}">
+                        <button type="button" class="variant-stock-increment w-7 h-7 flex items-center justify-center text-on-primary font-bold hover:bg-primary-container transition-colors" data-variant-key="${key}">+</button>
+                    </div>
                 `;
-                variantPreviewList.appendChild(card);
+                fragment.appendChild(card);
             });
         });
+
+        variantPreviewList.innerHTML = '';
+        variantPreviewList.appendChild(fragment);
+
+        // Drop manual edits for variants that no longer exist (size/color was deselected)
+        Array.from(variantManualEdits.keys()).forEach(key => {
+            if (!currentKeys.has(key)) variantManualEdits.delete(key);
+        });
+
+        // Listen for manual edits so future re-renders (e.g. typing total stock) don't overwrite them
+        variantPreviewList.querySelectorAll('.variant-stock-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const key = input.dataset.variantKey;
+                const val = parseInt(input.value);
+                variantManualEdits.set(key, isNaN(val) ? 0 : val);
+                checkVariantStockTotal();
+            });
+        });
+
+        // +/- stepper buttons
+        variantPreviewList.querySelectorAll('.variant-stock-increment, .variant-stock-decrement').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const key = btn.dataset.variantKey;
+                const input = variantPreviewList.querySelector(`.variant-stock-input[data-variant-key="${key}"]`);
+                let val = parseInt(input.value) || 0;
+                val += btn.classList.contains('variant-stock-increment') ? 1 : -1;
+                if (val < 0) val = 0;
+                input.value = val;
+                variantManualEdits.set(key, val);
+                checkVariantStockTotal();
+            });
+        });
+
+        checkVariantStockTotal();
+    }
+
+    // ========== VARIANT STOCK TOTAL VALIDATION ==========
+    const variantStockWarning = document.getElementById('variantStockWarning');
+    const variantStockWarningText = document.getElementById('variantStockWarningText');
+
+    function checkVariantStockTotal() {
+        const inputs = variantPreviewList.querySelectorAll('.variant-stock-input');
+        if (inputs.length === 0) {
+            variantStockWarning.classList.add('hidden');
+            return true;
+        }
+
+        let sumVariants = 0;
+        inputs.forEach(input => {
+            sumVariants += parseInt(input.value) || 0;
+        });
+
+        const totalStock = parseInt(stockInput.value) || 0;
+
+        if (sumVariants > totalStock) {
+            variantStockWarningText.textContent = `Total stock varian (${sumVariants}) melebihi Stock Quantity (${totalStock})! Selisih: ${sumVariants - totalStock}.`;
+            variantStockWarning.classList.remove('hidden');
+            return false;
+        } else if (sumVariants < totalStock) {
+            variantStockWarningText.textContent = `Total stock varian (${sumVariants}) masih kurang dari Stock Quantity (${totalStock}). Sisa: ${totalStock - sumVariants}.`;
+            variantStockWarning.classList.remove('hidden');
+            return false;
+        } else {
+            variantStockWarning.classList.add('hidden');
+            return true;
+        }
     }
 
     // Bind preview listeners
@@ -832,6 +932,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 carousel.classList.remove('border-error');
             }, 1000);
             goToSlide(0);
+            return false;
+        }
+
+        // Validate that variant stock totals match the declared Stock Quantity
+        if (!checkVariantStockTotal()) {
+            e.preventDefault();
+            variantStockWarning.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return false;
         }
 

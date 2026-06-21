@@ -109,7 +109,7 @@
             <div class="absolute -top-3 -right-3 bg-primary-container text-on-primary-container font-label-bold text-label-bold px-3 py-1 rounded-full comic-border sticker-rotate-reverse z-10">
                 New!
             </div>
-            @elseif($product->total_stock > 100)
+            @elseif($bestSellerIds->contains($product->id))
             <div class="absolute -top-3 -right-3 bg-secondary-container text-on-secondary-container font-label-bold text-label-bold px-3 py-1 rounded-full comic-border sticker-rotate z-10">
                 Top Seller!
             </div>
@@ -127,7 +127,7 @@
                      class="w-full h-full object-cover {{ $index % 2 == 0 ? 'sticker-rotate' : 'sticker-rotate-reverse' }} transition-transform group-hover:scale-105 {{ $product->total_stock == 0 ? 'grayscale' : '' }}">
                 
                 <div class="absolute inset-0 bg-on-surface/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 {{ $product->total_stock == 0 ? 'z-20' : '' }}">
-                    <a href="{{ route('admin.products.edit', $product->id) }}" class="bg-surface text-primary p-2 rounded-full comic-border hover:bg-primary-container transition-colors">
+                    <a href="{{ route('admin.products.edit', $product->id) }}?return_url={{ urlencode(request()->fullUrl()) }}" class="bg-surface text-primary p-2 rounded-full comic-border hover:bg-primary-container transition-colors">
                         <span class="material-symbols-outlined">edit</span>
                     </a>
                     <button class="bg-surface text-error p-2 rounded-full comic-border hover:bg-error-container transition-colors">

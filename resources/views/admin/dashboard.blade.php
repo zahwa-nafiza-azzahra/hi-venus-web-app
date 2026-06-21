@@ -95,16 +95,16 @@
         </div>
         <h3 class="bubble-title text-3xl mb-8">Top Items</h3>
         <div class="space-y-4">
-            @foreach(\App\Models\Product::take(3)->get() as $product)
-            <div class="bg-surface-bright border-4 border-on-background rounded-xl p-4 flex items-center gap-4 shadow-[4px_4px_0px_0px_#1b1c1c] hover:scale-105 transition-transform">
-                <div class="w-12 h-12 bg-primary-container border-2 border-on-background rounded-lg flex items-center justify-center">
+            @foreach(\App\Models\Product::with('category')->withSum('orderItems', 'quantity')->orderByRaw('COALESCE(order_items_sum_quantity, 0) DESC')->take(5)->get() as $product)
+            <div class="bg-surface-bright border-4 border-on-background rounded-xl p-4 flex items-center gap-3 shadow-[4px_4px_0px_0px_#1b1c1c] hover:scale-105 transition-transform overflow-hidden">
+                <div class="w-12 h-12 shrink-0 bg-primary-container border-2 border-on-background rounded-lg flex items-center justify-center">
                     <span class="material-symbols-outlined text-on-background">auto_awesome</span>
                 </div>
-                <div class="flex-1">
-                    <h4 class="font-black italic leading-tight line-clamp-1">{{ $product->name }}</h4>
-                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-tighter">{{ $product->category->name ?? 'Premium Item' }}</p>
+                <div class="flex-1 min-w-0">
+                    <h4 class="font-black italic leading-tight line-clamp-1 truncate">{{ $product->name }}</h4>
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-tighter truncate">{{ $product->category->name ?? 'Premium Item' }}</p>
                 </div>
-                <div class="text-xl font-black text-primary">Rp{{ number_format($product->price/1000, 0) }}k</div>
+                <div class="text-lg font-black text-primary shrink-0 whitespace-nowrap">Rp{{ number_format($product->price/1000, 0) }}k</div>
             </div>
             @endforeach
         </div>

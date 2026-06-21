@@ -4,6 +4,17 @@
 
 @push('styles')
 <style>
+    /* Remove native number input spinner so our custom +/- stepper looks clean */
+    .no-spinner::-webkit-outer-spin-button,
+    .no-spinner::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .no-spinner {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
     .kawaii-grid {
         background-image: 
             linear-gradient(to right, #e5e2e1 1px, transparent 1px),
@@ -47,7 +58,7 @@
 <div class="kawaii-grid -m-margin-desktop p-margin-desktop min-h-screen">
     <!-- Header Actions -->
     <div class="max-w-5xl mx-auto mb-10 flex justify-between items-center animate-fade-in-down">
-        <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 font-label-bold text-on-background bg-white border-4 border-on-background px-6 py-2 rounded-full comic-shadow-sm hover:translate-y-[-2px] active:translate-y-1 active:shadow-none transition-all">
+        <a href="{{ request('return_url') ?: route('admin.products.index') }}" class="flex items-center gap-2 font-label-bold text-on-background bg-white border-4 border-on-background px-6 py-2 rounded-full comic-shadow-sm hover:translate-y-[-2px] active:translate-y-1 active:shadow-none transition-all">
             <span class="material-symbols-outlined">arrow_back</span>
             Back to Inventory
         </a>
@@ -88,6 +99,7 @@
         <!-- Form Content -->
         <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data" class="p-8 lg:p-12">
             @csrf
+            <input type="hidden" name="return_url" value="{{ request('return_url') }}">
             
             <!-- Hidden inputs for multi-slide images -->
             <div id="slide-inputs-container">
@@ -320,7 +332,7 @@
 
             <!-- Footer Action Buttons -->
             <div class="mt-12 pt-10 border-t-4 border-on-background flex flex-col md:flex-row justify-end gap-6">
-                <a href="{{ route('admin.products.index') }}" class="bg-secondary-fixed text-on-secondary-fixed border-4 border-on-background px-10 py-4 font-headline-lg-mobile text-headline-lg-mobile comic-shadow hover:translate-y-[-4px] hover:translate-x-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] transition-all active:translate-y-1 active:shadow-none order-2 md:order-1 text-center">
+                <a href="{{ request('return_url') ?: route('admin.products.index') }}" class="bg-secondary-fixed text-on-secondary-fixed border-4 border-on-background px-10 py-4 font-headline-lg-mobile text-headline-lg-mobile comic-shadow hover:translate-y-[-4px] hover:translate-x-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] transition-all active:translate-y-1 active:shadow-none order-2 md:order-1 text-center">
                     Discard Changes
                 </a>
                 <button type="submit" class="bg-primary-container text-on-primary-container border-4 border-on-background px-12 py-4 font-headline-lg-mobile text-headline-lg-mobile comic-shadow hover:translate-y-[-4px] hover:translate-x-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] transition-all active:translate-y-1 active:shadow-none order-1 md:order-2 flex items-center justify-center gap-3">
@@ -607,22 +619,36 @@
                 const key   = `${size}|${color.name}`;
                 const stock = variantStocks[key] ?? 0;
                 const sku   = `HV-XXXX-${size.substring(0,2).toUpperCase()}-${color.name.substring(0,3).toUpperCase()}`;
-                const badgeId = 'badge-' + key.replace(/[^a-z0-9]/gi, '-');
-                html += `<div class="bg-white border-2 border-on-background rounded-xl p-4 flex items-center justify-between gap-3" style="box-shadow:3px 3px 0 #1b1c1c">
-                    <div class="flex-1 min-w-0">
-                        <p class="font-bold text-sm">Size: <span class="text-primary">${size}</span> | Color: <span style="color:${color.hex||'#333'}">${color.name}</span></p>
+                const inputId = 'stock-input-' + key.replace(/[^a-z0-9]/gi, '-');
+                html += `<div class="bg-white border-2 border-on-background rounded-xl p-3 flex flex-col gap-2" style="box-shadow:3px 3px 0 #1b1c1c">
+                    <div class="min-w-0">
+                        <p class="font-bold text-sm truncate">Size: <span class="text-primary">${size}</span> &middot; Color: <span style="color:${color.hex||'#333'}">${color.name}</span></p>
                         <p class="text-[10px] text-on-surface-variant font-mono mt-0.5 truncate">SKU: ${sku}</p>
                     </div>
-                    <div class="flex items-center gap-2 flex-shrink-0">
-                        <input type="number" min="0" value="${stock}" data-key="${key}"
-                            oninput="variantStocks['${key}']=parseInt(this.value)||0;document.getElementById('${badgeId}').textContent=this.value+' Stok'"
-                            class="w-20 border-2 border-on-background rounded-lg px-2 py-1.5 text-center font-bold text-sm focus:outline-none focus:border-primary">
-                        <span id="${badgeId}" class="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">${stock} Stok</span>
+                    <div class="flex items-center justify-end">
+                        <div class="flex items-center border-2 border-on-background rounded-full overflow-hidden bg-primary">
+                            <button type="button" onclick="stepVariantStock('${key}', -1)"
+                                class="w-7 h-7 flex items-center justify-center text-on-primary font-bold hover:bg-primary-container transition-colors">&minus;</button>
+                            <input type="number" min="0" value="${stock}" data-key="${key}" id="${inputId}"
+                                oninput="variantStocks['${key}']=parseInt(this.value)||0"
+                                class="no-spinner w-14 text-center font-bold bg-primary text-on-primary border-x-2 border-on-background py-1 focus:outline-none">
+                            <button type="button" onclick="stepVariantStock('${key}', 1)"
+                                class="w-7 h-7 flex items-center justify-center text-on-primary font-bold hover:bg-primary-container transition-colors">&plus;</button>
+                        </div>
                     </div>
                 </div>`;
             });
         });
         grid.innerHTML = html;
+    }
+
+    function stepVariantStock(key, delta) {
+        const current = variantStocks[key] ?? 0;
+        const next = Math.max(0, current + delta);
+        variantStocks[key] = next;
+        const inputId = 'stock-input-' + key.replace(/[^a-z0-9]/gi, '-');
+        const input = document.getElementById(inputId);
+        if (input) input.value = next;
     }
 
     function toggleSize(s) {

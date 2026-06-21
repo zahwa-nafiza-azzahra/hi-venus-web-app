@@ -206,7 +206,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
     // Products Management
     Route::get('products', function (\Illuminate\Http\Request $request) {
-        $query = \App\Models\Product::with('variants');
+        $query = \App\Models\Product::with('variants')->withSum('orderItems', 'quantity');
         
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
@@ -221,10 +221,17 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
             $product->total_stock = $product->variants->sum('stock');
         });
 
+        // Threshold dipakai untuk badge "Top Seller!": top 20% produk dengan penjualan tertinggi (min. 1 terjual)
+        $bestSellerIds = \App\Models\Product::withSum('orderItems', 'quantity')
+            ->having('order_items_sum_quantity', '>', 0)
+            ->orderByDesc('order_items_sum_quantity')
+            ->take(max(1, (int) ceil(\App\Models\Product::count() * 0.2)))
+            ->pluck('id');
+
         $categories = \App\Models\Category::all();
         $totalProducts = \App\Models\Product::count();
 
-        return view('admin.products.index', compact('products', 'categories', 'totalProducts'));
+        return view('admin.products.index', compact('products', 'categories', 'totalProducts', 'bestSellerIds'));
     })->name('products.index');
 
     Route::get('products/create', function () {
@@ -322,16 +329,11 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         $totalVariantsCount = count($sizes) * count($colors);
         $baseStock = floor($data['initial_stock'] / $totalVariantsCount);
         $remainder = $data['initial_stock'] % $totalVariantsCount;
-        
+        $manualStockMap = $request->input('variant_stock_map', []);
+
         $isFirst = true;
         foreach ($sizes as $size) {
             foreach ($colors as $color) {
-                $stock = $baseStock;
-                if ($isFirst) {
-                    $stock += $remainder;
-                    $isFirst = false;
-                }
-                
                 $colorHex = null;
                 $colorName = $color;
                 if (str_starts_with($color, '#')) {
@@ -343,6 +345,19 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
                         default => 'Custom',
                     };
                 }
+
+                $key = $size . '|' . $colorName;
+
+                if (array_key_exists($key, $manualStockMap) && $manualStockMap[$key] !== '') {
+                    // User manually edited this variant's stock in the form
+                    $stock = max(0, (int) $manualStockMap[$key]);
+                } else {
+                    $stock = $baseStock;
+                    if ($isFirst) {
+                        $stock += $remainder;
+                    }
+                }
+                $isFirst = false;
                 
                 $variantSku = $product->sku . '-' . strtoupper(substr($size, 0, 2)) . '-' . strtoupper(substr($colorName, 0, 3));
                 if ($size === 'Default' && $colorName === 'Default') {
@@ -493,6 +508,11 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
             foreach ($request->input('variant_stock') as $variantId => $stockValue) {
                 $product->variants()->where('id', $variantId)->update(['stock' => (int)$stockValue]);
             }
+        }
+
+        $returnUrl = $request->input('return_url');
+        if ($returnUrl && str_starts_with($returnUrl, url('/'))) {
+            return redirect($returnUrl)->with('success', '✨ Product "' . $product->name . '" has been updated!');
         }
 
         return redirect()->route('admin.products.index')->with('success', '✨ Product "' . $product->name . '" has been updated!');
