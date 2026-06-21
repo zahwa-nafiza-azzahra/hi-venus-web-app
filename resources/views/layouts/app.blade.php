@@ -29,7 +29,7 @@
                 @auth
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('wishlist') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('wishlist') }}">Wishlist</a>
                 @endauth
-                <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">About Us</a>
+                <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('about') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('about') }}">About Us</a>
             </div>
         </div>
         <div class="flex items-center gap-4 bg-primary border-4 border-on-background px-4 py-2 rounded-full shadow-[4px_4px_0px_0px_#1b1c1c] -rotate-1">
