@@ -25,7 +25,7 @@
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('home') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('home') }}">Home</a>
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('products.*') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('products.index') }}">Shop</a>
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">New Arrivals</a>
-                <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform" href="#">Best Sellers</a>
+                <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('products.best_sellers') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('products.best_sellers') }}">Best Sellers</a>
                 @auth
                 <a class="font-label-bold text-label-bold text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform {{ request()->routeIs('wishlist') ? 'border-b-4 border-on-primary pb-1 !text-on-primary' : '' }}" href="{{ route('wishlist') }}">Wishlist</a>
                 @endauth

@@ -26,6 +26,20 @@ class ProductController extends Controller
     }
 
     /**
+     * Best Sellers Hi Venus.
+     */
+    public function bestSellers()
+    {
+        $products = \App\Models\Product::with('category')
+            ->withSum('orderItems', 'quantity')
+            ->orderByRaw('COALESCE(order_items_sum_quantity, 0) DESC')
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        return view('products.best_sellers', compact('products'));
+    }
+
+    /**
      * Detail produk Hi Venus.
      */
     public function show($id)
