@@ -43,6 +43,9 @@
             @endauth
             @auth
                 <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none border-2 border-transparent hover:border-on-background rounded-full p-2 flex items-center justify-center" title="Dashboard">
+                    <span class="material-symbols-outlined" data-icon="space_dashboard">space_dashboard</span>
+                </a>
+                <a href="{{ route('settings') }}" class="text-on-primary/90 hover:text-on-primary hover:scale-105 transition-transform hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] active:translate-y-1 active:shadow-none border-2 border-transparent hover:border-on-background rounded-full p-2 flex items-center justify-center" title="Profil">
                     <span class="material-symbols-outlined" data-icon="person">person</span>
                 </a>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
