@@ -33,7 +33,10 @@ class VoucherController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
-        Voucher::create($request->all());
+        Voucher::create(array_merge(
+            $request->only(['code', 'type', 'value', 'min_spend', 'quota', 'start_date', 'end_date']),
+            ['is_active' => true, 'code' => strtoupper($request->code)]
+        ));
 
         return back()->with('success', 'Voucher berhasil dibuat! 🎟️');
     }
@@ -52,7 +55,10 @@ class VoucherController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
-        $voucher->update($request->all());
+        $voucher->update(array_merge(
+            $request->only(['code', 'type', 'value', 'min_spend', 'quota', 'start_date', 'end_date']),
+            ['code' => strtoupper($request->code)]
+        ));
 
         return back()->with('success', 'Voucher berhasil diperbarui! ✨');
     }

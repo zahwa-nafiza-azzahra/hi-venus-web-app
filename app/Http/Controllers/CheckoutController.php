@@ -52,7 +52,7 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Minimal belanja belum terpenuhi (Rp ' . number_format($voucher->min_spend, 0, ',', '.') . ').');
         }
 
-        session(['voucher' => $voucher]);
+        session(['voucher' => $voucher->toArray()]);
         return redirect()->back()->with('success', 'Voucher berhasil digunakan! ✨');
     }
 
@@ -102,7 +102,7 @@ class CheckoutController extends Controller
             
             if ($voucher) {
                 // Double check if valid
-                $v = Voucher::find($voucher->id);
+                $v = Voucher::find($voucher['id']);
                 if ($v && $v->is_active && ($v->quota === null || $v->quota_used < $v->quota)) {
                     if ($v->type == 'percentage') {
                         $discountAmount = $total * ($v->value / 100);
@@ -133,7 +133,7 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment ?? 'Bank Transfer',
                 'shipping_method' => $shippingMethod,
                 'shipping_cost' => $shippingCost,
-                'voucher_id' => $voucher ? $voucher->id : null,
+                'voucher_id' => $voucher ? $voucher['id'] : null,
                 'discount_amount' => $discountAmount,
                 'notes' => 'Pesanan dari checkout UI',
             ]);

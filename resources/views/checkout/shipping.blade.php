@@ -125,7 +125,7 @@
                     @if(session('voucher'))
                         <div class="flex items-center justify-between bg-tertiary-container border-2 border-on-background p-3 rounded-lg shadow-sm">
                             <div>
-                                <span class="font-bold text-tertiary">🎟️ {{ session('voucher')->code }}</span>
+                                <span class="font-bold text-tertiary">🎟️ {{ session('voucher')['code'] }}</span>
                                 <p class="text-xs text-on-tertiary-container mt-1">Voucher berhasil dipakai!</p>
                             </div>
                             <form action="{{ route('checkout.remove_voucher') }}" method="POST">
@@ -202,8 +202,8 @@
         const finalTotalDisplay = document.getElementById('final-total-display');
         
         const cartTotal = {{ $total }};
-        const voucherType = "{{ session('voucher') ? session('voucher')->type : '' }}";
-        const voucherValue = {{ session('voucher') ? session('voucher')->value : 0 }};
+        const voucherType = "{{ session('voucher') ? session('voucher')['type'] : '' }}";
+        const voucherValue = {{ session('voucher') ? (session('voucher')['value'] ?? 0) : 0 }};
         
         function updateTotals() {
             let shippingCost = 15000;
