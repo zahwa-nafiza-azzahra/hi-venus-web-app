@@ -139,9 +139,10 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart as $id => $item) {
+                $productId = strpos($id, '_') !== false ? explode('_', $id)[0] : $id;
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $id,
+                    'product_id' => $item['product_id'] ?? $productId,
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ]);

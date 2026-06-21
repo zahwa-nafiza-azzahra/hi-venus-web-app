@@ -40,6 +40,13 @@
                 </div>
                 <div class="flex-grow text-center md:text-left">
                     <h3 class="font-headline-lg text-headline-lg text-primary mb-1">{{ $details['name'] }}</h3>
+                    <p class="font-label-bold text-label-bold text-on-surface-variant mb-1 flex items-center gap-2 justify-center md:justify-start">
+                        Varian: 
+                        @if(!empty($details['color_hex']))
+                            <span class="inline-block w-4 h-4 rounded-full border-2 border-on-background shadow-sm" style="background-color: {{ $details['color_hex'] }}"></span>
+                        @endif
+                        {{ $details['variant'] ?? 'Default' }}
+                    </p>
                     <p class="font-label-bold text-label-bold text-on-surface-variant mb-4">Harga Satuan: Rp {{ number_format($details['price'], 0, ',', '.') }}</p>
                     <div class="flex items-center justify-center md:justify-start gap-4">
                         <span class="font-price-display text-price-display text-secondary">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>

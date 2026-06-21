@@ -230,36 +230,57 @@
                         </div>
                     </div>
 
-                    <!-- Stock & Variants -->
-                    <div class="space-y-3">
+                    <!-- Variants (Size & Color Builder) -->
+                    <div class="space-y-4">
                         <label class="block font-label-bold text-label-bold mb-1 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary">inventory_2</span>
-                            Stock & Variant Management
+                            <span class="material-symbols-outlined text-primary">palette</span>
+                            Add Variants 🎨
                         </label>
-                        <p class="text-xs text-on-surface-variant">Update the stock of each variant below. The total stock is automatically calculated.</p>
-                        
-                        <div class="space-y-3 bg-surface-container/60 border-3 border-on-background p-4 rounded-lg">
-                            @foreach($product->variants as $variant)
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white border-2 border-on-background rounded-lg text-sm comic-shadow-sm transition-transform hover:scale-[1.01]">
-                                <div class="flex flex-col">
-                                    <span class="font-label-bold text-on-background">
-                                        @if($variant->size === 'Default' && $variant->color === 'Default')
-                                            Standard Item (No Variants)
-                                        @else
-                                            Size: <span class="text-primary">{{ $variant->size }}</span> | Color: <span class="text-secondary">{{ $variant->color }}</span>
-                                        @endif
-                                    </span>
-                                    <span class="text-[10px] font-mono text-on-surface-variant mt-0.5">SKU: {{ $variant->sku }}</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <input type="number" name="variant_stock[{{ $variant->id }}]" 
-                                        class="w-28 bg-white border-2 border-on-background px-3 py-2 font-body-md rounded text-center focus:outline-none focus:border-primary transition-colors" 
-                                        value="{{ $variant->stock }}" min="0" required/>
-                                    <span class="text-xs font-bold text-on-surface-variant">units</span>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface-container/60 border-3 border-on-background p-5 rounded-lg">
+                            <!-- Sizes -->
+                            <div>
+                                <p class="font-bold text-sm mb-3 text-on-surface-variant uppercase tracking-wider">Available Sizes</p>
+                                <div class="flex flex-wrap gap-2 min-h-[44px]" id="size-tag-container"></div>
+                                <div class="flex gap-2 mt-3">
+                                    <input type="text" id="new-size-input" placeholder="Add custom size (e.g. XXL)"
+                                        onkeydown="if(event.key==='Enter'){event.preventDefault();addSize();}"
+                                        class="flex-grow border-2 border-on-background p-2 rounded-lg text-sm font-bold focus:outline-none focus:border-primary bg-white transition-colors">
+                                    <button type="button" onclick="addSize()"
+                                        class="px-4 py-2 bg-primary text-on-primary border-2 border-on-background rounded-lg text-sm font-bold">+ Add</button>
                                 </div>
                             </div>
-                            @endforeach
+
+                            <!-- Colors -->
+                            <div>
+                                <p class="font-bold text-sm mb-3 text-on-surface-variant uppercase tracking-wider">Color Options</p>
+                                <div class="flex flex-wrap gap-3 items-end min-h-[56px]" id="color-circle-container"></div>
+                                <div id="color-name-popup" class="hidden mt-3 items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full border-2 border-on-background flex-shrink-0" id="color-preview-dot"></div>
+                                    <input type="text" id="new-color-name-input" placeholder="Color name (e.g. Mocha)"
+                                        onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddColor();}"
+                                        class="flex-grow border-2 border-on-background p-2 rounded-lg text-sm font-bold focus:outline-none focus:border-primary bg-white">
+                                    <button type="button" onclick="confirmAddColor()"
+                                        class="px-3 py-2 bg-primary text-on-primary border-2 border-on-background rounded-lg text-sm font-bold flex-shrink-0">OK</button>
+                                </div>
+                            </div>
                         </div>
+
+                        <p class="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-2 flex items-start gap-2">
+                            <span>&#x1F4A1;</span>
+                            <em>Tip: Click to toggle sizes and colors. Variants will be created for each combination after saving. Existing stocks are preserved for matching combinations.</em>
+                        </p>
+
+                        <!-- Variant Combination Preview -->
+                        <div id="variant-preview-section" class="hidden">
+                            <div class="flex items-center gap-2 mb-3 border-t-2 border-dashed border-on-background pt-4">
+                                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+                                <h4 class="font-bold text-sm">Stock &amp; Variant Distribution Preview</h4>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="variant-preview-grid"></div>
+                        </div>
+
+                        <div id="variant-hidden-inputs"></div>
                     </div>
 
                     <!-- Description -->
@@ -456,19 +477,20 @@
     
     if (editForm && submitBtn) {
         editForm.addEventListener('submit', function(e) {
+            // Serialize variant data FIRST (before image check)
+            serializeVariantData();
+
             // Verify at least one image remains
             let hasAtLeastOneImage = false;
             for (let i = 0; i < totalSlides; i++) {
                 const fileInput = document.getElementById(`slide-input-${i}`);
                 const isRemoved = document.getElementById(`remove-slide-${i}`).value === '1';
                 const hasExisting = document.getElementById(`existing-slide-${i}`).value === '1';
-                
                 if ((fileInput.files && fileInput.files.length > 0) || (hasExisting && !isRemoved)) {
                     hasAtLeastOneImage = true;
                     break;
                 }
             }
-            
             if (!hasAtLeastOneImage) {
                 e.preventDefault();
                 alert('❌ Product must have at least one image!');
@@ -498,5 +520,161 @@
     
     // Initialise slide display
     goToSlide(0);
+
+    // ===== Variant Builder =====
+    let selectedSizes  = [];
+    let selectedColors = []; // [{name, hex}]
+    let variantStocks  = {}; // "size|color" -> stock
+    let pendingHex     = null;
+
+    const existingVariants = @json($product->variants);
+    const presetSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+    function initVariantBuilder() {
+        const sizeSet  = new Set();
+        const colorMap = {};
+        existingVariants.forEach(v => {
+            if (v.size  && v.size  !== 'Default') sizeSet.add(v.size);
+            if (v.color && v.color !== 'Default') colorMap[v.color] = v.color_hex || null;
+            variantStocks[`${v.size}|${v.color}`] = v.stock;
+        });
+        selectedSizes  = [...sizeSet];
+        selectedColors = Object.entries(colorMap).map(([name, hex]) => ({name, hex}));
+        renderSizeTags();
+        renderColorCircles();
+        renderPreview();
+    }
+
+    function renderSizeTags() {
+        const c = document.getElementById('size-tag-container');
+        if (!c) return;
+        let html = '';
+        presetSizes.forEach(s => {
+            const on = selectedSizes.includes(s);
+            html += `<button type="button" onclick="toggleSize('${s}')" data-size="${s}"
+                class="px-4 py-2 border-4 border-on-background font-bold rounded-lg text-sm transition-all ${on ? 'bg-primary text-on-primary' : 'bg-white hover:bg-surface-container'}">${s}</button>`;
+        });
+        selectedSizes.filter(s => !presetSizes.includes(s)).forEach(s => {
+            html += `<div class="flex items-center gap-1">
+                <span class="px-4 py-2 border-4 border-on-background font-bold rounded-lg text-sm bg-primary text-on-primary">${s}</span>
+                <button type="button" onclick="removeSize('${s}')" class="text-error hover:scale-125 transition-transform">
+                    <span class="material-symbols-outlined text-base">close</span>
+                </button>
+            </div>`;
+        });
+        c.innerHTML = html;
+    }
+
+    function renderColorCircles() {
+        const c = document.getElementById('color-circle-container');
+        if (!c) return;
+        let html = '';
+        selectedColors.forEach((color, idx) => {
+            html += `<div class="relative group flex flex-col items-center gap-1">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-full border-4 border-on-background flex items-center justify-center ring-4 ring-primary ring-offset-2"
+                        style="background-color:${color.hex || '#ccc'}">
+                        <span class="material-symbols-outlined text-white text-lg drop-shadow" style="font-variation-settings:'FILL' 1">check</span>
+                    </div>
+                    <button type="button" onclick="removeColor(${idx})"
+                        class="absolute -top-1 -right-1 w-5 h-5 bg-error text-white rounded-full text-xs hidden group-hover:flex items-center justify-center border-2 border-white leading-none font-bold">&times;</button>
+                </div>
+                <span class="text-[10px] font-bold text-on-surface-variant max-w-[48px] text-center truncate">${color.name}</span>
+            </div>`;
+        });
+        html += `<div class="flex flex-col items-center gap-1">
+            <button type="button" onclick="document.getElementById('color-picker-input').click()"
+                class="w-12 h-12 rounded-full border-4 border-dotted border-on-background bg-surface-container-high flex items-center justify-center hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-on-surface-variant">add</span>
+            </button>
+            <span class="text-[10px] font-bold text-on-surface-variant">Tambah</span>
+            <input type="color" id="color-picker-input" class="sr-only" onchange="showColorPrompt(this.value)">
+        </div>`;
+        c.innerHTML = html;
+    }
+
+    function renderPreview() {
+        const section = document.getElementById('variant-preview-section');
+        const grid    = document.getElementById('variant-preview-grid');
+        if (!section || !grid) return;
+        if (selectedSizes.length === 0 || selectedColors.length === 0) {
+            section.classList.add('hidden'); return;
+        }
+        section.classList.remove('hidden');
+        let html = '';
+        selectedSizes.forEach(size => {
+            selectedColors.forEach(color => {
+                const key   = `${size}|${color.name}`;
+                const stock = variantStocks[key] ?? 0;
+                const sku   = `HV-XXXX-${size.substring(0,2).toUpperCase()}-${color.name.substring(0,3).toUpperCase()}`;
+                const badgeId = 'badge-' + key.replace(/[^a-z0-9]/gi, '-');
+                html += `<div class="bg-white border-2 border-on-background rounded-xl p-4 flex items-center justify-between gap-3" style="box-shadow:3px 3px 0 #1b1c1c">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm">Size: <span class="text-primary">${size}</span> | Color: <span style="color:${color.hex||'#333'}">${color.name}</span></p>
+                        <p class="text-[10px] text-on-surface-variant font-mono mt-0.5 truncate">SKU: ${sku}</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <input type="number" min="0" value="${stock}" data-key="${key}"
+                            oninput="variantStocks['${key}']=parseInt(this.value)||0;document.getElementById('${badgeId}').textContent=this.value+' Stok'"
+                            class="w-20 border-2 border-on-background rounded-lg px-2 py-1.5 text-center font-bold text-sm focus:outline-none focus:border-primary">
+                        <span id="${badgeId}" class="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">${stock} Stok</span>
+                    </div>
+                </div>`;
+            });
+        });
+        grid.innerHTML = html;
+    }
+
+    function toggleSize(s) {
+        selectedSizes.includes(s) ? (selectedSizes = selectedSizes.filter(x => x !== s)) : selectedSizes.push(s);
+        renderSizeTags(); renderPreview();
+    }
+    function removeSize(s) { selectedSizes = selectedSizes.filter(x => x !== s); renderSizeTags(); renderPreview(); }
+    function addSize() {
+        const inp = document.getElementById('new-size-input');
+        const s = inp.value.trim().toUpperCase();
+        if (s && !selectedSizes.includes(s)) { selectedSizes.push(s); renderSizeTags(); renderPreview(); }
+        inp.value = '';
+    }
+    function showColorPrompt(hex) {
+        pendingHex = hex;
+        const dot = document.getElementById('color-preview-dot');
+        const pop = document.getElementById('color-name-popup');
+        if (dot) dot.style.backgroundColor = hex;
+        if (pop) { pop.classList.remove('hidden'); pop.style.display = 'flex'; }
+        const inp = document.getElementById('new-color-name-input');
+        if (inp) setTimeout(() => inp.focus(), 50);
+    }
+    function confirmAddColor() {
+        const inp = document.getElementById('new-color-name-input');
+        const pop = document.getElementById('color-name-popup');
+        const name = inp ? inp.value.trim() : '';
+        if (name && pendingHex && !selectedColors.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+            selectedColors.push({name, hex: pendingHex});
+            renderColorCircles(); renderPreview();
+        }
+        if (pop) { pop.classList.add('hidden'); pop.style.display = ''; }
+        if (inp) inp.value = '';
+        const picker = document.getElementById('color-picker-input');
+        if (picker) picker.value = '#000000';
+        pendingHex = null;
+    }
+    function removeColor(idx) { selectedColors.splice(idx, 1); renderColorCircles(); renderPreview(); }
+
+    function serializeVariantData() {
+        // Sync stocks from DOM inputs
+        document.querySelectorAll('[data-key]').forEach(inp => {
+            variantStocks[inp.dataset.key] = parseInt(inp.value) || 0;
+        });
+        const c = document.getElementById('variant-hidden-inputs');
+        if (!c) return;
+        c.innerHTML = '';
+        const h = (name, val) => { const el = document.createElement('input'); el.type='hidden'; el.name=name; el.value=val; c.appendChild(el); };
+        selectedSizes.forEach(s => h('sizes[]', s));
+        selectedColors.forEach(col => { h('color_names[]', col.name); h('color_hexes[]', col.hex || ''); });
+        selectedSizes.forEach(s => selectedColors.forEach(col => h(`variant_stock_map[${s}|${col.name}]`, variantStocks[`${s}|${col.name}`] ?? 0)));
+    }
+
+    initVariantBuilder();
 </script>
 @endpush

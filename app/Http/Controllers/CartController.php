@@ -18,19 +18,25 @@ class CartController extends Controller
     /**
      * Tambah produk ke keranjang (Session based).
      */
-    public function add($id)
+    public function add(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
-        if(isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+        $variant = $request->input('variant', '');
+        // Use product ID + variant as unique key so different variants are separate cart items
+        $cartKey = $variant ? $id . '_' . \Illuminate\Support\Str::slug($variant) : $id;
+
+        if(isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity']++;
         } else {
-            $cart[$id] = [
-                "name" => $product->name,
+            $cart[$cartKey] = [
+                "name"     => $product->name,
                 "quantity" => 1,
-                "price" => $product->price,
-                "image" => $product->image
+                "price"    => $product->price,
+                "image"    => $product->image,
+                "variant"  => $variant ?: 'Default',
+                "color_hex"=> $request->input('color_hex'),
             ];
         }
 

@@ -457,8 +457,39 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
         $product->update($updateData);
 
-        // Update variant stocks if provided
-        if ($request->has('variant_stock')) {
+        // Handle variant regeneration or stock update
+        if ($request->has('sizes') && $request->has('color_names')) {
+            $sizes      = array_filter($request->input('sizes', []));
+            $colorNames = $request->input('color_names', []);
+            $colorHexes = $request->input('color_hexes', []);
+            $stockMap   = $request->input('variant_stock_map', []);
+
+            $colors = [];
+            foreach ($colorNames as $idx => $name) {
+                if ($name) {
+                    $colors[] = ['name' => $name, 'hex' => $colorHexes[$idx] ?? null];
+                }
+            }
+
+            if (!empty($sizes) && !empty($colors)) {
+                $product->variants()->delete();
+                foreach ($sizes as $size) {
+                    foreach ($colors as $color) {
+                        $key   = $size . '|' . $color['name'];
+                        $stock = (int) ($stockMap[$key] ?? 0);
+                        $sku   = $product->sku . '-' . strtoupper(substr($size, 0, 2)) . '-' . strtoupper(substr($color['name'], 0, 3));
+                        $product->variants()->create([
+                            'size'      => $size,
+                            'color'     => $color['name'],
+                            'color_hex' => $color['hex'],
+                            'stock'     => $stock,
+                            'sku'       => $sku,
+                        ]);
+                    }
+                }
+            }
+        } elseif ($request->has('variant_stock')) {
+            // Legacy: update stock for existing variants
             foreach ($request->input('variant_stock') as $variantId => $stockValue) {
                 $product->variants()->where('id', $variantId)->update(['stock' => (int)$stockValue]);
             }

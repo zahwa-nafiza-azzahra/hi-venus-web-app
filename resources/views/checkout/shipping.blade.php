@@ -63,7 +63,13 @@
                             </div>
                             <div class="flex-grow">
                                 <h4 class="font-headline-lg text-xl font-extrabold text-on-background">{{ $details['name'] }}</h4>
-                                <p class="font-body-md text-body-md text-on-surface-variant">Varian: Default</p>
+                                <p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+                                    Varian: 
+                                    @if(!empty($details['color_hex']))
+                                        <span class="inline-block w-4 h-4 rounded-full border-2 border-on-background shadow-sm" style="background-color: {{ $details['color_hex'] }}"></span>
+                                    @endif
+                                    {{ $details['variant'] ?? 'Default' }}
+                                </p>
                                 <div class="flex justify-between items-center mt-2">
                                     <span class="font-body-lg text-body-lg">{{ $details['quantity'] }}x</span>
                                     <span class="font-price-display text-price-display text-primary">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>

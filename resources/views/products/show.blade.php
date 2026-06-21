@@ -94,20 +94,53 @@
                 </div>
             </div>
 
+            @php
+                $uniqueSizes = $product->variants->pluck('size')->unique()->filter(fn($s) => $s && $s !== 'Default')->values();
+                $uniqueColors = $product->variants->map(fn($v) => ['name' => $v->color, 'hex' => $v->color_hex])->unique('name')->filter(fn($c) => $c['name'] && $c['name'] !== 'Default')->values();
+                $variantsData = $product->variants->map(fn($v) => ['size' => $v->size, 'color' => $v->color, 'color_hex' => $v->color_hex, 'stock' => $v->stock]);
+                $hasSizes = $uniqueSizes->count() > 0;
+                $hasColors = $uniqueColors->count() > 0;
+            @endphp
             <div class="p-6 bg-surface-container-low border-4 border-on-background rounded-lg space-y-6">
-                @if($product->variants && $product->variants->count() > 0)
-                <div>
-                    <h3 class="font-label-bold mb-3 uppercase tracking-wider">Varian Tersedia</h3>
-                    <div class="flex flex-wrap gap-3">
-                        @foreach($product->variants as $variant)
-                        <button type="button" class="px-4 py-2 border-4 border-on-background bg-surface-bright font-label-bold rounded-lg comic-shadow-sm press-effect text-sm flex items-center gap-2">
-                            @if($variant->color_hex)
-                            <span class="w-4 h-4 rounded-full border-2 border-on-background" style="background-color: {{ $variant->color_hex }};"></span>
-                            @endif
-                            {{ $variant->color ?? '' }} {{ $variant->size ? ' - ' . $variant->size : '' }}
-                        </button>
-                        @endforeach
+                @if($hasSizes || $hasColors)
+                <div class="space-y-4">
+                    <h3 class="font-label-bold uppercase tracking-wider text-sm">Pilih Varian</h3>
+
+                    @if($hasSizes)
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Ukuran</p>
+                        <div class="flex flex-wrap gap-2" id="size-picker">
+                            @foreach($uniqueSizes as $size)
+                            <button type="button" onclick="pickSize('{{ $size }}')" data-size="{{ $size }}"
+                                class="size-btn px-5 py-2 border-4 border-on-background bg-surface-bright font-label-bold rounded-lg comic-shadow-sm press-effect text-sm transition-all">
+                                {{ $size }}
+                            </button>
+                            @endforeach
+                        </div>
                     </div>
+                    @endif
+
+                    @if($hasColors)
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Warna</p>
+                        <div class="flex flex-wrap gap-4 items-end" id="color-picker">
+                            @foreach($uniqueColors as $color)
+                            <div class="flex flex-col items-center gap-1">
+                                <button type="button"
+                                    onclick="pickColor('{{ $color['name'] }}')"
+                                    data-color="{{ $color['name'] }}"
+                                    title="{{ $color['name'] }}"
+                                    class="color-btn w-12 h-12 rounded-full border-4 border-on-background comic-shadow-sm transition-all hover:scale-110"
+                                    style="background-color: {{ !empty($color['hex']) ? $color['hex'] : '#cccccc' }};"></button>
+                                <span class="text-[10px] font-bold text-on-surface-variant">{{ $color['name'] }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
+                    <p id="variant-warning" class="text-error font-label-bold text-sm hidden">⚠️ Pilih ukuran dan warna terlebih dahulu!</p>
+                    <p id="stock-warning" class="text-error font-label-bold text-sm hidden">😢 Stok habis untuk pilihan ini!</p>
                 </div>
                 @endif
 
@@ -115,7 +148,6 @@
                 <div>
                     <div class="flex border-b-4 border-on-background mb-4">
                         <button class="px-6 py-2 font-label-bold border-t-4 border-l-4 border-r-4 border-on-background bg-surface-bright -mb-1 rounded-t-lg">Detail Produk</button>
-                        <button class="px-6 py-2 font-label-bold text-on-surface-variant">Spesifikasi</button>
                     </div>
                     <p class="font-body-md text-on-surface-variant leading-relaxed">
                         {{ $product->description ?? 'Nikmati kualitas suara yang imersif sambil tetap tampil menggemaskan! Headphone ini dilengkapi dengan lampu LED RGB pada bagian telinga kucing yang bisa berubah warna. Bantalan telinga yang super empuk memastikan kenyamanan maksimal untuk pemakaian lama.' }}
@@ -126,10 +158,12 @@
             <!-- CTA Actions -->
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
                 @auth
-                <form action="{{ route('cart.add', $product->id ?? 1) }}" method="POST" class="flex-1">
+                <form action="{{ route('cart.add', $product->id ?? 1) }}" method="POST" class="flex-1" id="cart-form">
                     @csrf
                     <input type="hidden" name="quantity" value="1">
-                    <button type="submit" class="w-full bg-primary text-on-primary font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex items-center justify-center gap-3">
+                    <input type="hidden" name="variant" id="selected_variant" value="">
+                    <input type="hidden" name="color_hex" id="selected_color_hex" value="">
+                    <button type="button" id="add-to-cart-btn" onclick="submitCart()" class="w-full bg-primary text-on-primary font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex items-center justify-center gap-3">
                         <span class="material-symbols-outlined">shopping_bag</span> Tambah ke Keranjang
                     </button>
                 </form>
@@ -237,5 +271,101 @@
         });
         element.classList.add('ring-4', 'ring-primary', 'ring-offset-1');
     }
+
+    // ===== Variant Picker =====
+    const allVariants = @json($variantsData ?? collect());
+    const hasSizes    = {{ ($hasSizes ?? false) ? 'true' : 'false' }};
+    const hasColors   = {{ ($hasColors ?? false) ? 'true' : 'false' }};
+    let selectedSize  = null;
+    let selectedColor = null;
+
+    function pickSize(size) {
+        selectedSize = size;
+        document.querySelectorAll('.size-btn').forEach(b => {
+            const on = b.dataset.size === size;
+            b.classList.toggle('bg-primary', on);
+            b.classList.toggle('text-on-primary', on);
+            b.classList.toggle('bg-surface-bright', !on);
+        });
+        updateVariantState();
+    }
+
+    function pickColor(colorName) {
+        selectedColor = colorName;
+        document.querySelectorAll('.color-btn').forEach(b => {
+            const on = b.dataset.color === colorName;
+            b.style.outline      = on ? '4px solid #9e357b' : '';
+            b.style.outlineOffset = on ? '3px' : '';
+            b.style.transform    = on ? 'scale(1.18)' : '';
+        });
+        updateVariantState();
+    }
+
+    function updateVariantState() {
+        let matched = null;
+        if (hasSizes && hasColors) {
+            if (selectedSize && selectedColor)
+                matched = allVariants.find(v => v.size === selectedSize && v.color === selectedColor);
+        } else if (hasSizes) {
+            if (selectedSize) matched = allVariants.find(v => v.size === selectedSize);
+        } else if (hasColors) {
+            if (selectedColor) matched = allVariants.find(v => v.color === selectedColor);
+        } else {
+            matched = allVariants[0] ?? null;
+        }
+
+        const cartBtn      = document.getElementById('add-to-cart-btn');
+        const stockWarn    = document.getElementById('stock-warning');
+        const variantWarn  = document.getElementById('variant-warning');
+        const variantInput = document.getElementById('selected_variant');
+        const colorHexInput = document.getElementById('selected_color_hex');
+
+        if (matched) {
+            const oos = matched.stock <= 0;
+            if (cartBtn) {
+                cartBtn.disabled = oos;
+                cartBtn.classList.toggle('opacity-50', oos);
+                cartBtn.classList.toggle('cursor-not-allowed', oos);
+                cartBtn.innerHTML = oos
+                    ? '<span class="material-symbols-outlined">remove_shopping_cart</span> Stok Habis'
+                    : '<span class="material-symbols-outlined">shopping_bag</span> Tambah ke Keranjang';
+            }
+            if (stockWarn)   stockWarn.classList.toggle('hidden', !oos);
+            if (variantWarn) variantWarn.classList.add('hidden');
+
+            const parts = [];
+            if (matched.color && matched.color !== 'Default') parts.push(matched.color);
+            if (matched.size  && matched.size  !== 'Default') parts.push(matched.size);
+            if (variantInput) variantInput.value = parts.join(' - ') || 'Default';
+            if (colorHexInput) colorHexInput.value = matched.color_hex || '';
+        } else {
+            if (cartBtn) {
+                cartBtn.disabled = true;
+                cartBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+    }
+
+    function submitCart() {
+        if (hasSizes && !selectedSize) {
+            const w = document.getElementById('variant-warning');
+            if (w) w.classList.remove('hidden');
+            return;
+        }
+        if (hasColors && !selectedColor) {
+            const w = document.getElementById('variant-warning');
+            if (w) w.classList.remove('hidden');
+            return;
+        }
+        document.getElementById('cart-form').submit();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const firstSize  = document.querySelector('.size-btn');
+        if (firstSize)  pickSize(firstSize.dataset.size);
+        const firstColor = document.querySelector('.color-btn');
+        if (firstColor) pickColor(firstColor.dataset.color);
+        if (!hasSizes && !hasColors) updateVariantState();
+    });
 </script>
 @endpush
