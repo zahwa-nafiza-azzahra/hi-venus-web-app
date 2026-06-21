@@ -26,6 +26,26 @@ class ProductController extends Controller
     }
 
     /**
+     * New Arrivals Hi Venus.
+     */
+    public function newArrivals()
+    {
+        $products = \App\Models\Product::with('category')
+            ->where('is_new', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        // Jika tidak ada yang ditandai is_new, ambil 12 terbaru
+        if ($products->isEmpty()) {
+            $products = \App\Models\Product::with('category')
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
+        }
+
+        return view('products.new_arrivals', compact('products'));
+    }
+
+    /**
      * Best Sellers Hi Venus.
      */
     public function bestSellers()

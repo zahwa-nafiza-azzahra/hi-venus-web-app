@@ -21,6 +21,7 @@ Route::get('/about', function () {
 
 // Products (public)
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/new-arrivals', [ProductController::class, 'newArrivals'])->name('products.new_arrivals');
 Route::get('/best-sellers', [ProductController::class, 'bestSellers'])->name('products.best_sellers');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
