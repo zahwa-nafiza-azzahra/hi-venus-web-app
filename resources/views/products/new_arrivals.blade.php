@@ -63,6 +63,17 @@
                             <a href="{{ route('products.show', $product->id) }}" class="font-headline-sm font-black italic text-on-background hover:text-[#9e357b] transition-colors line-clamp-2">
                                 {{ $product->name }}
                             </a>
+                            @auth
+                            <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="flex-shrink-0">
+                                @csrf
+                                @php
+                                    $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('product_id', $product->id)->exists();
+                                @endphp
+                                <button type="submit" class="hover:scale-110 transition-transform flex">
+                                    <span class="material-symbols-outlined {{ $inWishlist ? 'text-[#FF1493]' : 'text-on-background/50' }}" style="font-variation-settings: 'FILL' {{ $inWishlist ? '1' : '0' }}; text-shadow: 1px 1px 0px #1b1c1c;">favorite</span>
+                                </button>
+                            </form>
+                            @endauth
                         </div>
                         <div class="font-body-sm font-bold text-on-background/70 mb-4">{{ $product->category->name }}</div>
                         

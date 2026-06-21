@@ -29,7 +29,7 @@ class WishlistController extends Controller
         } else {
             Wishlist::create([
                 'user_id' => auth()->id(),
-                'product_id' => $product_id
+                'product_id' => $product_id,
             ]);
             return redirect()->back()->with('success', '✨ Produk ditambahkan ke wishlist!');
         }

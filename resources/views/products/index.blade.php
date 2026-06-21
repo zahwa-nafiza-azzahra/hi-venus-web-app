@@ -77,9 +77,18 @@
                 </a>
                 @auth
                 <div class="flex gap-2 w-full mt-4">
-                    <a href="{{ route('products.show', $p->id) }}" class="flex-1 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex justify-center items-center gap-1">
-                        <span class="material-symbols-outlined">visibility</span> Detail
+                    <a href="{{ route('products.show', $p->id) }}" class="bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg px-4 py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex justify-center items-center">
+                        <span class="material-symbols-outlined">visibility</span>
                     </a>
+                    <form action="{{ route('wishlist.toggle', $p->id) }}" method="POST" class="flex-none">
+                        @csrf
+                        @php
+                            $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('product_id', $p->id)->exists();
+                        @endphp
+                        <button type="submit" class="bg-surface-bright text-on-background border-4 border-on-background rounded-lg px-4 py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex justify-center items-center">
+                            <span class="material-symbols-outlined {{ $inWishlist ? 'text-primary' : '' }}" style="font-variation-settings: 'FILL' {{ $inWishlist ? '1' : '0' }};">favorite</span>
+                        </button>
+                    </form>
                     <form action="{{ route('cart.add', $p->id) }}" method="POST" class="flex-1">
                         @csrf
                         <button type="submit" class="w-full bg-primary text-on-primary border-4 border-on-background rounded-lg py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex justify-center items-center gap-1">

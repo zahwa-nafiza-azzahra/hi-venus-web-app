@@ -133,9 +133,15 @@
                         <span class="material-symbols-outlined">shopping_bag</span> Tambah ke Keranjang
                     </button>
                 </form>
-                <button class="bg-surface-bright text-on-background font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex-shrink-0">
-                    <span class="material-symbols-outlined">favorite</span>
-                </button>
+                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="flex-shrink-0">
+                    @csrf
+                    @php
+                        $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('product_id', $product->id)->exists();
+                    @endphp
+                    <button type="submit" class="bg-surface-bright text-on-background font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex items-center justify-center h-full">
+                        <span class="material-symbols-outlined {{ $inWishlist ? 'text-primary' : '' }}" style="font-variation-settings: 'FILL' {{ $inWishlist ? '1' : '0' }};">favorite</span>
+                    </button>
+                </form>
                 @endauth
             </div>
 
