@@ -294,38 +294,39 @@
                     </h3>
                     
                     <div class="space-y-6">
-                        <div class="flex flex-wrap gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-surface-container-low border-2 border-dashed border-on-background rounded-lg relative">
+                            <div class="absolute -top-3 left-4 bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold border-2 border-on-background comic-shadow-sm rotate-[-2deg]">Variant Editor ✨</div>
+                            
+                            <!-- Sizes Input -->
                             <div class="flex-1 min-w-[200px]">
-                                <label class="font-label-bold text-on-surface-variant mb-3 block">Available Sizes</label>
-                                <div class="flex gap-2" id="sizeSelector">
-                                    <div class="size-btn" data-size="S">S</div>
-                                    <div class="size-btn selected" data-size="M">M</div>
-                                    <div class="size-btn" data-size="L">L</div>
-                                    <div class="size-btn" data-size="XL">XL</div>
+                                <label class="font-label-bold text-on-surface-variant mb-2 block">Daftar Ukuran</label>
+                                <div class="flex gap-2 mb-2">
+                                    <input type="text" id="sizeInput" class="kawaii-input font-body-md flex-1" placeholder="Cth: S, M, XL, 42..." autocomplete="off">
+                                    <button type="button" id="addSizeBtn" class="bg-secondary-container text-on-secondary-container border-2 border-on-background px-4 rounded-lg font-bold hover:bg-secondary-container/80 transition-colors">+</button>
                                 </div>
-                                <!-- Hidden inputs for selected sizes -->
-                                <div id="sizeInputs">
-                                    <input type="hidden" name="sizes[]" value="M">
+                                <div class="flex flex-wrap gap-2 mt-2" id="sizeTagsContainer">
+                                    <!-- Size tags will appear here -->
                                 </div>
+                                <div id="sizeInputs"></div>
+                                <p class="text-xs text-on-surface-variant mt-1">Ketik ukuran lalu tekan Enter/Tambah.</p>
                             </div>
+
+                            <!-- Colors Input -->
                             <div class="flex-1 min-w-[200px]">
-                                <label class="font-label-bold text-on-surface-variant mb-3 block">Color Options</label>
-                                <div class="flex gap-3 items-center" id="colorSelector">
-                                    <div class="color-swatch selected" data-color="#ff85d0" style="background-color: #ff85d0;"></div>
-                                    <div class="color-swatch" data-color="#38bbef" style="background-color: #38bbef;"></div>
-                                    <div class="color-swatch" data-color="#fdd73b" style="background-color: #fdd73b;"></div>
-                                    <div class="color-swatch flex items-center justify-center" data-color="custom" style="background-color: #ffffff;" id="addColorBtn">
-                                        <span class="material-symbols-outlined text-sm">add</span>
-                                    </div>
+                                <label class="font-label-bold text-on-surface-variant mb-2 block">Daftar Warna</label>
+                                <div class="flex gap-2 mb-2">
+                                    <input type="color" id="colorHexInput" class="h-10 w-12 border-2 border-on-background rounded p-0 cursor-pointer" value="#ff85d0">
+                                    <input type="text" id="colorNameInput" class="kawaii-input font-body-md flex-1" placeholder="Cth: Pink, Hitam, Merah..." autocomplete="off">
+                                    <button type="button" id="addColorBtn" class="bg-secondary-container text-on-secondary-container border-2 border-on-background px-4 rounded-lg font-bold hover:bg-secondary-container/80 transition-colors">+</button>
                                 </div>
-                                <div id="colorInputs">
-                                    <input type="hidden" name="colors[]" value="#ff85d0">
+                                <div class="flex flex-wrap gap-2 mt-2" id="colorTagsContainer">
+                                    <!-- Color tags will appear here -->
                                 </div>
-                                <!-- Color picker (hidden by default) -->
-                                <input type="color" id="colorPicker" class="hidden" value="#aabbcc">
+                                <div id="colorInputs"></div>
+                                <p class="text-xs text-on-surface-variant mt-1">Pilih warna, ketik nama, lalu tambah.</p>
                             </div>
                         </div>
-                        <p class="text-xs text-on-surface-variant italic mt-2">💡 Tip: Click to toggle sizes and colors. Variants will be created for each combination after saving.</p>
+                        <p class="text-xs text-on-surface-variant italic mt-2">💡 Tip: Varian produk akan otomatis dibuat berdasarkan kombinasi Ukuran dan Warna yang dimasukkan di atas.</p>
                         
                         <!-- Dynamic Variant Preview Section -->
                         <div class="mt-6 border-t-2 border-dashed border-on-background pt-6 hidden" id="variantPreviewSection">
@@ -684,84 +685,107 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // ========== SIZE SELECTOR ==========
-    const sizeSelector = document.getElementById('sizeSelector');
+    // ========== SIZE SELECTOR (TAGS) ==========
+    const sizeInput = document.getElementById('sizeInput');
+    const addSizeBtn = document.getElementById('addSizeBtn');
+    const sizeTagsContainer = document.getElementById('sizeTagsContainer');
     const sizeInputsContainer = document.getElementById('sizeInputs');
+    let sizesList = []; // store size strings
 
-    sizeSelector.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            updateSizeInputs();
-            updateVariantPreview();
-        });
-    });
-
-    function updateSizeInputs() {
-        sizeInputsContainer.innerHTML = '';
-        sizeSelector.querySelectorAll('.size-btn.selected').forEach(btn => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'sizes[]';
-            input.value = btn.dataset.size;
-            sizeInputsContainer.appendChild(input);
-        });
-    }
-
-
-    // ========== COLOR SELECTOR ==========
-    const colorSelector = document.getElementById('colorSelector');
-    const colorInputsContainer = document.getElementById('colorInputs');
-    const addColorBtn = document.getElementById('addColorBtn');
-    const colorPicker = document.getElementById('colorPicker');
-
-    colorSelector.querySelectorAll('.color-swatch:not(#addColorBtn)').forEach(swatch => {
-        swatch.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            updateColorInputs();
-            updateVariantPreview();
-        });
-    });
-
-    addColorBtn.addEventListener('click', function() {
-        colorPicker.click();
-    });
-
-    colorPicker.addEventListener('input', function() {
-        const color = this.value;
-        // Check if color already exists
-        const exists = colorSelector.querySelector(`.color-swatch[data-color="${color}"]`);
-        if (exists) {
-            exists.classList.add('selected');
-            updateColorInputs();
-            updateVariantPreview();
-            return;
-        }
-        // Add new swatch before the + button
-        const newSwatch = document.createElement('div');
-        newSwatch.className = 'color-swatch selected';
-        newSwatch.dataset.color = color;
-        newSwatch.style.backgroundColor = color;
-        newSwatch.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            updateColorInputs();
-            updateVariantPreview();
-        });
-        colorSelector.insertBefore(newSwatch, addColorBtn);
-        updateColorInputs();
+    function addSize(size) {
+        size = size.trim().toUpperCase();
+        if(!size || sizesList.includes(size)) return;
+        sizesList.push(size);
+        renderSizeTags();
         updateVariantPreview();
-    });
+        sizeInput.value = '';
+    }
 
-    function updateColorInputs() {
-        colorInputsContainer.innerHTML = '';
-        colorSelector.querySelectorAll('.color-swatch.selected').forEach(swatch => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'colors[]';
-            input.value = swatch.dataset.color;
-            colorInputsContainer.appendChild(input);
+    function removeSize(size) {
+        sizesList = sizesList.filter(s => s !== size);
+        renderSizeTags();
+        updateVariantPreview();
+    }
+
+    function renderSizeTags() {
+        sizeTagsContainer.innerHTML = '';
+        sizeInputsContainer.innerHTML = '';
+        sizesList.forEach(size => {
+            // hidden input
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'sizes[]';
+            hidden.value = size;
+            sizeInputsContainer.appendChild(hidden);
+
+            // ui tag
+            const tag = document.createElement('div');
+            tag.className = 'flex items-center gap-1 bg-surface-container-high border-2 border-on-background px-3 py-1 rounded-full font-label-bold text-sm';
+            tag.innerHTML = `
+                ${size}
+                <button type="button" class="text-error font-bold ml-1 hover:scale-110">&times;</button>
+            `;
+            tag.querySelector('button').addEventListener('click', () => removeSize(size));
+            sizeTagsContainer.appendChild(tag);
         });
     }
 
+    addSizeBtn.addEventListener('click', () => addSize(sizeInput.value));
+    sizeInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') { e.preventDefault(); addSize(sizeInput.value); }
+    });
+
+    // ========== COLOR SELECTOR (TAGS) ==========
+    const colorHexInput = document.getElementById('colorHexInput');
+    const colorNameInput = document.getElementById('colorNameInput');
+    const addColorBtn = document.getElementById('addColorBtn');
+    const colorTagsContainer = document.getElementById('colorTagsContainer');
+    const colorInputsContainer = document.getElementById('colorInputs');
+    let colorsList = []; // store {name, hex} objects
+
+    function addColor(name, hex) {
+        name = name.trim();
+        if(!name || colorsList.find(c => c.name.toLowerCase() === name.toLowerCase())) return;
+        colorsList.push({name, hex});
+        renderColorTags();
+        updateVariantPreview();
+        colorNameInput.value = '';
+    }
+
+    function removeColor(name) {
+        colorsList = colorsList.filter(c => c.name !== name);
+        renderColorTags();
+        updateVariantPreview();
+    }
+
+    function renderColorTags() {
+        colorTagsContainer.innerHTML = '';
+        colorInputsContainer.innerHTML = '';
+        colorsList.forEach(color => {
+            // hidden input - we pass as a serialized string 'Name|Hex'
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'colors[]';
+            hidden.value = color.name + '|' + color.hex;
+            colorInputsContainer.appendChild(hidden);
+
+            // ui tag
+            const tag = document.createElement('div');
+            tag.className = 'flex items-center gap-2 bg-surface-container-high border-2 border-on-background px-3 py-1 rounded-full font-label-bold text-sm';
+            tag.innerHTML = `
+                <span class="w-3 h-3 rounded-full border border-on-background" style="background-color: ${color.hex}"></span>
+                ${color.name}
+                <button type="button" class="text-error font-bold ml-1 hover:scale-110">&times;</button>
+            `;
+            tag.querySelector('button').addEventListener('click', () => removeColor(color.name));
+            colorTagsContainer.appendChild(tag);
+        });
+    }
+
+    addColorBtn.addEventListener('click', () => addColor(colorNameInput.value, colorHexInput.value));
+    colorNameInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') { e.preventDefault(); addColor(colorNameInput.value, colorHexInput.value); }
+    });
 
     // ========== DYNAMIC VARIANT PREVIEW ==========
     const stockInput = document.getElementById('productStock');
@@ -770,14 +794,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const variantManualEdits = new Map(); // key: "size|color" -> manually edited stock value
 
     function updateVariantPreview() {
-        const selectedSizes = Array.from(sizeSelector.querySelectorAll('.size-btn.selected')).map(btn => btn.dataset.size);
-        const selectedColors = Array.from(colorSelector.querySelectorAll('.color-swatch.selected')).map(swatch => {
-            const color = swatch.dataset.color;
-            if (color.startsWith('#')) {
-                return matchColorName(color);
-            }
-            return color;
-        });
+        const selectedSizes = sizesList;
+        const selectedColors = colorsList.map(c => c.name);
 
         function matchColorName(hex) {
             switch(hex.toLowerCase()) {

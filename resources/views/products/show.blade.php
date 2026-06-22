@@ -97,7 +97,7 @@
             @php
                 $uniqueSizes = $product->variants->pluck('size')->unique()->filter(fn($s) => $s && $s !== 'Default')->values();
                 $uniqueColors = $product->variants->map(fn($v) => ['name' => $v->color, 'hex' => $v->color_hex])->unique('name')->filter(fn($c) => $c['name'] && $c['name'] !== 'Default')->values();
-                $variantsData = $product->variants->map(fn($v) => ['size' => $v->size, 'color' => $v->color, 'color_hex' => $v->color_hex, 'stock' => $v->stock]);
+                $variantsData = $product->variants->map(fn($v) => ['id' => $v->id, 'size' => $v->size, 'color' => $v->color, 'color_hex' => $v->color_hex, 'stock' => $v->stock]);
                 $hasSizes = $uniqueSizes->count() > 0;
                 $hasColors = $uniqueColors->count() > 0;
             @endphp
@@ -162,6 +162,7 @@
                     @csrf
                     <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="variant" id="selected_variant" value="">
+                    <input type="hidden" name="variant_id" id="selected_variant_id" value="">
                     <input type="hidden" name="color_hex" id="selected_color_hex" value="">
                     <button type="button" id="add-to-cart-btn" onclick="submitCart()" class="w-full bg-primary text-on-primary font-headline-lg py-4 px-8 border-4 border-on-background rounded-lg comic-shadow press-effect flex items-center justify-center gap-3">
                         <span class="material-symbols-outlined">shopping_bag</span> Tambah ke Keranjang
@@ -318,6 +319,7 @@
         const stockWarn    = document.getElementById('stock-warning');
         const variantWarn  = document.getElementById('variant-warning');
         const variantInput = document.getElementById('selected_variant');
+        const variantIdInput = document.getElementById('selected_variant_id');
         const colorHexInput = document.getElementById('selected_color_hex');
 
         if (matched) {
@@ -337,6 +339,7 @@
             if (matched.color && matched.color !== 'Default') parts.push(matched.color);
             if (matched.size  && matched.size  !== 'Default') parts.push(matched.size);
             if (variantInput) variantInput.value = parts.join(' - ') || 'Default';
+            if (variantIdInput) variantIdInput.value = matched.id || '';
             if (colorHexInput) colorHexInput.value = matched.color_hex || '';
         } else {
             if (cartBtn) {

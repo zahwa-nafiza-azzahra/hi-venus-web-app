@@ -50,6 +50,10 @@ Route::middleware(['auth', 'cashier'])->prefix('cashier')->name('cashier.')->gro
     Route::get('/pickup', [CashierController::class, 'pickup'])->name('pickup');
     Route::get('/receipt', [CashierController::class, 'receipt'])->name('receipt');
     Route::get('/report', [CashierController::class, 'report'])->name('report');
+    // Order management
+    Route::get('/orders', [CashierController::class, 'orders'])->name('orders');
+    Route::get('/orders/{id}', [CashierController::class, 'orderShow'])->name('orders.show');
+    Route::post('/orders/{id}/status', [CashierController::class, 'orderUpdateStatus'])->name('orders.update_status');
 });
 
 Route::middleware('guest')->group(function () {
@@ -167,7 +171,7 @@ Route::middleware('auth')->group(function () {
     })->name('orders.index');
 
     Route::get('/orders/{id}', function ($id) {
-        $order = auth()->user()->orders()->with('items.product')->findOrFail($id);
+        $order = auth()->user()->orders()->with(['items.product', 'items.variant'])->findOrFail($id);
         return view('orders.show', compact('order'));
     })->name('orders.show');
     Route::post('/orders/{id}/cancel', function ($id) {
@@ -348,7 +352,12 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
             foreach ($colors as $color) {
                 $colorHex = null;
                 $colorName = $color;
-                if (str_starts_with($color, '#')) {
+                
+                if (str_contains($color, '|')) {
+                    $parts = explode('|', $color);
+                    $colorName = trim($parts[0]);
+                    $colorHex = trim($parts[1]);
+                } elseif (str_starts_with($color, '#')) {
                     $colorHex = $color;
                     $colorName = match (strtolower($color)) {
                         '#ff85d0' => 'Pink',

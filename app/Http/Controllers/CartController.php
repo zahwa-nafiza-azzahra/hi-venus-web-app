@@ -24,6 +24,7 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
 
         $variant = $request->input('variant', '');
+        $variantId = $request->input('variant_id', null);
         // Use product ID + variant as unique key so different variants are separate cart items
         $cartKey = $variant ? $id . '_' . \Illuminate\Support\Str::slug($variant) : $id;
 
@@ -36,6 +37,7 @@ class CartController extends Controller
                 "price"    => $product->price,
                 "image"    => $product->image,
                 "variant"  => $variant ?: 'Default',
+                "variant_id"=> $variantId,
                 "color_hex"=> $request->input('color_hex'),
             ];
         }

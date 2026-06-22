@@ -29,41 +29,76 @@
                 <div class="absolute -top-4 -right-4 w-16 h-16 bg-primary-container border-4 border-on-background rounded-full flex items-center justify-center rotate-12">
                     <span class="material-symbols-outlined text-on-primary-container">local_shipping</span>
                 </div>
-                <h2 class="font-headline-lg text-headline-lg text-on-background mb-8">Timeline Pengiriman</h2>
-                <div class="space-y-6 relative">
-                    <div class="absolute left-[19px] top-2 bottom-2 w-1 bg-on-background opacity-20"></div>
-                    
-                    <div class="flex gap-6 relative">
-                        <div class="w-10 h-10 rounded-full bg-secondary-container border-4 border-on-background z-10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary-container text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                        </div>
-                        <div>
-                            <p class="font-label-bold text-label-bold text-on-background">Pesanan Diterima & Dibayar</p>
-                            <p class="font-body-md text-body-md text-on-surface-variant">{{ $order->created_at->format('d M Y - H:i') }} WIB</p>
-                        </div>
-                    </div>
+                <h2 class="font-headline-lg text-headline-lg text-on-background mb-8">Status Pesanan Kamu</h2>
 
-                    <div class="flex gap-6 relative">
-                        <div class="w-10 h-10 rounded-full bg-secondary-container border-4 border-on-background z-10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary-container text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                        </div>
-                        <div>
-                            <p class="font-label-bold text-label-bold text-on-background">Sedang Dikemas (Aesthetic Wrap! 🎀)</p>
-                            <p class="font-body-md text-body-md text-on-surface-variant">Sudah Siap!</p>
-                        </div>
-                    </div>
+                @php
+                $timelineSteps = [
+                    ['label' => 'Pesanan Masuk',           'icon' => 'shopping_bag',   'time' => $order->created_at,   'step' => 0],
+                    ['label' => 'Pembayaran Dikonfirmasi', 'icon' => 'payments',        'time' => $order->confirmed_at, 'step' => 1],
+                    ['label' => 'Sedang Dikemas 🎀',       'icon' => 'inventory_2',    'time' => $order->processed_at, 'step' => 2],
+                    ['label' => 'Dalam Pengiriman 🚚',     'icon' => 'local_shipping', 'time' => $order->shipped_at,   'step' => 3],
+                    ['label' => 'Pesanan Selesai 🎉',      'icon' => 'check_circle',   'time' => $order->completed_at, 'step' => 4],
+                ];
+                $currentStep = $order->status_step;
+                @endphp
 
-                    <div class="flex gap-6 relative">
-                        <div class="w-10 h-10 rounded-full bg-primary-container border-4 border-on-background z-10 flex items-center justify-center shrink-0 animate-pulse">
-                            <span class="material-symbols-outlined text-on-primary-container text-xl">rocket_launch</span>
-                        </div>
-                        <div>
-                            <p class="font-label-bold text-label-bold text-primary font-black uppercase">Dalam Perjalanan ke Rumahmu!</p>
-                            <p class="font-body-md text-body-md text-on-surface-variant">Estimasi tiba hari ini!</p>
-                        </div>
+                @if($order->status === 'cancelled')
+                <div class="flex gap-4 items-center bg-error-container border-4 border-error p-5 rounded-xl">
+                    <span class="material-symbols-outlined text-error text-4xl" style="font-variation-settings:'FILL' 1">cancel</span>
+                    <div>
+                        <p class="font-label-bold text-on-error-container text-lg">Pesanan Dibatalkan</p>
+                        @if($order->cashier_note)
+                        <p class="text-sm text-on-error-container/80 mt-1">{{ $order->cashier_note }}</p>
+                        @endif
                     </div>
                 </div>
+                @else
+                <div class="space-y-6 relative">
+                    <div class="absolute left-[19px] top-2 bottom-2 w-1 bg-on-background opacity-10"></div>
+                    @foreach($timelineSteps as $ts)
+                    @php $done = ($currentStep >= $ts['step']); $active = ($currentStep === $ts['step']); @endphp
+                    <div class="flex gap-6 relative">
+                        <div class="w-10 h-10 rounded-full border-4 border-on-background z-10 flex items-center justify-center shrink-0
+                            {{ $done ? 'bg-secondary-container' : 'bg-surface-container' }} {{ $active ? 'animate-pulse ring-4 ring-primary ring-offset-2' : '' }}">
+                            <span class="material-symbols-outlined text-xl {{ $done ? 'text-on-secondary-container' : 'text-on-surface-variant' }}"
+                                style="font-variation-settings:'FILL' {{ $done ? 1 : 0 }}">{{ $ts['icon'] }}</span>
+                        </div>
+                        <div>
+                            <p class="font-label-bold text-label-bold {{ $done ? 'text-on-background' : 'text-on-surface-variant' }} {{ $active ? '!text-primary font-black uppercase' : '' }}">
+                                {{ $ts['label'] }}
+                                @if($active) <span class="text-xs ml-1 normal-case font-normal opacity-70">← saat ini</span> @endif
+                            </p>
+                            @if($ts['time'])
+                            <p class="font-body-md text-body-md text-on-surface-variant">{{ $ts['time']->format('d M Y - H:i') }} WIB</p>
+                            @elseif(!$done)
+                            <p class="font-body-md text-body-md text-on-surface-variant italic opacity-50">Menunggu proses kasir...</p>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- Tracking Number --}}
+                @if($order->tracking_number)
+                <div class="mt-6 p-4 bg-primary-container border-2 border-on-background rounded-xl flex items-center gap-3">
+                    <span class="material-symbols-outlined text-on-primary-container text-2xl" style="font-variation-settings:'FILL' 1">package_2</span>
+                    <div>
+                        <p class="text-xs font-black uppercase text-on-primary-container/70">No. Resi Pengiriman</p>
+                        <p class="font-black text-lg text-on-primary-container">{{ $order->tracking_number }}</p>
+                    </div>
+                </div>
+                @endif
+
+                {{-- Cashier Note --}}
+                @if($order->cashier_note && $order->status !== 'cancelled')
+                <div class="mt-4 p-4 bg-secondary-fixed border-2 border-on-background rounded-xl">
+                    <p class="text-xs font-black uppercase text-on-surface-variant mb-1">📝 Catatan dari Kasir</p>
+                    <p class="font-bold italic text-sm">{{ $order->cashier_note }}</p>
+                </div>
+                @endif
             </section>
+
 
             <!-- Address & Payment Method -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
@@ -133,6 +168,17 @@
                         </div>
                         <div class="flex-grow">
                             <p class="font-label-bold text-label-bold text-on-background truncate">{{ $item->product->name }}</p>
+                            @if($item->variant)
+                            <div class="flex flex-wrap items-center gap-2 mt-1 mb-1">
+                                <span class="bg-surface-variant text-on-surface text-[10px] px-2 py-0.5 rounded-full font-bold">Size: {{ $item->variant->size }}</span>
+                                <span class="bg-surface-variant text-on-surface text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
+                                    Color: {{ $item->variant->color }}
+                                    @if($item->variant->color_hex)
+                                        <span class="w-2 h-2 rounded-full border border-on-background inline-block" style="background-color: {{ $item->variant->color_hex }}"></span>
+                                    @endif
+                                </span>
+                            </div>
+                            @endif
                             <p class="font-body-md text-xs text-on-surface-variant">Qty: {{ $item->quantity }}</p>
                             <p class="font-price-display text-primary">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>

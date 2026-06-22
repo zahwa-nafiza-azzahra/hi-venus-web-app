@@ -134,6 +134,14 @@
                 <span class="material-symbols-outlined" {{ request()->routeIs('cashier.catalog') ? "style=font-variation-settings:'FILL'1" : '' }}>inventory_2</span>
                 <span class="font-label-bold text-label-bold">Katalog & Stok</span>
             </a>
+            <a class="flex items-center gap-3 p-4 m-2 rounded-xl transition-all hover:scale-105 active:scale-95 {{ request()->routeIs('cashier.orders*') ? 'bg-secondary-container text-on-secondary-fixed font-bold border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]' : 'text-on-surface-variant hover:bg-surface-variant' }}" href="{{ route('cashier.orders') }}">
+                <span class="material-symbols-outlined" {{ request()->routeIs('cashier.orders*') ? "style=font-variation-settings:'FILL'1" : '' }}>package_2</span>
+                <span class="font-label-bold text-label-bold">Pesanan Online</span>
+                @php $pendingBadge = \App\Models\Order::where('status', 'pending')->count(); @endphp
+                @if($pendingBadge > 0)
+                <span class="ml-auto bg-error text-on-error text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white leading-none">{{ $pendingBadge }}</span>
+                @endif
+            </a>
             <a class="flex items-center gap-3 p-4 m-2 rounded-xl transition-all hover:scale-105 active:scale-95 {{ request()->routeIs('cashier.pickup') ? 'bg-secondary-container text-on-secondary-fixed font-bold border-4 border-on-background shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]' : 'text-on-surface-variant hover:bg-surface-variant' }}" href="{{ route('cashier.pickup') }}">
                 <span class="material-symbols-outlined" {{ request()->routeIs('cashier.pickup') ? "style=font-variation-settings:'FILL'1" : '' }}>local_shipping</span>
                 <span class="font-label-bold text-label-bold">Pickup Online</span>
