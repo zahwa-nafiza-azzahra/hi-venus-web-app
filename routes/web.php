@@ -54,6 +54,7 @@ Route::middleware(['auth', 'cashier'])->prefix('cashier')->name('cashier.')->gro
     Route::get('/pickup', [CashierController::class, 'pickup'])->name('pickup');
     Route::get('/receipt', [CashierController::class, 'receipt'])->name('receipt');
     Route::get('/report', [CashierController::class, 'report'])->name('report');
+    Route::get('/report/pdf', [CashierController::class, 'reportPdf'])->name('report.pdf');
     // Order management
     Route::get('/orders', [CashierController::class, 'orders'])->name('orders');
     Route::get('/orders/{id}', [CashierController::class, 'orderShow'])->name('orders.show');

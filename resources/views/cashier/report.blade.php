@@ -17,7 +17,7 @@
         </div>
         <div class="bg-white border-4 border-on-background p-5 rounded-2xl rotate-3 shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] relative z-10">
             <p class="font-label-bold text-on-surface-variant text-xs uppercase tracking-widest">KODE SHIFT</p>
-            <p class="font-headline-lg text-primary">#SHFT-{{ date('ymd') }}</p>
+            <p class="font-headline-lg text-primary">#{{ $shiftCode }}</p>
         </div>
     </div>
 
@@ -31,10 +31,9 @@
                 </div>
                 <h4 class="font-label-bold text-lg">Total Transaksi</h4>
             </div>
-            <p class="font-headline-xl text-5xl">42</p>
+            <p class="font-headline-xl text-5xl">{{ $totalTransactions }}</p>
             <p class="text-on-surface-variant font-bold text-sm mt-2 flex items-center gap-1">
-                <span class="material-symbols-outlined text-green-600">trending_up</span>
-                +12% dari shift sebelumnya
+                Hari ini
             </p>
         </div>
 
@@ -46,8 +45,8 @@
                 </div>
                 <h4 class="font-label-bold text-lg">Produk Terjual</h4>
             </div>
-            <p class="font-headline-xl text-5xl">156 <span class="text-xl">Items</span></p>
-            <p class="text-on-surface-variant font-bold text-sm mt-2">Populer: Bunny Sticker Pack 🎀</p>
+            <p class="font-headline-xl text-5xl">{{ $productsSold }} <span class="text-xl">Items</span></p>
+            <p class="text-on-surface-variant font-bold text-sm mt-2">Populer: {{ $popularProduct }} 🎀</p>
         </div>
 
         <!-- Total Pendapatan -->
@@ -59,8 +58,8 @@
                 </div>
                 <h4 class="font-label-bold text-lg text-on-primary-fixed">Total Pendapatan</h4>
             </div>
-            <p class="font-headline-xl text-5xl text-on-primary-container italic">Rp 4.520k</p>
-            <p class="text-primary font-black text-sm mt-2 uppercase tracking-widest">Target Tercapai! 🎉</p>
+            <p class="font-headline-xl text-5xl text-on-primary-container italic">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
+            <p class="text-primary font-black text-sm mt-2 uppercase tracking-widest">Hari ini 🎉</p>
         </div>
     </div>
 
@@ -91,48 +90,26 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y-4 divide-on-background">
+                    @forelse($recentTransactions as $order)
                     <tr class="hover:bg-primary-fixed-dim transition-colors group">
-                        <td class="p-6 border-r-4 border-on-background font-black italic">#TRX-8801</td>
-                        <td class="p-6 border-r-4 border-on-background font-bold">15:42</td>
+                        <td class="p-6 border-r-4 border-on-background font-black italic">#{{ $order->order_number }}</td>
+                        <td class="p-6 border-r-4 border-on-background font-bold">{{ $order->created_at->format('H:i') }}</td>
                         <td class="p-6 border-r-4 border-on-background">
-                            <span class="bg-secondary-container px-4 py-1 border-2 border-on-background rounded-full text-[10px] font-black uppercase shadow-sm">QRIS VENUS</span>
+                            <span class="bg-secondary-container px-4 py-1 border-2 border-on-background rounded-full text-[10px] font-black uppercase shadow-sm">{{ $order->payment_method }}</span>
                         </td>
-                        <td class="p-6 border-r-4 border-on-background font-bold">Budi Santoso</td>
-                        <td class="p-6 border-r-4 border-on-background text-right font-headline-lg text-primary text-xl">Rp 125k</td>
+                        <td class="p-6 border-r-4 border-on-background font-bold">{{ $order->recipient_name ?? ($order->user->name ?? 'Guest') }}</td>
+                        <td class="p-6 border-r-4 border-on-background text-right font-headline-lg text-primary text-xl">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                         <td class="p-6 text-center">
-                            <a href="{{ route('cashier.receipt') }}" class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-on-background rounded-lg shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-y-0.5 hover:shadow-none transition-all">
+                            <a href="{{ route('cashier.receipt', ['order_id' => $order->id]) }}" class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-on-background rounded-lg shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-y-0.5 hover:shadow-none transition-all">
                                 <span class="material-symbols-outlined text-sm">print</span>
                             </a>
                         </td>
                     </tr>
-                    <tr class="hover:bg-primary-fixed-dim transition-colors group">
-                        <td class="p-6 border-r-4 border-on-background font-black italic">#TRX-8802</td>
-                        <td class="p-6 border-r-4 border-on-background font-bold">15:10</td>
-                        <td class="p-6 border-r-4 border-on-background">
-                            <span class="bg-tertiary-container px-4 py-1 border-2 border-on-background rounded-full text-[10px] font-black uppercase text-white shadow-sm">Tunai</span>
-                        </td>
-                        <td class="p-6 border-r-4 border-on-background font-bold italic opacity-50">Guest Pelanggan</td>
-                        <td class="p-6 border-r-4 border-on-background text-right font-headline-lg text-primary text-xl">Rp 45k</td>
-                        <td class="p-6 text-center">
-                            <a href="{{ route('cashier.receipt') }}" class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-on-background rounded-lg shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-y-0.5 hover:shadow-none transition-all">
-                                <span class="material-symbols-outlined text-sm">print</span>
-                            </a>
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="p-6 text-center text-on-surface-variant italic">Belum ada transaksi di shift ini.</td>
                     </tr>
-                    <tr class="hover:bg-primary-fixed-dim transition-colors group">
-                        <td class="p-6 border-r-4 border-on-background font-black italic">#TRX-8803</td>
-                        <td class="p-6 border-r-4 border-on-background font-bold">14:55</td>
-                        <td class="p-6 border-r-4 border-on-background">
-                            <span class="bg-secondary-container px-4 py-1 border-2 border-on-background rounded-full text-[10px] font-black uppercase shadow-sm">QRIS VENUS</span>
-                        </td>
-                        <td class="p-6 border-r-4 border-on-background font-bold">Siska Amelia</td>
-                        <td class="p-6 border-r-4 border-on-background text-right font-headline-lg text-primary text-xl">Rp 890k</td>
-                        <td class="p-6 text-center">
-                            <a href="{{ route('cashier.receipt') }}" class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-on-background rounded-lg shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-y-0.5 hover:shadow-none transition-all">
-                                <span class="material-symbols-outlined text-sm">print</span>
-                            </a>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -140,10 +117,10 @@
 
     <!-- Final Action Button -->
     <div class="flex justify-center pt-12">
-        <button class="flex items-center gap-4 bg-primary text-on-primary px-12 py-6 rounded-2xl border-4 border-on-background font-headline-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] transition-all active:scale-95 group">
+        <a href="{{ route('cashier.report.pdf') }}" target="_blank" class="flex items-center gap-4 bg-primary text-on-primary px-12 py-6 rounded-2xl border-4 border-on-background font-headline-lg shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] transition-all active:scale-95 group">
             <span class="material-symbols-outlined text-4xl group-hover:rotate-12 transition-transform">print</span>
             <span>Cetak Laporan Shift 📄</span>
-        </button>
+        </a>
     </div>
 </div>
 @endsection

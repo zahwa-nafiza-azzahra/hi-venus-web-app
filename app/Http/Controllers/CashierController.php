@@ -61,7 +61,84 @@ class CashierController extends Controller
 
         return view('cashier.receipt', compact('paidOrders', 'selectedOrder'));
     }
-    public function report() { return view('cashier.report'); }
+    public function report()
+    {
+        $today = today();
+        $shiftCode = 'SHFT-' . date('ymd');
+
+        $ordersToday = Order::whereDate('created_at', $today);
+        $totalTransactions = $ordersToday->count();
+        
+        $totalRevenue = Order::whereDate('created_at', $today)
+            ->whereIn('status', ['completed', 'paid', 'processing', 'shipped'])
+            ->sum('total_amount');
+
+        $productsSold = \App\Models\OrderItem::whereHas('order', function($q) use ($today) {
+            $q->whereDate('created_at', $today)
+              ->whereIn('status', ['completed', 'paid', 'processing', 'shipped']);
+        })->sum('quantity');
+
+        $popularProductItem = \App\Models\OrderItem::whereHas('order', function($q) use ($today) {
+            $q->whereDate('created_at', $today)
+              ->whereIn('status', ['completed', 'paid', 'processing', 'shipped']);
+        })
+        ->select('product_id', \DB::raw('SUM(quantity) as total_sold'))
+        ->groupBy('product_id')
+        ->orderByDesc('total_sold')
+        ->with('product')
+        ->first();
+
+        $popularProduct = $popularProductItem ? $popularProductItem->product->name : '-';
+
+        $recentTransactions = Order::with(['user', 'items.product'])
+            ->whereDate('created_at', $today)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('cashier.report', compact(
+            'shiftCode', 'totalTransactions', 'totalRevenue', 'productsSold', 'popularProduct', 'recentTransactions'
+        ));
+    }
+
+    public function reportPdf()
+    {
+        $today = today();
+        $shiftCode = 'SHFT-' . date('ymd');
+
+        $totalTransactions = Order::whereDate('created_at', $today)->count();
+        
+        $totalRevenue = Order::whereDate('created_at', $today)
+            ->whereIn('status', ['completed', 'paid', 'processing', 'shipped'])
+            ->sum('total_amount');
+
+        $productsSold = \App\Models\OrderItem::whereHas('order', function($q) use ($today) {
+            $q->whereDate('created_at', $today)
+              ->whereIn('status', ['completed', 'paid', 'processing', 'shipped']);
+        })->sum('quantity');
+
+        $popularProductItem = \App\Models\OrderItem::whereHas('order', function($q) use ($today) {
+            $q->whereDate('created_at', $today)
+              ->whereIn('status', ['completed', 'paid', 'processing', 'shipped']);
+        })
+        ->select('product_id', \DB::raw('SUM(quantity) as total_sold'))
+        ->groupBy('product_id')
+        ->orderByDesc('total_sold')
+        ->with('product')
+        ->first();
+
+        $popularProduct = $popularProductItem ? $popularProductItem->product->name : '-';
+
+        $recentTransactions = Order::with(['user', 'items.product'])
+            ->whereDate('created_at', $today)
+            ->latest()
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('cashier.report_pdf', compact(
+            'shiftCode', 'totalTransactions', 'totalRevenue', 'productsSold', 'popularProduct', 'recentTransactions'
+        ));
+        return $pdf->download('Laporan_Shift_Hi_Venus_' . $shiftCode . '.pdf');
+    }
 
     /** Daftar semua pesanan online */
     public function orders(Request $request)
