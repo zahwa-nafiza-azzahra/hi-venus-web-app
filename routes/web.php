@@ -157,8 +157,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/reviews/{product_id}', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
 
     // Orders
-    Route::get('/orders', function () {
-        $orders = auth()->user()->orders()->latest()->get();
+    Route::get('/orders', function (\Illuminate\Http\Request $request) {
+        $query = auth()->user()->orders()->latest();
+        if ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+        $orders = $query->get();
         return view('orders.index', compact('orders'));
     })->name('orders.index');
 
@@ -166,6 +170,14 @@ Route::middleware('auth')->group(function () {
         $order = auth()->user()->orders()->with('items.product')->findOrFail($id);
         return view('orders.show', compact('order'));
     })->name('orders.show');
+    Route::post('/orders/{id}/cancel', function ($id) {
+        $order = auth()->user()->orders()->findOrFail($id);
+        if ($order->status === 'pending') {
+            $order->update(['status' => 'cancelled']);
+            return redirect()->back()->with('success', '✨ Pesanan berhasil dibatalkan.');
+        }
+        return redirect()->back()->with('error', 'Pesanan tidak dapat dibatalkan.');
+    })->name('orders.cancel');
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');

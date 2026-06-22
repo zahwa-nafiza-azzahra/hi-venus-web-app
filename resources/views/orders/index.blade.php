@@ -33,12 +33,28 @@
 
     <!-- Filter Tabs -->
     <div class="flex overflow-x-auto pb-6 gap-4 no-scrollbar mb-10 animate-fade-in">
-        <button class="whitespace-nowrap px-6 py-3 bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold active:translate-y-1 active:shadow-none transition-all">Semua</button>
-        <button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Menunggu Pembayaran</button>
-        <button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Diproses</button>
-        <button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Dikirim</button>
-        <button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Selesai</button>
-        <button class="whitespace-nowrap px-6 py-3 bg-surface-container-lowest text-on-surface border-4 border-on-background rounded-lg shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] font-label-bold text-label-bold hover:bg-surface-variant active:translate-y-1 active:shadow-none transition-all">Dibatalkan</button>
+        @php
+            $currentStatus = request('status', 'all');
+            
+            $tabs = [
+                ['value' => 'all', 'label' => 'Semua'],
+                ['value' => 'pending', 'label' => 'Menunggu Pembayaran'],
+                ['value' => 'paid', 'label' => 'Diproses'],
+                ['value' => 'shipped', 'label' => 'Dikirim'],
+                ['value' => 'completed', 'label' => 'Selesai'],
+                ['value' => 'cancelled', 'label' => 'Dibatalkan'],
+            ];
+        @endphp
+
+        @foreach($tabs as $tab)
+            <a href="{{ route('orders.index', ['status' => $tab['value']]) }}" 
+               class="whitespace-nowrap px-6 py-3 border-4 border-on-background rounded-lg font-label-bold text-label-bold transition-all
+                      {{ $currentStatus === $tab['value'] 
+                         ? 'bg-secondary-container text-on-secondary-container shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] translate-y-0.5' 
+                         : 'bg-surface-container-lowest text-on-surface shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:bg-surface-variant hover:-translate-y-1' }}">
+                {{ $tab['label'] }}
+            </a>
+        @endforeach
     </div>
 
     @if($orders->count() > 0)
@@ -97,11 +113,19 @@
                             <p class="font-price-display text-xl text-primary">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
                         </div>
                         
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 flex-wrap justify-end">
                             @if($order->status === 'completed')
                                 <a href="{{ route('reviews.create', $firstItem->product_id ?? 1) }}" class="px-3 py-1.5 bg-primary text-on-primary border-3 border-on-background rounded-lg font-label-bold shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all text-center text-xs">Ulas</a>
                             @endif
+                            @if($order->status === 'pending')
+                                <a href="{{ route('orders.show', $order->id) }}" class="px-3 py-1.5 bg-tertiary-container text-on-tertiary-container border-3 border-on-background rounded-lg font-label-bold shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all text-xs animate-pulse">Bayar Sekarang 💸</a>
+                                <form action="{{ route('orders.cancel', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" onclick="return confirm('Yakin batalin pesanan ini? 🥺')" class="px-3 py-1.5 bg-error-container text-on-error-container border-3 border-on-background rounded-lg font-label-bold shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all text-xs">Batal</button>
+                                </form>
+                            @else
                                 <a href="{{ route('orders.show', $order->id) }}" class="px-3 py-1.5 bg-surface-bright text-on-surface border-3 border-on-background rounded-lg font-label-bold shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all text-xs">Detail</a>
+                            @endif
                         </div>
                     </div>
                 </div>

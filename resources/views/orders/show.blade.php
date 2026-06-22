@@ -86,11 +86,32 @@
                         <h3 class="font-label-bold text-label-bold text-on-background uppercase">Metode Pembayaran</h3>
                     </div>
                     <div class="bg-white border-2 border-on-background p-3 rounded-lg flex items-center justify-between mb-4">
-                        <span class="font-label-bold text-label-bold text-on-background uppercase">GoPay Kawaii</span>
+                        <span class="font-label-bold text-label-bold text-on-background uppercase">{{ $order->payment_method }}</span>
                         <span class="material-symbols-outlined text-secondary">verified_user</span>
                     </div>
                     <p class="font-body-md text-body-md text-on-surface-variant">Nomor Pesanan:</p>
-                    <p class="font-label-bold text-label-bold text-on-background text-lg">#{{ $order->order_number }}</p>
+                    <p class="font-label-bold text-label-bold text-on-background text-lg mb-4">#{{ $order->order_number }}</p>
+                    
+                    @if($order->status === 'pending')
+                    <div class="bg-primary-container text-on-primary-container p-4 rounded-lg border-2 border-on-background mt-4">
+                        <p class="font-label-bold text-label-bold mb-2">📢 Instruksi Pembayaran:</p>
+                        @if($order->payment_method === 'Bank Transfer')
+                            <p class="font-body-md text-sm mb-1">Transfer ke Rekening BCA:</p>
+                            <p class="font-headline-lg text-lg tracking-widest font-black">123-456-7890</p>
+                            <p class="font-body-md text-xs mt-1">a/n Hi Venus Official</p>
+                        @else
+                            <p class="font-body-md text-sm mb-1">Transfer ke GoPay / OVO / DANA:</p>
+                            <p class="font-headline-lg text-lg tracking-widest font-black">0812-3456-7890</p>
+                            <p class="font-body-md text-xs mt-1">a/n Hi Venus Official</p>
+                        @endif
+                        <div class="mt-4 p-2 bg-white rounded border-2 border-on-background">
+                            <p class="font-body-md text-xs text-on-surface text-center">
+                                Silakan bayar sesuai <b>Total Harga</b>.<br>
+                                Sistem kami akan memverifikasi otomatis dalam 10 menit setelah transfer. 💸
+                            </p>
+                        </div>
+                    </div>
+                    @endif
                 </section>
             </div>
         </div>
@@ -143,11 +164,19 @@
             </section>
 
             <!-- Download CTA -->
-            <div class="pt-4">
+            <div class="pt-4 space-y-4">
                 <button class="w-full bg-secondary-container text-on-secondary-container font-headline-lg text-headline-lg-mobile md:text-headline-lg py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100 group">
                     Unduh Struk PDF 📄
                     <span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">download</span>
                 </button>
+                @if($order->status === 'pending')
+                <form action="{{ route('orders.cancel', $order->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" onclick="return confirm('Yakin mau membatalkan pesanan ini? 🥺')" class="w-full bg-error-container text-on-error-container font-headline-lg text-headline-lg-mobile md:text-headline-lg py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100">
+                        Batalkan Pesanan ❌
+                    </button>
+                </form>
+                @endif
             </div>
         </div>
     </div>
