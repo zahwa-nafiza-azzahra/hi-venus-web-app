@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariant;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -139,14 +140,22 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart as $id => $item) {
-                $productId = strpos($id, '_') !== false ? explode('_', $id)[0] : $id;
+                $productId = $item['product_id']
+                    ?? (strpos($id, '_') !== false ? explode('_', $id)[0] : $id);
+
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'] ?? $productId,
+                    'order_id'           => $order->id,
+                    'product_id'         => $productId,
                     'product_variant_id' => $item['variant_id'] ?? null,
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
+                    'quantity'           => $item['quantity'],
+                    'price'              => $item['price'],
                 ]);
+
+                // Kurangi stok varian
+                if (!empty($item['variant_id'])) {
+                    ProductVariant::where('id', $item['variant_id'])
+                        ->decrement('stock', $item['quantity']);
+                }
             }
 
             DB::commit();

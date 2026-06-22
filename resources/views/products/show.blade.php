@@ -125,14 +125,14 @@
                         <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Warna</p>
                         <div class="flex flex-wrap gap-4 items-end" id="color-picker">
                             @foreach($uniqueColors as $color)
-                            <div class="flex flex-col items-center gap-1">
+                            <div class="flex flex-col items-center gap-3" style="max-width: 60px;">
                                 <button type="button"
                                     onclick="pickColor('{{ $color['name'] }}')"
                                     data-color="{{ $color['name'] }}"
                                     title="{{ $color['name'] }}"
                                     class="color-btn w-12 h-12 rounded-full border-4 border-on-background comic-shadow-sm transition-all hover:scale-110"
-                                    style="background-color: {{ !empty($color['hex']) ? $color['hex'] : '#cccccc' }};"></button>
-                                <span class="text-[10px] font-bold text-on-surface-variant">{{ $color['name'] }}</span>
+                                    style="background-color: {{ !empty($color['hex']) ? $color['hex'] : '#cccccc' }}; {{ (strtolower($color['name']) === 'white' || (!empty($color['hex']) && strtolower($color['hex']) === '#ffffff')) ? 'box-shadow: inset 0 0 0 2px #ccc;' : '' }}"></button>
+                                <span class="text-[11px] font-extrabold text-center leading-tight" style="color: #1b1c1c; display:block; max-width: 56px; word-break: break-word;">{{ $color['name'] }}</span>
                             </div>
                             @endforeach
                         </div>
@@ -141,6 +141,20 @@
 
                     <p id="variant-warning" class="text-error font-label-bold text-sm hidden">⚠️ Pilih ukuran dan warna terlebih dahulu!</p>
                     <p id="stock-warning" class="text-error font-label-bold text-sm hidden">😢 Stok habis untuk pilihan ini!</p>
+
+                    {{-- Stock indicator --}}
+                    <div id="stock-indicator" style="display:none;" class="flex items-center gap-2 mt-1">
+                        <div id="stock-bar-wrap" class="flex-1 h-2 bg-surface-variant rounded-full border border-on-background overflow-hidden">
+                            <div id="stock-bar" class="h-full rounded-full transition-all duration-500" style="width: 0%; background: #9e357b;"></div>
+                        </div>
+                        <span id="stock-text" class="font-label-bold text-sm whitespace-nowrap"></span>
+                    </div>
+
+                    {{-- Kombinasi tidak tersedia --}}
+                    <p id="combo-unavailable" style="display:none; color: #f57c00;" class="text-sm font-bold flex items-center gap-1">
+                        <span class="material-symbols-outlined text-base" style="color: #f57c00;">block</span>
+                        <span>Kombinasi ukuran &amp; warna ini tidak tersedia</span>
+                    </p>
                 </div>
                 @endif
 
@@ -284,9 +298,10 @@
         selectedSize = size;
         document.querySelectorAll('.size-btn').forEach(b => {
             const on = b.dataset.size === size;
-            b.classList.toggle('bg-primary', on);
-            b.classList.toggle('text-on-primary', on);
-            b.classList.toggle('bg-surface-bright', !on);
+            // Pakai inline style agar tidak bergantung pada Tailwind purge
+            b.style.backgroundColor = on ? '#9e357b' : '';
+            b.style.color           = on ? '#ffffff' : '';
+            b.style.borderColor     = '#1b1c1c';
         });
         updateVariantState();
     }
@@ -322,8 +337,14 @@
         const variantIdInput = document.getElementById('selected_variant_id');
         const colorHexInput = document.getElementById('selected_color_hex');
 
+        const stockIndicator = document.getElementById('stock-indicator');
+        const stockBar       = document.getElementById('stock-bar');
+        const stockText      = document.getElementById('stock-text');
+
         if (matched) {
-            const oos = matched.stock <= 0;
+            const oos   = matched.stock <= 0;
+            const stock = matched.stock;
+
             if (cartBtn) {
                 cartBtn.disabled = oos;
                 cartBtn.classList.toggle('opacity-50', oos);
@@ -334,18 +355,47 @@
             }
             if (stockWarn)   stockWarn.classList.toggle('hidden', !oos);
             if (variantWarn) variantWarn.classList.add('hidden');
+            const comboUnavailEl = document.getElementById('combo-unavailable');
+            if (comboUnavailEl) comboUnavailEl.style.display = 'none';
+
+            // Stock indicator
+            if (stockIndicator) {
+                stockIndicator.style.display = 'flex';
+                const maxStock = Math.max(...allVariants.map(v => v.stock), 1);
+                const pct      = Math.min(100, Math.round((stock / maxStock) * 100));
+
+                if (stockBar) {
+                    stockBar.style.width = pct + '%';
+                    if (stock <= 0)       stockBar.style.background = '#d32f2f';
+                    else if (stock <= 5)  stockBar.style.background = '#f57c00';
+                    else                  stockBar.style.background = '#9e357b';
+                }
+                if (stockText) {
+                    if (stock <= 0)      { stockText.textContent = 'Habis'; stockText.style.color = '#d32f2f'; }
+                    else if (stock <= 5) { stockText.textContent = `Sisa ${stock} pcs!`; stockText.style.color = '#f57c00'; }
+                    else                 { stockText.textContent = `Stok: ${stock} pcs`; stockText.style.color = '#3a3a3a'; }
+                }
+            }
 
             const parts = [];
             if (matched.color && matched.color !== 'Default') parts.push(matched.color);
             if (matched.size  && matched.size  !== 'Default') parts.push(matched.size);
-            if (variantInput) variantInput.value = parts.join(' - ') || 'Default';
+            if (variantInput)   variantInput.value   = parts.join(' - ') || 'Default';
             if (variantIdInput) variantIdInput.value = matched.id || '';
-            if (colorHexInput) colorHexInput.value = matched.color_hex || '';
+            if (colorHexInput)  colorHexInput.value  = matched.color_hex || '';
         } else {
             if (cartBtn) {
                 cartBtn.disabled = true;
                 cartBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                cartBtn.innerHTML = '<span class="material-symbols-outlined">shopping_bag</span> Tambah ke Keranjang';
             }
+            if (stockIndicator) stockIndicator.style.display = 'none';
+            if (stockWarn) stockWarn.classList.add('hidden');
+
+            const comboUnavail = document.getElementById('combo-unavailable');
+            // Tampilkan pesan hanya jika user SUDAH memilih semua varian tapi kombinasinya tidak ada
+            const allSelected = (!hasSizes || selectedSize) && (!hasColors || selectedColor);
+            if (comboUnavail) comboUnavail.style.display = allSelected ? 'flex' : 'none';
         }
     }
 

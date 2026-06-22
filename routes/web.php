@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\CashierController;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -133,7 +134,7 @@ Route::middleware('auth')->group(function () {
         if (!\Illuminate\Support\Facades\Hash::check($request->current_password, auth()->user()->password)) {
             return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
-        auth()->user()->update(['password' => $request->password]);
+        auth()->user()->update(['password' => Hash::make($request->password)]);
         return back()->with('success', 'Password changed successfully.');
     })->name('settings.password');
     Route::post('/settings/avatar', function (\Illuminate\Http\Request $request) {
@@ -559,7 +560,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         if (!\Illuminate\Support\Facades\Hash::check($request->current_password, auth()->user()->password)) {
             return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
-        auth()->user()->update(['password' => $request->password]);
+        auth()->user()->update(['password' => Hash::make($request->password)]);
         return back()->with('success', 'Password changed successfully.');
     })->name('settings.password');
     Route::post('settings/avatar', function (\Illuminate\Http\Request $request) {
