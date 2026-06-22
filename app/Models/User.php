@@ -25,11 +25,16 @@ class User extends Authenticatable {
     public function getAvatarUrlAttribute()
     {
         if (!$this->avatar) {
-            return asset('images/default-avatar.png');
+            return 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' . urlencode($this->name);
         }
         
         if (str_starts_with($this->avatar, 'http')) {
             return $this->avatar;
+        }
+        
+        // Check if the local file exists, fallback if missing
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($this->avatar) && !file_exists(public_path('storage/' . $this->avatar))) {
+            return 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' . urlencode($this->name);
         }
         
         return asset('storage/' . $this->avatar);

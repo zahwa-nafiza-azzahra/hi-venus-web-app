@@ -93,19 +93,19 @@
     </div>
 
     <!-- Actions -->
-    <div class="flex flex-col md:flex-row gap-6 w-full md:w-auto">
+    <div class="flex flex-col md:flex-row gap-6 w-full md:w-auto no-print">
         <button onclick="window.print()" class="bg-primary text-on-primary font-headline-lg text-headline-lg px-12 py-6 rounded-xl border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:scale-95 transition-all flex items-center justify-center gap-4">
             <span class="material-symbols-outlined text-4xl">print</span>
             Cetak Struk
         </button>
-        <button class="bg-secondary-container text-on-secondary-fixed font-headline-lg text-headline-lg px-10 py-6 rounded-xl border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:scale-95 transition-all flex items-center justify-center gap-4">
+        <button onclick="window.print()" class="bg-secondary-container text-on-secondary-fixed font-headline-lg text-headline-lg px-10 py-6 rounded-xl border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:scale-95 transition-all flex items-center justify-center gap-4">
             <span class="material-symbols-outlined text-4xl">picture_as_pdf</span>
             Simpan PDF
         </button>
     </div>
 
     <!-- Secondary Action Link -->
-    <a href="{{ route('cashier.index') }}" class="mt-12 font-black text-primary underline underline-offset-8 decoration-4 hover:text-on-primary-fixed-variant transition-colors uppercase tracking-widest text-sm">
+    <a href="{{ route('cashier.index') }}" class="mt-12 font-black text-primary underline underline-offset-8 decoration-4 hover:text-on-primary-fixed-variant transition-colors uppercase tracking-widest text-sm no-print">
         Kembali ke Menu Utama
     </a>
 </main>

@@ -104,7 +104,7 @@
                             <p class="font-label-bold text-primary">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-3 py-1 rounded-full border-2 border-on-background text-xs font-black uppercase {{ $order->status_color }}">
+                            <span class="px-3 py-1 rounded-full border-2 border-on-background text-xs font-black uppercase whitespace-nowrap {{ $order->status_color }}">
                                 {{ $order->status_label }}
                             </span>
                         </td>

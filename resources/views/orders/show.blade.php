@@ -32,12 +32,13 @@
                 <h2 class="font-headline-lg text-headline-lg text-on-background mb-8">Status Pesanan Kamu</h2>
 
                 @php
+                $isPickup = $order->shipping_method === 'Ambil di Toko';
                 $timelineSteps = [
                     ['label' => 'Pesanan Masuk',           'icon' => 'shopping_bag',   'time' => $order->created_at,   'step' => 0],
                     ['label' => 'Pembayaran Dikonfirmasi', 'icon' => 'payments',        'time' => $order->confirmed_at, 'step' => 1],
                     ['label' => 'Sedang Dikemas 🎀',       'icon' => 'inventory_2',    'time' => $order->processed_at, 'step' => 2],
-                    ['label' => 'Dalam Pengiriman 🚚',     'icon' => 'local_shipping', 'time' => $order->shipped_at,   'step' => 3],
-                    ['label' => 'Pesanan Selesai 🎉',      'icon' => 'check_circle',   'time' => $order->completed_at, 'step' => 4],
+                    ['label' => $isPickup ? 'Siap Diambil 🛍️' : 'Dalam Pengiriman 🚚', 'icon' => $isPickup ? 'storefront' : 'local_shipping', 'time' => $order->shipped_at,   'step' => 3],
+                    ['label' => $isPickup ? 'Sudah Diambil 🎉' : 'Pesanan Selesai 🎉',  'icon' => 'check_circle',   'time' => $order->completed_at, 'step' => 4],
                 ];
                 $currentStep = $order->status_step;
                 @endphp
@@ -102,6 +103,21 @@
 
             <!-- Address & Payment Method -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                @if($order->shipping_method === 'Ambil di Toko')
+                <section class="bg-secondary-fixed border-4 border-on-background p-6 rounded-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)]">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">storefront</span>
+                        <h3 class="font-label-bold text-label-bold text-on-background uppercase">Lokasi Pengambilan (Toko)</h3>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-background font-bold">Toko Hi Venus Boutique 🎀</p>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Jl. Venus Raya No. 12, Lantai 2, Ruko Pastel Blossom<br/>
+                        Kecamatan Kawaii, Jakarta Selatan<br/>
+                        DKI Jakarta, 12130
+                    </p>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">📞 WhatsApp Toko: +62 812-3456-7890</p>
+                </section>
+                @else
                 <section class="bg-surface-container-low border-4 border-on-background p-6 rounded-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)]">
                     <div class="flex items-center gap-2 mb-4">
                         <span class="material-symbols-outlined text-primary">location_on</span>
@@ -115,6 +131,7 @@
                     </p>
                     <p class="font-body-md text-body-md text-on-surface-variant mt-2">📞 {{ auth()->user()->phone ?? '+62 8xx-xxxx-xxxx' }}</p>
                 </section>
+                @endif
                 <section class="bg-surface-container-low border-4 border-on-background p-6 rounded-lg shadow-[6px_6px_0px_0px_rgba(27,28,28,1)]">
                     <div class="flex items-center gap-2 mb-4">
                         <span class="material-symbols-outlined text-primary">payments</span>

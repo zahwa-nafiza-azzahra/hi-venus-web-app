@@ -62,11 +62,12 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full">
         @foreach($orders as $index => $order)
             @php
+                $isPickup = $order->shipping_method === 'Ambil di Toko';
                 $statusLabel = match($order->status) {
                     'pending' => 'Menunggu Pembayaran',
                     'paid' => 'Diproses',
-                    'shipped' => 'Dikirim',
-                    'completed' => 'Selesai',
+                    'shipped' => $isPickup ? 'Siap Diambil 🛍️' : 'Dikirim 🚚',
+                    'completed' => $isPickup ? 'Sudah Diambil' : 'Selesai',
                     'cancelled' => 'Dibatalkan',
                     default => 'Diproses'
                 };
@@ -75,7 +76,7 @@
                     'pending' => 'bg-error-container text-on-error-container',
                     'paid', 'processing' => 'bg-secondary-container text-on-secondary-container',
                     'completed' => 'bg-primary text-on-primary',
-                    'shipped' => 'bg-tertiary-container text-on-tertiary-container',
+                    'shipped' => $isPickup ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container',
                     'cancelled' => 'bg-outline text-white',
                     default => 'bg-surface-variant text-on-surface-variant'
                 };
@@ -89,7 +90,7 @@
             <div class="bg-surface-container-lowest border-4 border-on-background p-5 md:p-6 rounded-2xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex flex-col md:flex-row items-center md:items-start gap-6 relative">
                 <!-- Status Badge -->
                 <div class="absolute -top-3 right-4 z-20">
-                    <div class="{{ $statusColor }} px-4 py-1 border-4 border-on-background font-label-bold rounded-full shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] text-[10px] uppercase tracking-tighter">
+                    <div class="{{ $statusColor }} px-4 py-1 border-4 border-on-background font-label-bold rounded-full shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] text-[10px] uppercase tracking-tighter whitespace-nowrap">
                         {{ $statusLabel }}
                     </div>
                 </div>

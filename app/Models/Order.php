@@ -28,12 +28,14 @@ class Order extends Model
 
     public function getStatusLabelAttribute(): string
     {
+        $isPickup = $this->shipping_method === 'Ambil di Toko';
+        
         return match($this->status) {
             'pending'    => 'Menunggu Konfirmasi',
             'paid'       => 'Pembayaran Dikonfirmasi',
             'processing' => 'Sedang Dikemas',
-            'shipped'    => 'Dalam Pengiriman',
-            'completed'  => 'Selesai',
+            'shipped'    => $isPickup ? 'Siap Diambil' : 'Dalam Pengiriman',
+            'completed'  => $isPickup ? 'Sudah Diambil' : 'Selesai',
             'cancelled'  => 'Dibatalkan',
             default      => 'Tidak Diketahui',
         };

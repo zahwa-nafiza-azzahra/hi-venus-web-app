@@ -110,7 +110,7 @@
                     <p class="text-xs text-on-surface-variant">{{ $order->created_at->diffForHumans() }}</p>
                 </div>
                 <div class="flex items-center gap-3 flex-shrink-0">
-                    <span class="px-3 py-1 border-2 border-on-background rounded-full text-xs font-black uppercase {{ $order->status_color }}">
+                    <span class="px-3 py-1 border-2 border-on-background rounded-full text-xs font-black uppercase whitespace-nowrap {{ $order->status_color }}">
                         {{ $order->status_label }}
                     </span>
                     <a href="{{ route('cashier.orders.show', $order->id) }}"

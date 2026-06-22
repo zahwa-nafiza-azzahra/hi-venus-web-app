@@ -23,7 +23,7 @@
             <p class="text-xs text-on-surface-variant font-bold">{{ $order->created_at->format('d M Y, H:i') }} WIB • {{ $order->items->count() }} item</p>
         </div>
         <div class="ml-auto">
-            <span class="px-4 py-2 border-4 border-on-background rounded-lg font-black text-sm uppercase {{ $order->status_color }} shadow-[3px_3px_0px_0px_rgba(27,28,28,1)]">
+            <span class="px-4 py-2 border-4 border-on-background rounded-lg font-black text-sm uppercase whitespace-nowrap {{ $order->status_color }} shadow-[3px_3px_0px_0px_rgba(27,28,28,1)]">
                 {{ $order->status_label }}
             </span>
         </div>
@@ -36,16 +36,17 @@
             {{-- Timeline --}}
             <div class="bg-white border-4 border-on-background p-6 rounded-xl shadow-[6px_6px_0px_0px_rgba(27,28,28,1)]">
                 <h3 class="font-label-bold uppercase tracking-wider mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">local_shipping</span>
+                    <span class="material-symbols-outlined text-primary">{{ $order->shipping_method === 'Ambil di Toko' ? 'storefront' : 'local_shipping' }}</span>
                     Timeline Pesanan
                 </h3>
                 @php
+                $isPickup = $order->shipping_method === 'Ambil di Toko';
                 $steps = [
                     ['label' => 'Pesanan Masuk',           'icon' => 'shopping_bag',   'time' => $order->created_at,   'step' => 0],
                     ['label' => 'Pembayaran Dikonfirmasi', 'icon' => 'payments',        'time' => $order->confirmed_at, 'step' => 1],
                     ['label' => 'Sedang Dikemas',          'icon' => 'inventory_2',    'time' => $order->processed_at, 'step' => 2],
-                    ['label' => 'Dalam Pengiriman',        'icon' => 'local_shipping', 'time' => $order->shipped_at,   'step' => 3],
-                    ['label' => 'Pesanan Selesai',         'icon' => 'check_circle',   'time' => $order->completed_at, 'step' => 4],
+                    ['label' => $isPickup ? 'Siap Diambil' : 'Dalam Pengiriman',        'icon' => $isPickup ? 'storefront' : 'local_shipping', 'time' => $order->shipped_at,   'step' => 3],
+                    ['label' => $isPickup ? 'Sudah Diambil' : 'Pesanan Selesai',         'icon' => 'check_circle',   'time' => $order->completed_at, 'step' => 4],
                 ];
                 $currentStep = $order->status_step;
                 @endphp
