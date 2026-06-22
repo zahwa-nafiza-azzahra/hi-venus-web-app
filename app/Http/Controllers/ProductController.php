@@ -52,9 +52,11 @@ class ProductController extends Controller
     {
         $products = \App\Models\Product::with('category')
             ->withSum('orderItems', 'quantity')
+            ->having('order_items_sum_quantity', '>', 15)
             ->orderByRaw('COALESCE(order_items_sum_quantity, 0) DESC')
             ->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->take(10)
+            ->get();
 
         return view('products.best_sellers', compact('products'));
     }
