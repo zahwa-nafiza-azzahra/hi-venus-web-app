@@ -55,6 +55,7 @@ Route::middleware(['auth', 'cashier'])->prefix('cashier')->name('cashier.')->gro
     Route::get('/orders', [CashierController::class, 'orders'])->name('orders');
     Route::get('/orders/{id}', [CashierController::class, 'orderShow'])->name('orders.show');
     Route::post('/orders/{id}/status', [CashierController::class, 'orderUpdateStatus'])->name('orders.update_status');
+    Route::get('/orders/{id}/pdf', [CashierController::class, 'orderPdf'])->name('orders.pdf');
 });
 
 Route::middleware('guest')->group(function () {

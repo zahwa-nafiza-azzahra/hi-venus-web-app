@@ -45,7 +45,22 @@ class CashierController extends Controller
 
         return view('cashier.pickup', compact('order', 'order_number'));
     }
-    public function receipt() { return view('cashier.receipt'); }
+    public function receipt(Request $request)
+    {
+        $order_id = $request->get('order_id');
+        $selectedOrder = null;
+
+        if ($order_id) {
+            $selectedOrder = Order::with(['user', 'items.product', 'items.variant'])->findOrFail($order_id);
+        }
+
+        $paidOrders = Order::with('user')
+            ->whereIn('status', ['paid', 'processing', 'shipped', 'completed'])
+            ->latest()
+            ->paginate(15);
+
+        return view('cashier.receipt', compact('paidOrders', 'selectedOrder'));
+    }
     public function report() { return view('cashier.report'); }
 
     /** Daftar semua pesanan online */
@@ -100,5 +115,13 @@ class CashierController extends Controller
         ], $timestamps));
 
         return back()->with('success', "Status pesanan #{$order->order_number} berhasil diubah ke: {$order->fresh()->status_label}");
+    }
+
+    /** Cetak PDF Struk */
+    public function orderPdf($id)
+    {
+        $order = Order::with(['user', 'items.product', 'items.variant'])->findOrFail($id);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('orders.receipt_pdf', compact('order'));
+        return $pdf->download('Struk_Hi_Venus_' . $order->order_number . '.pdf');
     }
 }
