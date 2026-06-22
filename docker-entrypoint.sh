@@ -18,6 +18,9 @@ php artisan storage:link || true
 
 
 
+echo "Menyesuaikan port Apache ke PORT dari environment..."
+sed -i "s/80/${PORT:-80}/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
 echo "Memulai server Apache..."
 # Jalankan command default Docker (biasanya apache2-foreground)
 exec "$@"
