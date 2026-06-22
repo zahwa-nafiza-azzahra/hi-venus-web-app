@@ -175,6 +175,12 @@ Route::middleware('auth')->group(function () {
         $order = auth()->user()->orders()->with(['items.product', 'items.variant'])->findOrFail($id);
         return view('orders.show', compact('order'));
     })->name('orders.show');
+
+    Route::get('/orders/{id}/pdf', function ($id) {
+        $order = auth()->user()->orders()->with(['items.product', 'items.variant'])->findOrFail($id);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('orders.receipt_pdf', compact('order'));
+        return $pdf->download('Struk_Hi_Venus_' . $order->order_number . '.pdf');
+    })->name('orders.pdf');
     Route::post('/orders/{id}/cancel', function ($id) {
         $order = auth()->user()->orders()->findOrFail($id);
         if ($order->status === 'pending') {

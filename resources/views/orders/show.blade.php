@@ -211,7 +211,7 @@
 
             <!-- Download CTA -->
             <div class="pt-4 space-y-4">
-                <button class="w-full bg-secondary-container text-on-secondary-container font-headline-lg text-headline-lg-mobile md:text-headline-lg py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100 group">
+                <button onclick="window.location.href='{{ route('orders.pdf', $order->id) }}'" class="w-full bg-secondary-container text-on-secondary-container font-headline-lg text-headline-lg-mobile md:text-headline-lg py-6 rounded-lg border-4 border-on-background shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] flex items-center justify-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100 group">
                     Unduh Struk PDF 📄
                     <span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">download</span>
                 </button>
