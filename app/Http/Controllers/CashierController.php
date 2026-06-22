@@ -32,7 +32,19 @@ class CashierController extends Controller
         return view('cashier.catalog', compact('products'));
     }
 
-    public function pickup() { return view('cashier.pickup'); }
+    public function pickup(Request $request)
+    {
+        $order_number = $request->input('order_number');
+        $order = null;
+
+        if ($order_number) {
+            $order = Order::with(['user', 'items.product', 'items.variant'])
+                ->where('order_number', $order_number)
+                ->first();
+        }
+
+        return view('cashier.pickup', compact('order', 'order_number'));
+    }
     public function receipt() { return view('cashier.receipt'); }
     public function report() { return view('cashier.report'); }
 
