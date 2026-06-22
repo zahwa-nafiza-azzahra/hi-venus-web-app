@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/pos', [PosController::class, 'index'])
     ->middleware(['auth', 'pos'])
     ->name('pos.index');
+Route::post('/pos/checkout', [PosController::class, 'checkout'])
+    ->middleware(['auth', 'pos'])
+    ->name('pos.checkout');
 
 // Cashier Role Routes
 Route::middleware(['auth', 'cashier'])->prefix('cashier')->name('cashier.')->group(function () {
