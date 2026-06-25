@@ -31,9 +31,9 @@
                 <div class="flex items-center gap-2 w-full sm:w-auto">
                     <span class="font-label-bold text-label-bold whitespace-nowrap">Category:</span>
                     <select onchange="window.location.href=this.value" class="w-full sm:w-auto appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-0.5rem)_center] bg-[length:1.5rem_1.5rem]">
-                        <option value="{{ route('products.index') }}">All Categories</option>
+                        <option value="{{ route('products.index', array_merge(request()->except(['category', 'page']))) }}">All Categories</option>
                         @foreach($categories as $category)
-                            <option value="{{ route('products.index', ['category' => $category->slug]) }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
+                            <option value="{{ route('products.index', array_merge(request()->except(['category', 'page']), ['category' => $category->slug])) }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -41,11 +41,11 @@
                 </div>
                 <div class="flex items-center gap-2 w-full sm:w-auto">
                     <span class="font-label-bold text-label-bold whitespace-nowrap">Sort by:</span>
-                    <select class="w-full sm:w-auto appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-0.5rem)_center] bg-[length:1.5rem_1.5rem]">
-                        <option>Most Popular</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Newest Arrivals</option>
+                    <select onchange="window.location.href=this.value" class="w-full sm:w-auto appearance-none bg-primary-container border-4 border-on-background rounded-lg px-4 py-2 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] focus:outline-none focus:border-tertiary cursor-pointer pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-0.5rem)_center] bg-[length:1.5rem_1.5rem]">
+                        <option value="{{ route('products.index', array_merge(request()->except(['sort', 'page']), ['sort' => 'popular'])) }}" {{ ($sort ?? 'popular') == 'popular' ? 'selected' : '' }}>Most Popular</option>
+                        <option value="{{ route('products.index', array_merge(request()->except(['sort', 'page']), ['sort' => 'price_asc'])) }}" {{ ($sort ?? '') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                        <option value="{{ route('products.index', array_merge(request()->except(['sort', 'page']), ['sort' => 'price_desc'])) }}" {{ ($sort ?? '') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                        <option value="{{ route('products.index', array_merge(request()->except(['sort', 'page']), ['sort' => 'newest'])) }}" {{ ($sort ?? '') == 'newest' ? 'selected' : '' }}>Newest Arrivals</option>
                     </select>
                 </div>
             </div>
@@ -75,6 +75,12 @@
                     </div>
                     <h3 class="font-body-lg text-body-lg font-bold text-center leading-tight min-h-[3rem] flex justify-center items-center text-on-background">{{ $p->name }}</h3>
                 </a>
+                {{-- Badge Terjual --}}
+                @if(($p->total_sold ?? 0) > 0)
+                <div class="mt-2 flex justify-center">
+                    <span class="text-xs font-bold bg-[#F0FFF0] text-[#32CD32] px-3 py-1 rounded-full border-2 border-on-background shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">Terjual: {{ $p->total_sold }}</span>
+                </div>
+                @endif
                 @auth
                 <div class="flex gap-2 w-full mt-4">
                     <a href="{{ route('products.show', $p->id) }}" class="bg-secondary-container text-on-secondary-container border-4 border-on-background rounded-lg px-4 py-3 font-label-bold text-label-bold shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex justify-center items-center">

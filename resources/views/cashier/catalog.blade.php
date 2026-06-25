@@ -61,6 +61,10 @@
                         <span class="px-3 py-1 bg-red-200 text-red-800 border-2 border-red-800 rounded-lg font-black text-[12px]">STOK HABIS</span>
                     @endif
                 </div>
+                {{-- Badge Terjual --}}
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="text-xs font-bold bg-[#F0FFF0] text-[#32CD32] px-3 py-1 rounded-full border-2 border-[#32CD32]">Terjual: {{ $product->total_sold }}</span>
+                </div>
                 <div class="pt-4 border-t-2 border-on-background/10 space-y-3">
                     @foreach($product->variants as $variant)
                     <div class="flex justify-between items-center">

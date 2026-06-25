@@ -111,7 +111,12 @@
                         <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">lock</span>
                         Password
                     </label>
-                    <input name="password" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="••••••••" type="password" required/>
+                    <div class="relative w-full">
+                        <input name="password" id="password-input" class="w-full bg-surface-bright pl-4 pr-12 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="••••••••" type="password" required/>
+                        <button type="button" onclick="togglePasswordVisibility('password-input', 'password-toggle-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-background hover:text-primary flex items-center justify-center">
+                            <span id="password-toggle-icon" class="material-symbols-outlined text-2xl cursor-pointer">visibility_off</span>
+                        </button>
+                    </div>
                     @error('password')
                         <p class="text-error text-xs font-bold mt-1">{{ $message }}</p>
                     @enderror
@@ -123,7 +128,12 @@
                         <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
                         Confirm Password
                     </label>
-                    <input name="password_confirmation" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="••••••••" type="password" required/>
+                    <div class="relative w-full">
+                        <input name="password_confirmation" id="password-confirm-input" class="w-full bg-surface-bright pl-4 pr-12 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="••••••••" type="password" required/>
+                        <button type="button" onclick="togglePasswordVisibility('password-confirm-input', 'password-confirm-toggle-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-background hover:text-primary flex items-center justify-center">
+                            <span id="password-confirm-toggle-icon" class="material-symbols-outlined text-2xl cursor-pointer">visibility_off</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
@@ -136,3 +146,19 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function togglePasswordVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = 'visibility';
+        } else {
+            input.type = 'password';
+            icon.textContent = 'visibility_off';
+        }
+    }
+</script>
+@endpush

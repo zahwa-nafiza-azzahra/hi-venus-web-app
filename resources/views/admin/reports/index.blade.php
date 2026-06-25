@@ -94,12 +94,12 @@
 </div>
 <!-- Export Buttons -->
 <div class="flex gap-4">
-<button class="bg-tertiary-container text-on-tertiary-container border-4 border-on-surface px-6 py-2 rounded-2xl font-bold shadow-[4px_4px_0px_0px_#1b1c1c] press-effect flex items-center gap-2">
+<a href="{{ route('admin.reports.export.pdf', ['period' => $period]) }}" class="bg-tertiary-container text-on-tertiary-container border-4 border-on-surface px-6 py-2 rounded-2xl font-bold shadow-[4px_4px_0px_0px_#1b1c1c] press-effect flex items-center gap-2">
 <span class="material-symbols-outlined" data-icon="download">download</span> PDF
-                    </button>
-<button class="bg-primary-container text-on-primary-container border-4 border-on-surface px-6 py-2 rounded-2xl font-bold shadow-[4px_4px_0px_0px_#1b1c1c] press-effect flex items-center gap-2">
+                    </a>
+<a href="{{ route('admin.reports.export.excel', ['period' => $period]) }}" class="bg-primary-container text-on-primary-container border-4 border-on-surface px-6 py-2 rounded-2xl font-bold shadow-[4px_4px_0px_0px_#1b1c1c] press-effect flex items-center gap-2">
 <span class="material-symbols-outlined" data-icon="table_view">table_view</span> Excel
-                    </button>
+                    </a>
 </div>
 </div>
 </section>
@@ -162,9 +162,11 @@
 </div>
 <div class="h-64 flex items-end justify-between gap-6 border-b-8 border-l-8 border-on-surface p-6 bg-surface-container rounded-bl-3xl">
 @foreach($trends as $day => $data)
-<div class="flex-1 flex flex-col items-center gap-3 group cursor-pointer h-full justify-end">
+<div class="flex-1 flex flex-col items-center group cursor-pointer h-full justify-end">
+<div class="w-full flex-1 flex items-end justify-center mb-3">
 <div class="w-full bg-[{{ $loop->iteration % 2 == 0 ? '#ff76ce' : '#94FFD8' }}] border-4 border-on-surface rounded-t-xl transition-all duration-300 group-hover:scale-y-110 group-hover:-translate-y-2 origin-bottom" style="height: {{ $data['revenue'] }}%;"></div>
-<span class="font-bold text-xs mt-auto">{{ $day }}</span>
+</div>
+<span class="font-bold text-xs">{{ $day }}</span>
 </div>
 @endforeach
 </div>

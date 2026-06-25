@@ -140,7 +140,7 @@
                 <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-tight line-clamp-1">{{ $product->name }}</h3>
             </div>
 
-            <div class="flex items-center gap-2 mb-4">
+            <div class="flex items-center gap-2 mb-2">
                 @if($product->total_stock == 0)
                     <span class="material-symbols-outlined text-error text-sm" style="font-variation-settings: 'FILL' 1;">cancel</span>
                     <span class="font-label-bold text-label-bold text-error">Out of Stock</span>
@@ -151,6 +151,12 @@
                     <span class="material-symbols-outlined text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
                     <span class="font-label-bold text-label-bold text-tertiary-container">In Stock: {{ $product->total_stock }}</span>
                 @endif
+            </div>
+
+            {{-- Badge Terjual --}}
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-[#32CD32] text-sm" style="font-variation-settings: 'FILL' 1;">sell</span>
+                <span class="font-label-bold text-label-bold text-[#32CD32]">Terjual: {{ $product->total_sold ?? 0 }}</span>
             </div>
 
             <div class="flex justify-between items-end border-t-2 border-dashed border-surface-container-high pt-3">

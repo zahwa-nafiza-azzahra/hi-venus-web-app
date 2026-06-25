@@ -219,6 +219,8 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     
     // Reports
     Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/export/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'exportPdf'])->name('reports.export.pdf');
+    Route::get('reports/export/excel', [\App\Http\Controllers\Admin\ReportController::class, 'exportExcel'])->name('reports.export.excel');
 
     // Cashiers (FR-A04)
     Route::get('cashiers', [\App\Http\Controllers\Admin\CashierController::class, 'index'])->name('cashiers.index');
@@ -234,7 +236,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
     // Products Management
     Route::get('products', function (\Illuminate\Http\Request $request) {
-        $query = \App\Models\Product::with('variants')->withSum('orderItems', 'quantity');
+        $query = \App\Models\Product::with('variants');
         
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
@@ -250,9 +252,8 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         });
 
         // Threshold dipakai untuk badge "Top Seller!": top 20% produk dengan penjualan tertinggi (min. 1 terjual)
-        $bestSellerIds = \App\Models\Product::withSum('orderItems', 'quantity')
-            ->having('order_items_sum_quantity', '>', 0)
-            ->orderByDesc('order_items_sum_quantity')
+        $bestSellerIds = \App\Models\Product::where('total_sold', '>', 0)
+            ->orderByDesc('total_sold')
             ->take(max(1, (int) ceil(\App\Models\Product::count() * 0.2)))
             ->pluck('id');
 

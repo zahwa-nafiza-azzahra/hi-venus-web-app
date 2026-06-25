@@ -19,10 +19,28 @@ class ProductController extends Controller
             });
         }
 
+        // Sort by logic — pakai kolom total_sold langsung (tidak perlu withSum)
+        $sort = $request->get('sort', 'popular');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'popular':
+            default:
+                $query->orderBy('total_sold', 'desc');
+                break;
+        }
+
         $products = $query->paginate(8)->withQueryString();
         $categories = \App\Models\Category::all();
         
-        return view('products.index', compact('products', 'categories'));
+        return view('products.index', compact('products', 'categories', 'sort'));
     }
 
     /**
@@ -51,9 +69,8 @@ class ProductController extends Controller
     public function bestSellers()
     {
         $products = \App\Models\Product::with('category')
-            ->withSum('orderItems', 'quantity')
-            ->having('order_items_sum_quantity', '>', 15)
-            ->orderByRaw('COALESCE(order_items_sum_quantity, 0) DESC')
+            ->where('total_sold', '>', 15)
+            ->orderBy('total_sold', 'desc')
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();

@@ -87,6 +87,12 @@ class PosController extends Controller
                         $variant->decrement('stock', $item['qty']);
                     }
                 }
+
+                // Tambah total_sold pada produk
+                $product = \App\Models\Product::find($item['product_id']);
+                if ($product) {
+                    $product->increment('total_sold', $item['qty']);
+                }
             }
 
             \DB::commit();

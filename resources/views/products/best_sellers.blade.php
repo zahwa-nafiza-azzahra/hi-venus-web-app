@@ -96,7 +96,7 @@
                                 Rp {{ number_format($product->price, 0, ',', '.') }}
                             </div>
                             <div class="text-xs font-bold bg-[#F0FFF0] text-[#32CD32] px-2 py-1 rounded-lg border-2 border-on-background">
-                                Terjual: {{ $product->order_items_sum_quantity ?? 0 }}
+                                Terjual: {{ $product->total_sold ?? 0 }}
                             </div>
                         </div>
                     </div>

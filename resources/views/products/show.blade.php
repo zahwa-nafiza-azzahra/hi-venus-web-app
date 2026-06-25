@@ -81,6 +81,10 @@
                         @endfor
                     </div>
                     <span class="font-label-bold text-on-surface-variant">({{ $reviewCount }} Ulasan)</span>
+                    @if(($product->total_sold ?? 0) > 0)
+                        <span class="text-on-surface-variant font-label-bold">•</span>
+                        <span class="text-xs font-bold bg-[#F0FFF0] text-[#32CD32] px-3 py-1 rounded-full border-2 border-on-background shadow-[2px_2px_0px_0px_rgba(27,28,28,1)]">Terjual: {{ $product->total_sold }}</span>
+                    @endif
                 </div>
             </div>
 
@@ -270,7 +274,12 @@
                     <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{{ $r->image ? $r->image_url : 'https://placehold.co/400' }}" alt="{{ $r->name }}" />
                 </div>
                 <div class="font-label-bold text-on-background mb-1 truncate">{{ $r->name }}</div>
-                <div class="font-price-display text-primary text-sm sm:text-base">Rp {{ number_format($r->price, 0, ',', '.') }}</div>
+                <div class="font-price-display text-primary text-sm sm:text-base mb-1">Rp {{ number_format($r->price, 0, ',', '.') }}</div>
+                @if(($r->total_sold ?? 0) > 0)
+                <div class="mt-2 flex">
+                    <span class="text-[10px] font-bold bg-[#F0FFF0] text-[#32CD32] px-2 py-0.5 rounded-full border border-on-background shadow-[1px_1px_0px_0px_rgba(27,28,28,1)]">Terjual: {{ $r->total_sold }}</span>
+                </div>
+                @endif
             </a>
             @endforeach
         </div>

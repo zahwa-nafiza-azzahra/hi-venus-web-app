@@ -171,7 +171,7 @@ class CashierController extends Controller
     /** Update status pesanan */
     public function orderUpdateStatus(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('items.product', 'items.variant')->findOrFail($id);
         $request->validate([
             'status'          => 'required|in:paid,processing,shipped,completed,cancelled',
             'cashier_note'    => 'nullable|string|max:500',
@@ -179,6 +179,7 @@ class CashierController extends Controller
         ]);
 
         $newStatus  = $request->status;
+        $oldStatus  = $order->status;
         $timestamps = [];
         if ($newStatus === 'paid'       && !$order->confirmed_at) $timestamps['confirmed_at'] = now();
         if ($newStatus === 'processing' && !$order->processed_at) $timestamps['processed_at'] = now();
@@ -190,6 +191,28 @@ class CashierController extends Controller
             'cashier_note'    => $request->cashier_note,
             'tracking_number' => $request->tracking_number ?? $order->tracking_number,
         ], $timestamps));
+
+        // Jika order baru diselesaikan → tambah total_sold tiap produk
+        if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('total_sold', $item->quantity);
+                }
+            }
+        }
+
+        // Jika order dibatalkan dan sebelumnya BUKAN cancelled → kembalikan stok varian
+        if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
+            foreach ($order->items as $item) {
+                if ($item->variant) {
+                    $item->variant->increment('stock', $item->quantity);
+                }
+                // Jika sudah completed sebelumnya, kurangi kembali total_sold
+                if ($oldStatus === 'completed' && $item->product) {
+                    $item->product->decrement('total_sold', $item->quantity);
+                }
+            }
+        }
 
         return back()->with('success', "Status pesanan #{$order->order_number} berhasil diubah ke: {$order->fresh()->status_label}");
     }
