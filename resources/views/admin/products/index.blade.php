@@ -30,6 +30,56 @@
         background-image: radial-gradient(#d8c0cb 2px, transparent 2px);
         background-size: 20px 20px;
     }
+
+    /* Delete Confirm Modal */
+    #deleteConfirmModal {
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    #deleteConfirmModal.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    #deleteConfirmModal:not(.hidden) {
+        opacity: 1;
+        visibility: visible;
+    }
+    #deleteModalCard {
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+    }
+    #deleteConfirmModal.hidden #deleteModalCard {
+        transform: scale(0.85) rotate(-3deg);
+        opacity: 0;
+    }
+    #deleteConfirmModal:not(.hidden) #deleteModalCard {
+        transform: scale(1) rotate(-1.5deg);
+        opacity: 1;
+    }
+    .btn-hapus:hover {
+        transform: translate(3px, 3px);
+        box-shadow: 3px 3px 0px 0px #1b1c1c;
+    }
+    .btn-batal:hover {
+        transform: translate(3px, 3px);
+        box-shadow: 3px 3px 0px 0px #1b1c1c;
+    }
+    @keyframes wiggle {
+        0%, 100% { transform: rotate(-1.5deg); }
+        25%       { transform: rotate(2deg); }
+        75%       { transform: rotate(-3deg); }
+    }
+    #deleteModalCard.wiggle {
+        animation: wiggle 0.4s ease;
+    }
+    @keyframes icon-bounce {
+        0%, 100% { transform: translateY(0) scale(1); }
+        40%       { transform: translateY(-10px) scale(1.15); }
+        70%       { transform: translateY(-4px) scale(0.95); }
+    }
+    #deleteModalIcon {
+        display: inline-block;
+        animation: icon-bounce 1.2s ease-in-out infinite;
+    }
 </style>
 @endpush
 
@@ -130,7 +180,10 @@
                     <a href="{{ route('admin.products.edit', $product->id) }}?return_url={{ urlencode(request()->fullUrl()) }}" class="bg-surface text-primary p-2 rounded-full comic-border hover:bg-primary-container transition-colors">
                         <span class="material-symbols-outlined">edit</span>
                     </a>
-                    <button class="bg-surface text-error p-2 rounded-full comic-border hover:bg-error-container transition-colors">
+                    <button
+                        type="button"
+                        onclick="openDeleteModal('{{ route('admin.products.destroy', $product->id) }}', '{{ addslashes($product->name) }}')"
+                        class="bg-surface text-error p-2 rounded-full comic-border hover:bg-error-container transition-colors">
                         <span class="material-symbols-outlined">delete</span>
                     </button>
                 </div>
@@ -227,4 +280,113 @@
     </div>
     @endif
 </div>
+
+{{-- ====================================================
+     KAWAII DELETE CONFIRMATION MODAL
+     ==================================================== --}}
+<div id="deleteConfirmModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+
+    {{-- Backdrop --}}
+    <div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+
+    {{-- Modal Card --}}
+    <div id="deleteModalCard"
+         class="relative w-full max-w-sm bg-surface border-4 border-on-surface rounded-3xl"
+         style="box-shadow: 10px 10px 0px 0px #1b1c1c;">
+
+        {{-- Decorative dots pattern strip --}}
+        <div class="absolute inset-x-0 -top-1 h-4 rounded-t-3xl overflow-hidden"
+             style="background-image: radial-gradient(#ffd8eb 2.5px, transparent 2.5px); background-size: 14px 14px; background-color: #ff85d0;"></div>
+
+        {{-- Close button --}}
+        <button type="button" onclick="closeDeleteModal()"
+                class="absolute -top-4 -right-4 z-10 w-10 h-10 bg-surface border-4 border-on-surface rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_#1b1c1c] hover:bg-error-container transition-colors">
+            <span class="material-symbols-outlined text-base font-black">close</span>
+        </button>
+
+        {{-- Content --}}
+        <div class="pt-10 pb-8 px-8 text-center">
+
+            {{-- Bouncing trash icon --}}
+            <div class="mb-4">
+                <div id="deleteModalIcon"
+                     class="inline-flex items-center justify-center w-20 h-20 rounded-full border-4 border-on-surface bg-error-container"
+                     style="box-shadow: 5px 5px 0px 0px #1b1c1c;">
+                    <span class="material-symbols-outlined text-5xl text-error" style="font-variation-settings: 'FILL' 1;">delete_forever</span>
+                </div>
+            </div>
+
+            {{-- Sticker badge --}}
+            <div class="inline-block mb-4">
+                <span class="bg-primary-container text-on-primary-container font-label-bold text-label-bold px-4 py-1 rounded-full border-2 border-on-surface"
+                      style="transform: rotate(-2deg); display: inline-block; box-shadow: 3px 3px 0 #1b1c1c;">Hati-hati!</span>
+            </div>
+
+            <h3 id="deleteModalTitle" class="font-black text-2xl text-on-surface mb-2 leading-tight">
+                Hapus Produk?
+            </h3>
+            <p class="text-on-surface-variant font-bold text-sm mb-1">
+                Kamu mau hapus:
+            </p>
+            <p id="deleteModalProductName"
+               class="font-black text-primary text-lg mb-5 px-3 py-1 bg-primary-container rounded-xl border-2 border-on-surface inline-block"
+               style="word-break: break-word;"></p>
+            <p class="text-on-surface-variant text-sm mt-3 mb-6">
+                Aksi ini tidak bisa dibatalkan ya!
+            </p>
+
+            {{-- Hidden DELETE form --}}
+            <form id="deleteProductForm" method="POST">
+                @csrf
+                @method('DELETE')
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                            class="btn-batal flex-1 bg-surface border-4 border-on-surface rounded-2xl py-3 font-black text-on-surface transition-all"
+                            style="box-shadow: 5px 5px 0px 0px #1b1c1c;">
+                            Batal
+                    </button>
+                    <button type="submit"
+                            class="btn-hapus flex-1 bg-error text-on-error border-4 border-on-surface rounded-2xl py-3 font-black transition-all"
+                            style="box-shadow: 5px 5px 0px 0px #1b1c1c;">
+                        Hapus!
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {{-- Bottom polka dot strip --}}
+        <div class="absolute inset-x-0 -bottom-1 h-4 rounded-b-3xl overflow-hidden"
+             style="background-image: radial-gradient(#94ffd8 2.5px, transparent 2.5px); background-size: 14px 14px; background-color: #a0e9c8;"></div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    function openDeleteModal(actionUrl, productName) {
+        document.getElementById('deleteProductForm').action = actionUrl;
+        document.getElementById('deleteModalProductName').textContent = productName;
+
+        const modal = document.getElementById('deleteConfirmModal');
+        modal.classList.remove('hidden');
+
+        // Wiggle animation on open
+        const card = document.getElementById('deleteModalCard');
+        card.classList.remove('wiggle');
+        void card.offsetWidth; // force reflow
+        card.classList.add('wiggle');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteConfirmModal').classList.add('hidden');
+    }
+
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDeleteModal();
+    });
+</script>
+@endpush
+
 @endsection

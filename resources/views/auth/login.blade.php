@@ -78,16 +78,28 @@
                 </a>
             </div>
 
+            @php
+                $isLockedOut = $errors->has('email');
+            @endphp
             <!-- Form -->
             <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-6">
                 @csrf
+
+                {{-- Lockout Error Banner --}}
+                @error('email')
+                <div class="flex items-start gap-3 bg-error-container border-4 border-error rounded-xl px-4 py-3 shadow-[4px_4px_0px_0px_rgba(27,28,28,1)]">
+                    <span class="material-symbols-outlined text-error text-2xl flex-shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">lock_clock</span>
+                    <p class="font-label-bold text-label-bold text-error leading-snug">{{ $message }}</p>
+                </div>
+                @enderror
+
                 <!-- Input: Login ID -->
                 <div class="flex flex-col gap-2">
                     <label class="font-label-bold text-label-bold text-on-background flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
                         Email Address or Username
                     </label>
-                    <input name="login_id" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="hello@hivenus.com or username" type="text" value="{{ old('login_id') }}" required autofocus/>
+                    <input name="login_id" id="login-id-input" class="w-full bg-surface-bright px-4 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-surface-container-highest" placeholder="hello@hivenus.com or username" type="text" value="{{ old('login_id') }}" required autofocus {{ $isLockedOut ? 'disabled' : '' }}/>
                     @error('login_id')
                         <p class="text-error text-xs font-bold mt-1">{{ $message }}</p>
                     @enderror
@@ -101,12 +113,12 @@
                             Password
                         </label>
                         @if (Route::has('password.request'))
-                            <a class="font-label-bold text-label-bold text-primary hover:underline decoration-4 underline-offset-4" href="{{ route('password.request') }}">Forgot?</a>
+                            <a class="font-label-bold text-label-bold text-primary hover:underline decoration-4 underline-offset-4 {{ $isLockedOut ? 'opacity-50 pointer-events-none' : '' }}" href="{{ route('password.request') }}">Forgot?</a>
                         @endif
                     </div>
                     <div class="relative w-full">
-                        <input name="password" id="password-input" class="w-full bg-surface-bright pl-4 pr-12 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline" placeholder="••••••••" type="password" required/>
-                        <button type="button" onclick="togglePasswordVisibility('password-input', 'password-toggle-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-background hover:text-primary flex items-center justify-center">
+                        <input name="password" id="password-input" class="w-full bg-surface-bright pl-4 pr-12 py-4 border-4 border-on-background rounded-lg font-body-md text-body-md focus:outline-none focus:border-tertiary-container focus:ring-0 shadow-[inset_0px_6px_0px_0px_rgba(27,28,28,0.08)] transition-colors placeholder:text-outline disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-surface-container-highest" placeholder="••••••••" type="password" required {{ $isLockedOut ? 'disabled' : '' }}/>
+                        <button type="button" id="password-toggle-btn" onclick="togglePasswordVisibility('password-input', 'password-toggle-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-background hover:text-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" {{ $isLockedOut ? 'disabled' : '' }}>
                             <span id="password-toggle-icon" class="material-symbols-outlined text-2xl cursor-pointer">visibility_off</span>
                         </button>
                     </div>
@@ -114,18 +126,18 @@
 
                 <!-- Custom Checkbox -->
                 <div class="flex items-center gap-4 mt-2">
-                    <label class="relative flex items-center cursor-pointer group">
-                        <input name="remember" class="peer sr-only" type="checkbox"/>
+                    <label class="relative flex items-center {{ $isLockedOut ? 'cursor-not-allowed opacity-50 pointer-events-none' : 'cursor-pointer' }} group">
+                        <input name="remember" id="remember-checkbox" class="peer sr-only" type="checkbox" {{ $isLockedOut ? 'disabled' : '' }}/>
                         <div class="w-8 h-8 border-4 border-on-background rounded bg-surface-bright peer-checked:bg-secondary-fixed transition-colors shadow-[2px_2px_0px_0px_rgba(27,28,28,1)] group-hover:bg-surface-variant flex items-center justify-center">
                             <span class="material-symbols-outlined opacity-0 peer-checked:opacity-100 text-on-background text-xl font-bold" style="font-variation-settings: 'FILL' 1;">sentiment_satisfied</span>
                         </div>
                     </label>
-                    <span class="font-label-bold text-label-bold text-on-background">Remember my vibes</span>
+                    <span class="font-label-bold text-label-bold text-on-background {{ $isLockedOut ? 'opacity-50' : '' }}">Remember my vibes</span>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="mt-4 w-full bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile py-4 border-4 border-on-background rounded-xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] active:translate-y-[8px] active:translate-x-[8px] active:shadow-none transition-all flex items-center justify-center gap-3 group relative overflow-hidden">
-                    <span class="relative z-10">Let's Go!</span>
+                <button type="submit" id="submit-btn" class="mt-4 w-full bg-primary text-on-primary font-headline-lg-mobile text-headline-lg-mobile py-4 border-4 border-on-background rounded-xl shadow-[8px_8px_0px_0px_rgba(27,28,28,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[6px_6px_0px_0px_rgba(27,28,28,1)] active:translate-y-[8px] active:translate-x-[8px] active:shadow-none transition-all flex items-center justify-center gap-3 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-[4px_4px_0px_0px_rgba(27,28,28,1)] disabled:translate-y-0 disabled:translate-x-0 disabled:pointer-events-none" {{ $isLockedOut ? 'disabled' : '' }}>
+                    <span class="relative z-10" id="submit-btn-text">Let's Go!</span>
                     <span class="material-symbols-outlined text-3xl relative z-10 group-hover:rotate-12 transition-transform" style="font-variation-settings: 'FILL' 1;">pets</span>
                 </button>
             </form>
@@ -147,5 +159,79 @@
             icon.textContent = 'visibility_off';
         }
     }
+
+    @if ($errors->has('email'))
+    document.addEventListener('DOMContentLoaded', function() {
+        let seconds = {{ session('lockout_seconds', 300) }};
+        const loginIdInput = document.getElementById('login-id-input');
+        const passwordInput = document.getElementById('password-input');
+        const passwordToggleBtn = document.getElementById('password-toggle-btn');
+        const rememberCheckbox = document.getElementById('remember-checkbox');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitBtnText = document.getElementById('submit-btn-text');
+        const submitBtnIcon = submitBtn ? submitBtn.querySelector('.material-symbols-outlined') : null;
+        const errorText = document.querySelector('.bg-error-container p');
+
+        // Save original button text and icon
+        const originalBtnText = submitBtnText ? submitBtnText.textContent : "Let's Go!";
+        
+        function updateTimer() {
+            if (seconds <= 0) {
+                // Re-enable form fields
+                if (loginIdInput) loginIdInput.disabled = false;
+                if (passwordInput) passwordInput.disabled = false;
+                if (passwordToggleBtn) passwordToggleBtn.disabled = false;
+                if (rememberCheckbox) {
+                    rememberCheckbox.disabled = false;
+                    const label = rememberCheckbox.closest('label');
+                    if (label) {
+                        label.classList.remove('cursor-not-allowed', 'opacity-50', 'pointer-events-none');
+                        label.classList.add('cursor-pointer');
+                    }
+                    const siblingSpan = rememberCheckbox.closest('.flex').querySelector('span');
+                    if (siblingSpan) {
+                        siblingSpan.classList.remove('opacity-50');
+                    }
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                }
+                if (submitBtnText) submitBtnText.textContent = originalBtnText;
+                if (submitBtnIcon) {
+                    submitBtnIcon.textContent = 'pets';
+                    submitBtnIcon.style.variationSettings = "'FILL' 1";
+                }
+                
+                // Hide or remove error banner
+                const errorBanner = document.querySelector('.bg-error-container');
+                if (errorBanner) {
+                    errorBanner.style.display = 'none';
+                }
+                return;
+            }
+
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const timeString = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            
+            if (errorText) {
+                errorText.textContent = `Terlalu banyak percobaan login. Silakan coba lagi dalam ${timeString}.`;
+            }
+            if (submitBtnText) {
+                submitBtnText.textContent = `Terkunci (${timeString})`;
+            }
+            if (submitBtnIcon) {
+                submitBtnIcon.textContent = 'lock';
+                submitBtnIcon.style.variationSettings = "'FILL' 1";
+            }
+
+            seconds--;
+            setTimeout(updateTimer, 1000);
+        }
+
+        updateTimer();
+    });
+    @endif
 </script>
 @endpush

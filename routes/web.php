@@ -552,6 +552,32 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
         return redirect()->route('admin.products.index')->with('success', '✨ Product "' . $product->name . '" has been updated!');
     })->name('products.update');
 
+    Route::delete('products/{product}', function (\App\Models\Product $product) {
+        // Delete related variants first (cascades but safe to do explicitly)
+        $product->variants()->delete();
+        // Delete related reviews
+        $product->reviews()->delete();
+        // Delete related wishlists
+        \App\Models\Wishlist::where('product_id', $product->id)->delete();
+
+        // Delete images from public storage
+        if ($product->image && !str_starts_with($product->image, 'http')) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+        }
+        if ($product->images && is_array($product->images)) {
+            foreach ($product->images as $img) {
+                if ($img && !str_starts_with($img, 'http')) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($img);
+                }
+            }
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Product successfully deleted! 🗑️');
+    })->name('products.destroy');
+
+
     Route::get('settings', function () {
         return view('admin.settings');
     })->name('settings');
